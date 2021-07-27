@@ -1,5 +1,21 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+/* Custom CSS */
+.tabParam{
+    font-weight:bold
+}
+.borderless{
+    border:none
+}
+.largeFont{
+    font-size:larger
+}
+.colorWeight {
+    color: #818182;
+    font-weight: 600;
+}
+/* END Custom CSS */
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

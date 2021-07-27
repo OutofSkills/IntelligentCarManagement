@@ -9,5 +9,6 @@ namespace IntelligentCarManagement.UI.Services
     public interface ICarService
     {
         Task<IEnumerable<Car>> GetCars();
+        Task<Driver> GetCarDriver(int carId);
     }
 }

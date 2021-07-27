@@ -21,5 +21,9 @@ namespace IntelligentCarManagement.UI.Services
         {
             return await httpClient.GetJsonAsync<Car[]>("api/Car/getCars");
         }
+        public async Task<Driver> GetCarDriver(int carId)
+        {
+            return await httpClient.GetJsonAsync<Driver>($"api/Driver/getDriver/{carId}");
+        }
     }
 }

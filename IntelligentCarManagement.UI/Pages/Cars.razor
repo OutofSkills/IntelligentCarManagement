@@ -1,13 +1,13 @@
 ﻿@page "/cars"
+@inherits CarsBase
 @using IntelligentCarManagement.DataModels;
 @using IntelligentCarManagement.UI.Services;
 
-<!--HTML-->
 <h1>Cars</h1>
 
 All existing cars. <br /><br />
 
-@if (_cars == null)
+@if (Cars == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -20,29 +20,29 @@ else
                     <th scope="col">Id</th>
                     <th scope="col">Brand</th>
                     <th scope="col">Model</th>
-                    <th scope="col">Fuel Type</th>
+                    <th scope="col">Current Location</th>
                     <th scope="col">Available</th>
                     <th scope="col">Driver</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var car in _cars)
+                @foreach (var car in Cars)
                 {
                     <tr>
                         <th scope="row">@car.Id</th>
                         <td>@car.Brand</td>
                         <td>@car.Model</td>
-                        <td>@car.FuelType</td>
+                        <td>@car.CurrentLocation</td>
                         @if (car.IsAvailable)
                         {
-                            <td>Yes</td>
+                            <td><i class="fas fa-check-circle"></i></td>
                         }
                         else
                         {
-                            <td>No</td>
+                            <td><i class="far fa-times-circle"></i></td>
                         }
                         <td>
-                            <a href="driver">@car.Driver.FirstName @car.Driver.LastName</a>
+                            <a href="@($"driverdetails/{ car.Id}")">@car.Driver.Username</a>
                         </td>
                     </tr>
                 }
@@ -50,16 +50,3 @@ else
         </table>
     </div>
 }
-<!--end HTML-->
-<!--C#-->
-@inject ICarService CarService
-@code {
-    private IEnumerable<Car> _cars = null;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _cars = await CarService.GetCars();
-    }
-}
-
-<!--end C#-->

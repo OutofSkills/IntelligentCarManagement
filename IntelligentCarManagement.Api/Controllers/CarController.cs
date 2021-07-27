@@ -19,7 +19,7 @@ namespace IntelligentCarManagement.Api.Controllers
             List<Car> cars = new List<Car>
             {
                 new Car { Id = 1, Brand = "Dacia", Model = "Logan", FuelType = "Petrol", IsAvailable = true, 
-                    Driver = new Driver{Id = 1, FirstName = "Micu", LastName = "Daniel", Age = 29, Email = "something@gmail.com",
+                    Driver = new Driver{Id = 1, FirstName = "Micu", LastName = "Daniel", Username = "Dani777", Age = 29, Email = "something@gmail.com",
                         Address = new UserAddress{ Id = 1, City = "Craiova", County = "Dolj", Street = "Amaradi 59" } } }
             };
 

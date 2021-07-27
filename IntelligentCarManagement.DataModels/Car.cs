@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace IntelligentCarManagement.DataModels
@@ -11,6 +12,10 @@ namespace IntelligentCarManagement.DataModels
         public string Model { get; set; }
         public string FuelType { get; set; }
         public bool IsAvailable { get; set; }
+        [NotMapped]
+        public string CurrentLocation { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude{ get; set;}
         public Driver Driver { get; set; }
     }
 }
