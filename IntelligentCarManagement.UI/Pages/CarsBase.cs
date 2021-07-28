@@ -1,4 +1,4 @@
-﻿using IntelligentCarManagement.DataModels;
+﻿using IntelligentCarManagement.DataAccess.Models;
 using IntelligentCarManagement.UI.Services;
 using Microsoft.AspNetCore.Components;
 using System;

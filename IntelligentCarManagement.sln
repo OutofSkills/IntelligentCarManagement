@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Api", "IntelligentCarManagement.Api\IntelligentCarManagement.Api.csproj", "{73FE5B68-145A-4109-BC96-83FECD061A2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.DataModels", "IntelligentCarManagement.DataModels\IntelligentCarManagement.DataModels.csproj", "{DEAB175D-2AB5-4BE1-9808-1563EC270B10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.DataAccess", "IntelligentCarManagement.DataModels\IntelligentCarManagement.DataAccess.csproj", "{DEAB175D-2AB5-4BE1-9808-1563EC270B10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.UI", "IntelligentCarManagement.UI\IntelligentCarManagement.UI.csproj", "{156565F1-990C-4C4D-BCB4-65C0B2BB6FF7}"
 EndProject

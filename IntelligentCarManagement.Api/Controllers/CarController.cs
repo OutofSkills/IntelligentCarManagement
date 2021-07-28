@@ -1,4 +1,6 @@
-﻿using IntelligentCarManagement.DataModels;
+﻿using IntelligentCarManagement.DataAccess.Models;
+using IntelligentCarManagement.DataAccess.Repositories;
+using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,16 +14,18 @@ namespace IntelligentCarManagement.Api.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
+        private readonly IUnitOfWork _repository;
+
+        public CarController(IUnitOfWork repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet]
         [Route("getCars")]
         public IActionResult GetCars() 
         {
-            List<Car> cars = new List<Car>
-            {
-                new Car { Id = 1, Brand = "Dacia", Model = "Logan", FuelType = "Petrol", IsAvailable = true, 
-                    Driver = new Driver{Id = 1, FirstName = "Micu", LastName = "Daniel", Username = "Dani777", Age = 29, Email = "something@gmail.com",
-                        Address = new UserAddress{ Id = 1, City = "Craiova", County = "Dolj", Street = "Amaradi 59" } } }
-            };
+            var cars = _repository.CarsRepo.GetAll();
 
             return Ok(cars);
         }

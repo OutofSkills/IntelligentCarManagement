@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntelligentCarManagement.DataModels
+namespace IntelligentCarManagement.DataAccess.Models
 {
     public class UserAddress
     {
@@ -10,5 +10,6 @@ namespace IntelligentCarManagement.DataModels
         public string County { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
+        public virtual User User{ get; set; }
     }
 }

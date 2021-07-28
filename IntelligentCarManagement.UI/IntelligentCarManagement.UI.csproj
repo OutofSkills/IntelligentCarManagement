@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelligentCarManagement.DataModels\IntelligentCarManagement.DataModels.csproj" />
+    <ProjectReference Include="..\IntelligentCarManagement.DataModels\IntelligentCarManagement.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
