@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntelligentCarManagement.DataAccess.Migrations
 {
-    public partial class Car_Driver_User : Migration
+    public partial class Car_User_Driver : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
