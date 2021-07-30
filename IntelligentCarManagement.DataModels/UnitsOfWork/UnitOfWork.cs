@@ -1,4 +1,4 @@
-﻿using IntelligentCarManagement.DataAccess.Models;
+﻿using IntelligentCarManagement.Models;
 using IntelligentCarManagement.DataAccess.Repositories;
 using IntelligentCarManagement.DataAccess.Repositories.GenericRepository;
 using System;

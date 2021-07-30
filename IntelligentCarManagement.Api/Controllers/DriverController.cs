@@ -1,4 +1,4 @@
-﻿using IntelligentCarManagement.DataAccess.Models;
+﻿using IntelligentCarManagement.Models;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

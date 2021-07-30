@@ -1,4 +1,3 @@
-using IntelligentCarManagement.UI.Data;
 using IntelligentCarManagement.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;

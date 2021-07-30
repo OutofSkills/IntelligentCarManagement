@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntelligentCarManagement.DataAccess.Models
+namespace IntelligentCarManagement.Models
 {
     public class Driver: User
     {

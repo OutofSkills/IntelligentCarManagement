@@ -1,5 +1,5 @@
-﻿using IntelligentCarManagement.DataAccess.Models;
-using IntelligentCarManagement.DataAccess.Repositories.GenericRepository;
+﻿using IntelligentCarManagement.DataAccess.Repositories.GenericRepository;
+using IntelligentCarManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
