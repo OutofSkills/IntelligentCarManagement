@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IntelligentCarManagement.Api.Services;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -13,20 +14,18 @@ namespace IntelligentCarManagement.Api.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
-        private readonly IUnitOfWork _repository;
+        private readonly ICarService carService;
 
-        public CarController(IUnitOfWork repository)
+        public CarController(ICarService carService)
         {
-            _repository = repository;
+            this.carService = carService;
         }
 
         [HttpGet]
         [Route("getCars")]
         public IActionResult GetCars() 
         {
-            var cars = _repository.CarsRepo.GetAll();
-
-            return Ok(cars);
+            return Ok(carService.GetAllCars());
         }
     }
 }

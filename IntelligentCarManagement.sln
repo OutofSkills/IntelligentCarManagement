@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.UI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCarManagement.Models", "IntelligentCarManagement.Models\IntelligentCarManagement.Models.csproj", "{5F7F0A15-5F0C-422A-9C14-66091A2F0A17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCarManagement.Services", "IntelligentCarManagement.Services\IntelligentCarManagement.Services.csproj", "{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5F7F0A15-5F0C-422A-9C14-66091A2F0A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F7F0A15-5F0C-422A-9C14-66091A2F0A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F7F0A15-5F0C-422A-9C14-66091A2F0A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

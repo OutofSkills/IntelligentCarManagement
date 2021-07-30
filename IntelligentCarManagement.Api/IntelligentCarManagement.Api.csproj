@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelligentCarManagement.DataModels\IntelligentCarManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\IntelligentCarManagement.Services\IntelligentCarManagement.Services.csproj" />
   </ItemGroup>
 
 

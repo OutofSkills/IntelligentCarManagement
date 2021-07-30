@@ -1,3 +1,4 @@
+using IntelligentCarManagement.Api.Services;
 using IntelligentCarManagement.DataAccess;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Builder;
@@ -33,7 +34,10 @@ namespace IntelligentCarManagement.Api
 
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ICarService, CarService>();
+            services.AddTransient<IDriverService, DriverService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
