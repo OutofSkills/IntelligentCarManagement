@@ -19,11 +19,11 @@ namespace IntelligentCarManagement.UI.Services
 
         public async Task<IEnumerable<Car>> GetCars()
         {
-            return await httpClient.GetJsonAsync<Car[]>("api/Car/getCars");
+            return await httpClient.GetJsonAsync<Car[]>("https://carsmanagementapi.azurewebsites.net/api/Car/getCars");
         }
         public async Task<Driver> GetCarDriver(int carId)
         {
-            return await httpClient.GetJsonAsync<Driver>($"api/Driver/getDriver/{carId}");
+            return await httpClient.GetJsonAsync<Driver>($"https://carsmanagementapi.azurewebsites.net/api/Driver/getDriver/{carId}");
         }
     }
 }
