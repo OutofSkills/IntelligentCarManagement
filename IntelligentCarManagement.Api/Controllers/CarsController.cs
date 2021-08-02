@@ -7,22 +7,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using IntelligentCarManagement.Api.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
-    public class CarController : ControllerBase
+    public class CarsController : ControllerBase
     {
         private readonly ICarService carService;
 
-        public CarController(ICarService carService)
+        public CarsController(ICarService carService)
         {
             this.carService = carService;
         }
 
         [HttpGet]
-        [Route("getCars")]
+        [Route("GetCars")]
         public IActionResult GetCars() 
         {
             return Ok(carService.GetAllCars());

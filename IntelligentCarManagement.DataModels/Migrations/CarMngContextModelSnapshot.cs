@@ -19,7 +19,7 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Car", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.ToTable("Car");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.User", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,7 +94,7 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.UserAddress", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.UserAddress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,16 +115,19 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Client", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Client", b =>
                 {
-                    b.HasBaseType("IntelligentCarManagement.DataAccess.Models.User");
+                    b.HasBaseType("IntelligentCarManagement.Models.User");
 
                     b.ToTable("Client");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Driver", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
                 {
-                    b.HasBaseType("IntelligentCarManagement.DataAccess.Models.User");
+                    b.HasBaseType("IntelligentCarManagement.Models.User");
+
+                    b.Property<int>("Accidents")
+                        .HasColumnType("int");
 
                     b.Property<int>("DeservedClients")
                         .HasColumnType("int");
@@ -141,52 +144,52 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.ToTable("Driver");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Car", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Car", b =>
                 {
-                    b.HasOne("IntelligentCarManagement.DataAccess.Models.Driver", "Driver")
+                    b.HasOne("IntelligentCarManagement.Models.Driver", "Driver")
                         .WithOne("Car")
-                        .HasForeignKey("IntelligentCarManagement.DataAccess.Models.Car", "DriverID")
+                        .HasForeignKey("IntelligentCarManagement.Models.Car", "DriverID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Driver");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.User", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
                 {
-                    b.HasOne("IntelligentCarManagement.DataAccess.Models.UserAddress", "Address")
+                    b.HasOne("IntelligentCarManagement.Models.UserAddress", "Address")
                         .WithOne("User")
-                        .HasForeignKey("IntelligentCarManagement.DataAccess.Models.User", "AddressID")
+                        .HasForeignKey("IntelligentCarManagement.Models.User", "AddressID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Client", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Client", b =>
                 {
-                    b.HasOne("IntelligentCarManagement.DataAccess.Models.User", null)
+                    b.HasOne("IntelligentCarManagement.Models.User", null)
                         .WithOne()
-                        .HasForeignKey("IntelligentCarManagement.DataAccess.Models.Client", "Id")
+                        .HasForeignKey("IntelligentCarManagement.Models.Client", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Driver", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
                 {
-                    b.HasOne("IntelligentCarManagement.DataAccess.Models.User", null)
+                    b.HasOne("IntelligentCarManagement.Models.User", null)
                         .WithOne()
-                        .HasForeignKey("IntelligentCarManagement.DataAccess.Models.Driver", "Id")
+                        .HasForeignKey("IntelligentCarManagement.Models.Driver", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.UserAddress", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.UserAddress", b =>
                 {
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.DataAccess.Models.Driver", b =>
+            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
                 {
                     b.Navigation("Car");
                 });

@@ -28,6 +28,16 @@ namespace IntelligentCarManagement.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:44304", "http://localhost:41427")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
+            });
             services.AddDbContext<CarMngContext>(options =>
                 options.UseLazyLoadingProxies()
                        .UseSqlServer(Configuration.GetConnectionString("CarMngmentConnection")));
@@ -49,6 +59,8 @@ namespace IntelligentCarManagement.Api
             }
 
             app.UseRouting();
+
+            app.UseCors("AllowOrigin");
 
             app.UseAuthorization();
 
