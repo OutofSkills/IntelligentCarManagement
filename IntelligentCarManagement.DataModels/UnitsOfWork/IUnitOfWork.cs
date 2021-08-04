@@ -12,6 +12,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         /// </summary>
         ICarsRepo CarsRepo { get; }
         IDriversRepo DriversRepo { get; }
+        IUsersRepo UsersRepo { get; }
 
         /// <summary>
         /// Saves all pending changes

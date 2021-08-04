@@ -1,3 +1,5 @@
+using Blazorise;
+using Blazorise.Icons.FontAwesome;
 using IntelligentCarManagement.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,9 +20,10 @@ namespace IntelligentCarManagement.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:41427") });
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
+            builder.Services.AddScoped<IUsersService, UsersService>();
 
             await builder.Build().RunAsync();
         }

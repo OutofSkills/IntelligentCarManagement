@@ -11,6 +11,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
     {
         public ICarsRepo CarsRepo { get; private set; }
         public IDriversRepo DriversRepo { get; private set; }
+        public IUsersRepo UsersRepo { get; private set; }
 
         /// <summary>
         /// The DbContext
@@ -26,6 +27,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
             _context = context;
             CarsRepo = new CarsRepo(_context);
             DriversRepo = new DriversRepo(_context);
+            UsersRepo = new UsersRepo(_context);
 
         }
 

@@ -1,0 +1,34 @@
+﻿@using IntelligentCarManagement.Models
+<tr>
+    <td>@User.Id</td>
+    <td><a href="#"><i class="bi bi-person-fill"></i> @User.FirstName @User.LastName</a></td>
+    <td>@User.RegistrationDate</td>
+    <td>@User.Role.Name</td>
+    @switch (User.AccountStatus.Status)
+    {
+        case "PENDING-ACTIVATION":
+            <td><span class="status text-warning">&bull;</span> @User.AccountStatus.Status</td>
+            break;
+        case "BANNED":
+            <td><span class="status text-dark">&bull;</span> @User.AccountStatus.Status</td>
+            break;
+        case "ACTIVE":
+            <td><span class="status text-success">&bull;</span> @User.AccountStatus.Status</td>
+            break;
+        case "DELETED":
+            <td><span class="status text-info">&bull;</span> @User.AccountStatus.Status</td>
+            break;
+    }
+    <td>
+        <ToolTip Text="Settings">
+            <a href=""><i class="bi bi-gear-fill"></i></a>
+        </ToolTip>
+        <ToolTip Text="Remove user">
+            <a href=""><i class="bi bi-archive-fill text-danger"></i></a>
+        </ToolTip>
+    </td>
+</tr>
+@code {
+    [Parameter]
+    public User User { get; set; }
+}

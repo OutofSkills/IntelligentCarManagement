@@ -1,6 +1,6 @@
-using IntelligentCarManagement.Api.Services;
 using IntelligentCarManagement.DataAccess;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
+using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +48,7 @@ namespace IntelligentCarManagement.Api
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICarService, CarService>();
             services.AddTransient<IDriverService, DriverService>();
+            services.AddTransient<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

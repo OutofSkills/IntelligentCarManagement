@@ -20,10 +20,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<IEnumerable<Car>> GetCars()
         {
-            httpClient.BaseAddress = new Uri("http://localhost:41427");
-            IEnumerable <Car> cars = await httpClient.GetJsonAsync<Car[]>("/api/Cars/GetCars");
-
-            return cars;
+            return await httpClient.GetJsonAsync<Car[]>("/api/Cars/GetCars");
         }
         public async Task<Driver> GetCarDriver(int carId)
         {

@@ -19,6 +19,24 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AccountStatus");
+                });
+
             modelBuilder.Entity("IntelligentCarManagement.Models.Car", b =>
                 {
                     b.Property<int>("Id")
@@ -55,6 +73,24 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.ToTable("Car");
                 });
 
+            modelBuilder.Entity("IntelligentCarManagement.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -62,11 +98,14 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AddressID")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -83,13 +122,25 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressID")
-                        .IsUnique();
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("StatusId");
 
                     b.ToTable("User");
                 });
@@ -158,12 +209,28 @@ namespace IntelligentCarManagement.DataAccess.Migrations
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
                 {
                     b.HasOne("IntelligentCarManagement.Models.UserAddress", "Address")
-                        .WithOne("User")
-                        .HasForeignKey("IntelligentCarManagement.Models.User", "AddressID")
+                        .WithMany("Users")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("IntelligentCarManagement.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IntelligentCarManagement.Models.AccountStatus", "AccountStatus")
+                        .WithMany("Users")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccountStatus");
+
                     b.Navigation("Address");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Client", b =>
@@ -184,9 +251,19 @@ namespace IntelligentCarManagement.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("IntelligentCarManagement.Models.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("IntelligentCarManagement.Models.UserAddress", b =>
                 {
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>

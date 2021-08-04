@@ -1,0 +1,14 @@
+﻿<div class="tooltip-wrapper">
+
+    <span id="spanText">@((MarkupString)Text)</span>
+
+    @ChildContent
+
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Mo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Services", "IntelligentCarManagement.Services\IntelligentCarManagement.Services.csproj", "{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCarManagement.Client", "IntelligentCarManagement.Client\IntelligentCarManagement.Client.csproj", "{E6EE4286-C013-43D7-A6A1-36BEACD0AC1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Client", "IntelligentCarManagement.Client\IntelligentCarManagement.Client.csproj", "{E6EE4286-C013-43D7-A6A1-36BEACD0AC1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
