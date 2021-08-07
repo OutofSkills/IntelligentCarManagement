@@ -10,5 +10,6 @@ namespace IntelligentCarManagement.Client.Services
     {
         public Task<IEnumerable<User>> GetUsersAsync();
         public bool NewUser(User user);
+        public bool ChangeAccountStatus(User user, string status);
     }
 }

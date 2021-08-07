@@ -17,6 +17,15 @@ namespace IntelligentCarManagement.Client.Services
             this.httpClient = httpClient;
         }
 
+        public bool ChangeAccountStatus(User user, string status)
+        {
+            // Fetch the wanted status
+            // Set it to the user instance
+            bool result = true;
+
+            return result;
+        }
+
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await httpClient.GetJsonAsync<User[]>("/api/Users/GetUsers");

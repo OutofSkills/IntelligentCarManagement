@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IntelligentCarManagement.Authentication\IntelligentCarManagement.Authentication.csproj" />
     <ProjectReference Include="..\IntelligentCarManagement.Models\IntelligentCarManagement.Models.csproj" />
   </ItemGroup>
 

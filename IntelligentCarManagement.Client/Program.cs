@@ -1,6 +1,9 @@
+using Blazored.LocalStorage;
 using Blazorise;
 using Blazorise.Icons.FontAwesome;
+using IntelligentCarManagement.Authentication;
 using IntelligentCarManagement.Client.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +27,11 @@ namespace IntelligentCarManagement.Client
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
+
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
+            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddAuthorizationCore();
 
             await builder.Build().RunAsync();
         }

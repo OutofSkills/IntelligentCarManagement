@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.Services;
+﻿using IntelligentCarManagement.Models;
+using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -24,6 +25,13 @@ namespace IntelligentCarManagement.Api.Controllers
         public IActionResult GetUsers()
         {
             return Ok(usersService.GetAllUsers());
+        }
+
+        [HttpGet]
+        [Route("UpdateUser")]
+        public IActionResult UpdateUser(User user)
+        {
+            return Ok(usersService.EditUser(user));
         }
     }
 }
