@@ -20,6 +20,7 @@ namespace IntelligentCarManagement.Authentication
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
+            _anonimous = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Se
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Client", "IntelligentCarManagement.Client\IntelligentCarManagement.Client.csproj", "{E6EE4286-C013-43D7-A6A1-36BEACD0AC1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCarManagement.Authentication", "IntelligentCarManagement.Authentication\IntelligentCarManagement.Authentication.csproj", "{BC027925-871F-442A-8BD5-566B0A86E746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Authentication", "IntelligentCarManagement.Authentication\IntelligentCarManagement.Authentication.csproj", "{BC027925-871F-442A-8BD5-566B0A86E746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
