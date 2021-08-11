@@ -27,16 +27,16 @@ namespace IntelligentCarManagement.Client.Services
             this.localStorage = localStorage;
         }
 
-        public async Task<User> Login(User userForAtuthetication)
+        public async Task<User> Login(LoginModel userForAtuthetication)
         {
             var data = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string, string>("grant_type", "password"),
-                new KeyValuePair<string, string>("username", userForAtuthetication.Email),
+                new KeyValuePair<string, string>("email", userForAtuthetication.Email),
                 new KeyValuePair<string, string>("password", userForAtuthetication.Password)
             });
 
-            var authResult = await httpClient.PostAsJsonAsync("", data);
+            var authResult = await httpClient.PostAsync("http://localhost:41427/token/create", data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)
@@ -60,6 +60,18 @@ namespace IntelligentCarManagement.Client.Services
             await localStorage.RemoveItemAsync("authToken");
             ((AuthStateProvider)authStateProvider).NotifyUserLogout();
             httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public async Task<string> Register(User user)
+        {
+            var registerResult = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/register", user);
+
+            if(registerResult.IsSuccessStatusCode is false)
+            {
+                return "Something went wrong";
+            }
+
+            return "Success";
         }
     }
 }

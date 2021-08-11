@@ -33,5 +33,21 @@ namespace IntelligentCarManagement.Api.Controllers
         {
             return Ok(usersService.EditUser(user));
         }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register([FromBody]User user)
+        {
+            var result = await usersService.RegisterUser(user);
+
+            if (result.ToLower() == "success")
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
+        }
     }
 }

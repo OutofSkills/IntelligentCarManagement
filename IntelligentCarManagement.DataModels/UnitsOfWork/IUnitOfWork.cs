@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IntelligentCarManagement.DataAccess.UnitsOfWork
 {
-    public interface IUnitOfWork: IDisposable
+    public interface IUnitOfWork : IDisposable
     {
         /// <summary>
         /// Repositories
@@ -13,6 +13,8 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         ICarsRepo CarsRepo { get; }
         IDriversRepo DriversRepo { get; }
         IUsersRepo UsersRepo { get; }
+        IRolesRepo RolesRepo { get; }
+        IAccountStatusesRepo StatusesRepo{ get;}
 
         /// <summary>
         /// Saves all pending changes

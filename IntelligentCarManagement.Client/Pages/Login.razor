@@ -9,16 +9,16 @@
 
 <h3>Login</h3>
 
-@if(showAuthentificationError)
-{ 
-    <div class="alert alert-danger" role="alert"> 
+@if (showAuthentificationError)
+{
+    <div class="alert alert-danger" role="alert">
         <p>@authentificationErrorText</p>
     </div>
 }
 
 <EditForm Model="@user" OnValidSubmit="ExecuteLogin" class="card card-body bg-light mt-5">
     <DataAnnotationsValidator />
-    <ValidationSummary />
+        <ValidationSummary />
 
     <div class="form-group row">
         <label for="email" class="col-md-2 col-form-label">Email:</label>
@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="form-group row">
+    <div class="form-group row mt-2">
         <label for="password" class="col-md-2 col-form-label">Password:</label>
         <div class="col-md-10">
             <InputText id="password" class="form-control" @bind-Value="user.Password"></InputText>
@@ -36,8 +36,8 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-12 text-right">
+    <div class="form-group row mt-2">
+        <div class="col-md-12 text-end">
             <button type="submit" class="btn btn-success">Log in</button>
         </div>
     </div>
@@ -45,7 +45,7 @@
 
 
 @code {
-    private User user = new User();
+    private LoginModel user = new LoginModel();
     private bool showAuthentificationError = false;
     private string authentificationErrorText = "";
 
@@ -55,13 +55,13 @@
 
         var result = await AuthService.Login(user);
 
-        if(result is not null)
+        if (result is not null)
         {
             NavManager.NavigateTo("/");
         }
         else
         {
-            authentificationErrorText = "There was an error when trying to log in.";
+            authentificationErrorText = "There was an error when trying to log in. ";
             showAuthentificationError = true;
         }
 

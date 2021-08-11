@@ -1,19 +1,23 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace IntelligentCarManagement.Models
 {
-    public class Role
+    public class Role: IdentityRole<int>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        public override int Id { get; set; }
+        public override string Name { get; set; }
         public string Description { get; set; }
-        public virtual IEnumerable<User> Users { get; set; }
+
+        public virtual IList<UserRole> Users { get; set; }
 
         public Role()
         {
-            Users = new HashSet<User>();
+            Users = new List<UserRole>();
         }
     }
 }

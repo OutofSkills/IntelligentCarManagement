@@ -3,7 +3,12 @@
     <td>@User.Id</td>
     <td><a href="#"><i class="bi bi-person-fill"></i> @User.FirstName @User.LastName</a></td>
     <td>@User.RegistrationDate</td>
-    <td>@User.Role.Name</td>
+    <td>
+        @foreach (var userRole in User.Roles)
+        {
+            @userRole.Role.Name
+        }
+    </td>
     @switch (User.AccountStatus.Status)
     {
         case "PENDING-ACTIVATION":
@@ -20,12 +25,8 @@
             break;
     }
     <td>
-        <ToolTip Text="Settings">
-            <a href=""><i class="bi bi-gear-fill"></i></a>
-        </ToolTip>
-        <ToolTip Text="Remove user">
-            <a href=""><i class="bi bi-archive-fill text-danger"></i></a>
-        </ToolTip>
+       <a href=""><i class="bi bi-gear-fill"></i></a>
+       <a href=""><i class="bi bi-archive-fill text-danger"></i></a>
     </td>
 </tr>
 @code {

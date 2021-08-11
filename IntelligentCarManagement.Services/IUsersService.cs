@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Services
 {
@@ -12,5 +13,6 @@ namespace IntelligentCarManagement.Services
         bool RemoveUser(User user);
         bool AddUser(User user);
         bool EditUser(User user);
+        Task<string> RegisterUser(User user);
     }
 }
