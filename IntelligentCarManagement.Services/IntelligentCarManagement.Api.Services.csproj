@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelligentCarManagement.DataModels\IntelligentCarManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\IntelligentCarManagement.DataModels\IntelligentCarManagement.Api.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

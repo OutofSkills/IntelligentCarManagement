@@ -1,5 +1,6 @@
 ﻿using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,9 +27,10 @@ namespace IntelligentCarManagement.Client.Services
             return result;
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<HttpResponseMessage> GetUsersAsync(int page = 1, int recordsPerPage = 10)
         {
-            return await httpClient.GetJsonAsync<User[]>("/api/Users/GetUsers");
+            var response = await httpClient.GetAsync($"/api/Users/GetUsers?page={page}&recordsPerPage={recordsPerPage}");
+            return response;
         }
 
         public bool NewUser(User user)

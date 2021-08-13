@@ -8,7 +8,7 @@ namespace IntelligentCarManagement.Services
 {
     public interface IDriverService
     {
-        Driver GetDriver(int id);
+        Task<Driver> GetDriver(int id);
         Driver GetCarDriver(int carID);
     }
 }

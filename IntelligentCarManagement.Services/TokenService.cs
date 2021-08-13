@@ -45,7 +45,7 @@ namespace IntelligentCarManagement.Services
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
 
-            foreach (var role in user.Roles)
+            foreach (var role in user.UserRoles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
             }

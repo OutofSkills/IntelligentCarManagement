@@ -4,14 +4,14 @@
 <div class="container-xl">
     <div class="container-fluid">
         <div class="container">
-                <div class="row">
-                    <div class="col-5">
-                        <h2>User <b>Management</b></h2>
-                    </div>
-                    <div class="col-7" align="right">
-                        <a href="#" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i> <span>Add New User</span></a>
-                    </div>
+            <div class="row">
+                <div class="col-5">
+                    <h2>User <b>Management</b></h2>
                 </div>
+                <div class="col-7" align="right">
+                    <a href="#" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i> <span>Add New User</span></a>
+                </div>
+            </div>
 
             @if (Users == null)
             {
@@ -24,22 +24,18 @@
             else
             {
                 <div class="table-responsive">
-                    <UsersTable Users="@Users"></UsersTable>
+                    <Table ColumnNames="@(new List<string> {"#", "Name", "Registration Date", "Role", "Status", "Actions"})">
+                        @foreach (var user in Users)
+                        {
+                            <UsersTableRecord User="user"></UsersTableRecord>
+                        }
+                    </Table>
                 </div>
             }
 
-            <div class="clearfix">
-                <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
-            </div>
+        <div class="clearfix">
+            <Pagination NumberOfPages="NumberOfPages" CurrentPage="CurrentPage" Radius="3" SelectedPage="SelectedPage"></Pagination>
+        </div>
         </div>
     </div>
 </div>

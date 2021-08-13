@@ -40,7 +40,8 @@ namespace IntelligentCarManagement.Api
                     {
                         builder.WithOrigins("https://localhost:44304", "http://localhost:41427")
                                             .AllowAnyHeader()
-                                            .AllowAnyMethod();
+                                            .AllowAnyMethod()
+                                            .WithExposedHeaders("*"); ;
                     });
             });
 

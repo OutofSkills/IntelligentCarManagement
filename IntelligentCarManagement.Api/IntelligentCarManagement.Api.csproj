@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IntelligentCarManagement.Services\IntelligentCarManagement.Services.csproj" />
+    <ProjectReference Include="..\IntelligentCarManagement.Services\IntelligentCarManagement.Api.Services.csproj" />
   </ItemGroup>
 
 

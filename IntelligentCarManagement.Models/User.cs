@@ -44,16 +44,19 @@ namespace IntelligentCarManagement.Models
         public string Access_Token { get; set; }
         public int AddressId { get; set; }
         public int StatusId { get; set; }
+        public int RoleId { get; set; }
 
-        [ForeignKey("AddressId")]
+
+        [ForeignKey(nameof(AddressId))]
         public virtual UserAddress Address { get; set; }
-        [ForeignKey("StatusId")]
+        [ForeignKey(nameof(StatusId))]
         public virtual AccountStatus AccountStatus { get; set; }
-        public virtual IList<UserRole> Roles { get; set; }
+        [ForeignKey(nameof(RoleId))]
+        public virtual IList<UserRole> UserRoles { get; set; }
 
         public User()
         {
-            Roles = new List<UserRole>();
+            UserRoles = new List<UserRole>();
             Address = new UserAddress();
         }
     }

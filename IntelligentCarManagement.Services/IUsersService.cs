@@ -8,8 +8,8 @@ namespace IntelligentCarManagement.Services
 {
     public interface IUsersService
     {
-        IEnumerable<User> GetAllUsers();
-        User GetUser(int id);
+        Task<IEnumerable<User>> GetAllUsersAsync();
+        Task<User> GetUser(int id);
         bool RemoveUser(User user);
         bool AddUser(User user);
         bool EditUser(User user);

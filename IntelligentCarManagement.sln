@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Api", "IntelligentCarManagement.Api\IntelligentCarManagement.Api.csproj", "{73FE5B68-145A-4109-BC96-83FECD061A2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.DataAccess", "IntelligentCarManagement.DataModels\IntelligentCarManagement.DataAccess.csproj", "{DEAB175D-2AB5-4BE1-9808-1563EC270B10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Api.DataAccess", "IntelligentCarManagement.DataModels\IntelligentCarManagement.Api.DataAccess.csproj", "{DEAB175D-2AB5-4BE1-9808-1563EC270B10}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Models", "IntelligentCarManagement.Models\IntelligentCarManagement.Models.csproj", "{5F7F0A15-5F0C-422A-9C14-66091A2F0A17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Services", "IntelligentCarManagement.Services\IntelligentCarManagement.Services.csproj", "{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Api.Services", "IntelligentCarManagement.Services\IntelligentCarManagement.Api.Services.csproj", "{44E5D1D4-24AE-44B4-A999-3F9C6DA0A065}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Client", "IntelligentCarManagement.Client\IntelligentCarManagement.Client.csproj", "{E6EE4286-C013-43D7-A6A1-36BEACD0AC1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Authentication", "IntelligentCarManagement.Authentication\IntelligentCarManagement.Authentication.csproj", "{BC027925-871F-442A-8BD5-566B0A86E746}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCarManagement.Client.Authentication", "IntelligentCarManagement.Authentication\IntelligentCarManagement.Client.Authentication.csproj", "{BC027925-871F-442A-8BD5-566B0A86E746}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

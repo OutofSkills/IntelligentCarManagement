@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.DataAccess.Repositories.GenericRepository
 {
@@ -16,13 +17,13 @@ namespace IntelligentCarManagement.DataAccess.Repositories.GenericRepository
             this._context = _context;
             table = _context.Set<TEntity>();
         }
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return table.ToList();
+            return await table.ToListAsync();
         }
-        public TEntity GetById(object id)
+        public async Task<TEntity> GetById(object id)
         {
-            return table.Find(id);
+            return await table.FindAsync(id);
         }
         public void Insert(TEntity obj)
         {
@@ -33,9 +34,9 @@ namespace IntelligentCarManagement.DataAccess.Repositories.GenericRepository
             table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
         }
-        public void Delete(object id)
+        public async Task Delete(object id)
         {
-            TEntity existing = table.Find(id);
+            TEntity existing = await table.FindAsync(id);
             table.Remove(existing);
         }
     }

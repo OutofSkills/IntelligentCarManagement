@@ -19,17 +19,33 @@ namespace IntelligentCarManagement.DataAccess
             modelBuilder.Entity<UserAddress>().ToTable("Address");
             modelBuilder.Entity<User>().ToTable("User");
 
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(ur => ur.Users)
-                .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+            //modelBuilder.Entity<UserRole>().HasKey(ur => ur.Id);
+
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(ur => ur.Role)
+            //    .WithMany(ur => ur.Users)
+            //    .HasForeignKey(ur => ur.RoleId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //modelBuilder.Entity<UserRole>()
+            //    .HasOne(ur => ur.User)
+            //    .WithMany(ur => ur.Roles)
+            //    .HasForeignKey(ur => ur.UserId)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(ur => ur.Roles)
-                .HasForeignKey(ur => ur.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany() // If you add `public ICollection<UserRoles> UserRoles{ get; set; }` navigation property to Role model class then replace `.WithMany()` with `.WithMany(b => b.UserRoles)`
+                .HasForeignKey(ur => ur.RoleId);
+
 
             base.OnModelCreating(modelBuilder);
         }

@@ -32,12 +32,12 @@ namespace IntelligentCarManagement.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return unitOfWork.UsersRepo.GetAll();
+            return await unitOfWork.UsersRepo.GetAll();
         }
 
-        public User GetUser(int id)
+        public Task<User> GetUser(int id)
         {
             throw new NotImplementedException();
         }
@@ -46,7 +46,7 @@ namespace IntelligentCarManagement.Services
         {
             /*Completing default user data*/
             // Set status to pendind activation
-            userToRegister.AccountStatus = unitOfWork.StatusesRepo.GetById(1);
+            userToRegister.AccountStatus = await unitOfWork.StatusesRepo.GetById(1);
             userToRegister.RegistrationDate = DateTime.Now;
             /*End completing*/
 
@@ -83,14 +83,16 @@ namespace IntelligentCarManagement.Services
                 }
 
                 await userManager.AddToRoleAsync(userToRegister, defaultRole);
-                userToRegister.Roles.Add(new UserRole { Role = await roleManager.FindByNameAsync(userToRegister.UserName), User = userToRegister});
-                
-                //var updateResult = await userManager.UpdateAsync(userToRegister);
 
-                //if (updateResult.Succeeded)
-                //{
-                //    return "Success";
-                //}
+                var roleToAssign = await roleManager.FindByNameAsync(defaultRole);
+                userToRegister.UserRoles.Add(new UserRole { Role = roleToAssign, RoleId = roleToAssign.Id, User = userToRegister});
+                
+                var updateResult = await userManager.UpdateAsync(userToRegister);
+
+                if (updateResult.Succeeded)
+                {
+                    return "Success";
+                }
             }
             catch(Exception e)
             {

@@ -26,9 +26,9 @@ namespace IntelligentCarManagement.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Car> GetAllCars()
+        public async Task<IEnumerable<Car>> GetAllCars()
         {
-            return _repository.CarsRepo.GetAll();
+            return await _repository.CarsRepo.GetAll();
         }
 
         public Car GetCar(int id)

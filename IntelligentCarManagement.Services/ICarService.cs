@@ -8,7 +8,7 @@ namespace IntelligentCarManagement.Services
 {
     public interface ICarService
     {
-        IEnumerable<Car> GetAllCars();
+        Task<IEnumerable<Car>> GetAllCars();
         Car GetCar(int id);
         bool RemoveCar(Car car);
         bool AddCar(Car car);

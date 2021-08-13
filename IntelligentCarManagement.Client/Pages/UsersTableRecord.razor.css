@@ -84,3 +84,7 @@ table.table .avatar {
 .text-danger {
     color: #ff5b5b;
 }
+
+.text-danger {
+    color: #000;
+}

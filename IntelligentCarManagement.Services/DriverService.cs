@@ -21,9 +21,9 @@ namespace IntelligentCarManagement.Services
             return repository.DriversRepo.GetCarDriver(carID);
         }
 
-        public Driver GetDriver(int id)
+        public async Task<Driver> GetDriver(int id)
         {
-            return repository.DriversRepo.GetById(id);
+            return await repository.DriversRepo.GetById(id);
         }
     }
 }

@@ -4,7 +4,7 @@
     <td><a href="#"><i class="bi bi-person-fill"></i> @User.FirstName @User.LastName</a></td>
     <td>@User.RegistrationDate</td>
     <td>
-        @foreach (var userRole in User.Roles)
+        @foreach (var userRole in User.UserRoles)
         {
             @userRole.Role.Name
         }
@@ -23,10 +23,13 @@
         case "DELETED":
             <td><span class="status text-info">&bull;</span> @User.AccountStatus.Status</td>
             break;
+        default:
+            <td><span class="status text-black">&bull;</span> @User.AccountStatus.Status</td>
+            break;
     }
     <td>
-       <a href=""><i class="bi bi-gear-fill"></i></a>
-       <a href=""><i class="bi bi-archive-fill text-danger"></i></a>
+        <a href=""><i class="bi bi-gear-fill"></i></a>
+        <a href=""><i class="bi bi-archive-fill text-danger"></i></a>
     </td>
 </tr>
 @code {
