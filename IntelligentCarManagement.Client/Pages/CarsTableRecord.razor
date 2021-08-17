@@ -1,0 +1,52 @@
+﻿@inherits CarsTableRecordBase
+
+<tr>
+    <td>@Car.Id</td>
+    <td>@Car.Brand @Car.Model</td>
+    <td>@Car.CurrentLocation</td>
+    <td>
+        @if (Car.IsAvailable)
+        {
+            <span class="status text-success">&bull;</span> <text>Available</text>
+        }
+        else
+        {
+            <span class="status text-danger">&bull;</span> <text>Not Available</text>
+        }
+    </td>
+    <td>
+        @if (Car.Driver is not null)
+        {
+            <a href="#"><i class="bi bi-person-fill"></i>@Car.Driver.UserName</a>
+        }
+        else
+        {
+            <span>Not Assigned</span>
+        }
+    </td>
+    <td>
+        <a href=""><i class="bi bi-gear-fill"></i></a>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#removeCar" style="border:none;background:none">
+            <i class="bi bi-archive-fill text-danger"></i>
+        </button>
+    </td>
+</tr>
+
+<!-- Modal Remove Warning-->
+<div class="modal fade" id="removeCar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="removeCarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="removeCarLabel">Warning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove the car with the id @Car.Id ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="@(() => RemoveCar())">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>

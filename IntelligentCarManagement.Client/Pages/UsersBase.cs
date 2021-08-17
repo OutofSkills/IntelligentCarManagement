@@ -41,6 +41,11 @@ namespace IntelligentCarManagement.Client.Pages
             Users = JsonSerializer.Deserialize<IEnumerable<User>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
         }
 
+        public async Task UserRemoved()
+        {
+            await LoadUsers();
+        }
+
     }
 }
 

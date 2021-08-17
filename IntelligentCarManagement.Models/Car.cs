@@ -16,7 +16,7 @@ namespace IntelligentCarManagement.Models
         public string CurrentLocation { get; set; }
         public string Latitude { get; set; }
         public string Longitude{ get; set;}
-        public int DriverID { get; set; }
+        public int? DriverID { get; set; }
 
         [ForeignKey("DriverID")]
         public virtual Driver Driver { get; set; }

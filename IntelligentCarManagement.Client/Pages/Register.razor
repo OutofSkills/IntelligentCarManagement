@@ -4,6 +4,13 @@
 @inject NavigationManager NavManager
 <h3>Register</h3>
 
+@if (showError is true)
+{
+    <div class="alert alert-danger" role="alert">
+        <p>@errorMessage</p>
+    </div>
+}
+
 <EditForm Model="@user" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
 
@@ -106,14 +113,39 @@
 @code {
     private User user = new User();
     private string errorMessage;
+    private bool showError;
 
     private async Task OnValidSubmit()
     {
         errorMessage = "";
 
-        errorMessage =  await AuthService.Register(user);
+        errorMessage = await AuthService.Register(user);
 
+        if (errorMessage.ToLower() == "success")
+        {
+            await ExecuteLogin();
+        }
+        else
+        {
+            showError = true;
+        }
+    }
 
+    private async Task ExecuteLogin()
+    {
+        showError = false;
+
+        var result = await AuthService.Login(new LoginModel { Email = user.Email, Password = user.Password, Grant_Type = "password" });
+
+        if (result is not null)
+        {
+            NavManager.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "There was an error when trying to log in. ";
+            showError = true;
+        }
 
     }
 }

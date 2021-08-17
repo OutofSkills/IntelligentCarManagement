@@ -11,6 +11,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using IntelligentCarManagement.Authentication;
 using System.Net.Http.Headers;
+using IntelligentCarManagement.Models.NotMapped_Models;
 
 namespace IntelligentCarManagement.Client.Services
 {
@@ -72,6 +73,13 @@ namespace IntelligentCarManagement.Client.Services
             }
 
             return "Success";
+        }
+
+        public async Task<bool> ChangePasswordAsync(ResetPasswordModel resetPasswordModel)
+        {
+            var result = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/change-password", resetPasswordModel);
+
+            return result.IsSuccessStatusCode;
         }
     }
 }

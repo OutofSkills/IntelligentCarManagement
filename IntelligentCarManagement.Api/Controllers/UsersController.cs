@@ -35,10 +35,25 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("UpdateUser")]
-        public IActionResult UpdateUser(User user)
+        [Route("GetUser")]
+        public async Task<IActionResult> GetUserAsync([FromQuery] int userId)
         {
-            return Ok(usersService.EditUser(user));
+            var user = await usersService.GetUserAsync(userId);
+
+            return Ok(user);
+        }
+
+        [HttpPost]
+        [Route("edit")]
+        public IActionResult UpdateUser([FromBody]User user)
+        {
+            var result = usersService.EditUser(user);
+
+            if(result is true)
+            {
+                return Ok();
+            }
+            return BadRequest();
         }
 
         [HttpPost]
@@ -55,6 +70,34 @@ namespace IntelligentCarManagement.Api.Controllers
             {
                 return BadRequest(result);
             }
+        }
+
+        [HttpPost]
+        [Route("removeAccount")]
+        public async Task<IActionResult> RemoveAccountAsync([FromForm] int userId)
+        {
+            var result = await usersService.RemoveUserAsync(userId);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ResetPasswordModel resetPasswordModel)
+        {
+            var result = await usersService.ChangePasswordAsync(resetPasswordModel); 
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

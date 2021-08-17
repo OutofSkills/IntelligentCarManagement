@@ -1,5 +1,6 @@
 ﻿using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using IntelligentCarManagement.Models;
+using IntelligentCarManagement.Models.NotMapped_Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,16 @@ namespace IntelligentCarManagement.Services
 
         public bool EditUser(User user)
         {
-            throw new NotImplementedException();
+            var success = true;
+            try
+            {
+                unitOfWork.UsersRepo.Update(user);
+                unitOfWork.SaveChanges();
+            }catch(Exception e)
+            {
+                return !success;
+            }
+            return success;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -37,9 +47,9 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.UsersRepo.GetAll();
         }
 
-        public Task<User> GetUser(int id)
+        public async Task<User> GetUserAsync(int id)
         {
-            throw new NotImplementedException();
+            return await unitOfWork.UsersRepo.GetById(id);
         }
 
         public async Task<string> RegisterUser(User userToRegister)
@@ -102,9 +112,30 @@ namespace IntelligentCarManagement.Services
             return "Fail";
         }
 
-        public bool RemoveUser(User user)
+        public async Task<bool> ChangePasswordAsync(ResetPasswordModel resetPasswordModel)
         {
-            throw new NotImplementedException();
+            var user = await userManager.FindByEmailAsync(resetPasswordModel.Email);
+            var result = await userManager.ChangePasswordAsync(user, resetPasswordModel.CurrentPassword, resetPasswordModel.Password);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> RemoveUserAsync(int userId)
+        {
+            var success = true;
+
+            try
+            {
+                await unitOfWork.UsersRepo.Delete(userId);
+                unitOfWork.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                // Should do something with the exception
+                return !success;
+            }
+
+            return success;
         }
     }
 }

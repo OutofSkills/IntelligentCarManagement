@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>2cf3ca0a-fb0b-4210-a6a3-d0eacfb745b1</UserSecretsId>
   </PropertyGroup>
 
@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IntelligentCarManagement.Models\IntelligentCarManagement.Models.csproj" />
     <ProjectReference Include="..\IntelligentCarManagement.Services\IntelligentCarManagement.Api.Services.csproj" />
   </ItemGroup>
 

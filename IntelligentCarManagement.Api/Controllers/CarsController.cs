@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using IntelligentCarManagement.Services;
+using IntelligentCarManagement.Models.NotMapped_Models;
+using IntelligentCarManagement.Api.Helpers;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -25,9 +27,41 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpGet]
         [Route("GetCars")]
-        public IActionResult GetCars() 
+        public async Task<IActionResult> GetCarsAsync([FromQuery] Pagination pagination) 
         {
-            return Ok(carService.GetAllCars());
+            var collection = await carService.GetAllCars();
+
+            HttpContext.InsertPaginationParameterInResponse(collection, pagination.NumberOfRecords);
+
+            return Ok(collection.Paginate(pagination).ToList());
+        }
+
+        [HttpPost]
+        [Route("removeCar")]
+        public async Task<IActionResult> RemoveCarAsync([FromForm] int carId)
+        {
+            var result = await carService.RemoveCarAsync(carId);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+    
+        [HttpPost]
+        [Route("newCar")]
+        public IActionResult AddNewCarAsync([FromBody] Car car)
+        {
+            var result = carService.AddCar(car);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
     }
 }

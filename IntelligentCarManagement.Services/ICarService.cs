@@ -10,7 +10,7 @@ namespace IntelligentCarManagement.Services
     {
         Task<IEnumerable<Car>> GetAllCars();
         Car GetCar(int id);
-        bool RemoveCar(Car car);
+        Task<bool> RemoveCarAsync(int carId);
         bool AddCar(Car car);
         bool EditCar(Car car);
     }

@@ -9,16 +9,28 @@ namespace IntelligentCarManagement.Services
 {
     public class CarService : ICarService
     {
-        private readonly IUnitOfWork _repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CarService(IUnitOfWork repository)
+        public CarService(IUnitOfWork unitOfWork)
         {
-            _repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public bool AddCar(Car car)
         {
-            throw new NotImplementedException();
+            var success = true;
+            try
+            {
+                unitOfWork.CarsRepo.Insert(car);
+                unitOfWork.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                //handle exception
+                return !success;
+            }
+
+            return success;
         }
 
         public bool EditCar(Car car)
@@ -28,7 +40,7 @@ namespace IntelligentCarManagement.Services
 
         public async Task<IEnumerable<Car>> GetAllCars()
         {
-            return await _repository.CarsRepo.GetAll();
+            return await unitOfWork.CarsRepo.GetAll();
         }
 
         public Car GetCar(int id)
@@ -36,9 +48,19 @@ namespace IntelligentCarManagement.Services
             throw new NotImplementedException();
         }
 
-        public bool RemoveCar(Car car)
+        public async Task<bool> RemoveCarAsync(int carId)
         {
-            throw new NotImplementedException();
+            var success = true;
+            try
+            {
+                await unitOfWork.CarsRepo.Delete(carId);
+            }
+            catch(Exception e)
+            {
+                return !success;
+            }
+
+            return success;
         }
     }
 }

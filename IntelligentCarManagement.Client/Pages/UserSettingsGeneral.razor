@@ -1,0 +1,81 @@
+﻿@using IntelligentCarManagement.Client.Services
+
+@if (User is null || User.Address is null)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <EditForm Model="@User" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        @if (successStatus)
+        {
+            <div class="alert alert-success">
+                <span>@successMessage</span>
+            </div>
+        }
+
+    <div class="form-group">
+        <label class="form-label">Username</label>
+        <InputText type="text" class="form-control mb-1" @bind-Value="@User.UserName"></InputText>
+        <ValidationMessage For="@(() => User.UserName)" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">First Name</label>
+        <InputText type="text" class="form-control" @bind-Value="@User.FirstName"></InputText>
+        <ValidationMessage For="@(() => User.FirstName)" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <InputText type="text" class="form-control" @bind-Value="@User.LastName"></InputText>
+        <ValidationMessage For="@(() => User.LastName)" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <InputText type="text" class="form-control mb-1" @bind-Value="@User.Email"></InputText>
+        <ValidationMessage For="@(() => User.Email)" />
+
+        @if (User.EmailConfirmed is false)
+        {
+            <div class="alert alert-warning mt-3">
+                Your email is not confirmed. Please check your inbox.<br>
+                <a href="javascript:void(0)">Resend confirmation</a>
+            </div>
+        }
+
+    </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+            <button type="button" class="btn btn-default">Cancel</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public User User { get; set; }
+    [Inject]
+    public IUsersService UsersService { get; set; }
+    private bool successStatus = false;
+    private string successMessage;
+
+    protected override void OnParametersSet()
+    {
+        User.Password = "PreventValidationError123456";
+        User.ConfirmPassword = "PreventValidationError123456";
+    }
+
+    private async Task HandleSubmit()
+    {
+        successStatus = await UsersService.Edit(User);
+
+        successMessage = "Changes saved successfully.";
+    }
+}

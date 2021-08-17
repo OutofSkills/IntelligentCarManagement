@@ -1,4 +1,5 @@
 ﻿using IntelligentCarManagement.Models;
+using IntelligentCarManagement.Models.NotMapped_Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,10 +10,11 @@ namespace IntelligentCarManagement.Services
     public interface IUsersService
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<User> GetUser(int id);
-        bool RemoveUser(User user);
+        Task<User> GetUserAsync(int id);
+        Task<bool> RemoveUserAsync(int userId);
         bool AddUser(User user);
         bool EditUser(User user);
         Task<string> RegisterUser(User user);
+        Task<bool> ChangePasswordAsync(ResetPasswordModel model);
     }
 }

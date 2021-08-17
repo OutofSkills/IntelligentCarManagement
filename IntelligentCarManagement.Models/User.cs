@@ -23,7 +23,7 @@ namespace IntelligentCarManagement.Models
         [MinLength(8)]
         public override string PhoneNumber { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
         [Required(ErrorMessage = "Email address is required.")]
         [DataType(DataType.EmailAddress)]
         public override string Email { get; set; }
@@ -41,6 +41,8 @@ namespace IntelligentCarManagement.Models
         [Compare(nameof(Password), ErrorMessage = "The password do not match.")]
         [NotMapped]
         public string ConfirmPassword { get; set; }
+        [NotMapped]
+        public string CurrentPassword { get; set; }
         public string Access_Token { get; set; }
         public int AddressId { get; set; }
         public int StatusId { get; set; }
@@ -57,7 +59,6 @@ namespace IntelligentCarManagement.Models
         public User()
         {
             UserRoles = new List<UserRole>();
-            Address = new UserAddress();
         }
     }
 }
