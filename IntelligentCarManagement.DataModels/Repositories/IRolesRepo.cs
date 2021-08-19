@@ -10,6 +10,6 @@ namespace IntelligentCarManagement.DataAccess.Repositories
 {
     public interface IRolesRepo: IRepo<Role>
     {
-        IEnumerable<UserRole> GetRoles(int userId);
+        IEnumerable<UserRole> GetUserRoles(int userId);
     }
 }

@@ -111,7 +111,7 @@
 </EditForm>
 
 @code {
-    private User user = new User();
+    private User user = new User() { Address = new UserAddress() };
     private string errorMessage;
     private bool showError;
 

@@ -1,0 +1,100 @@
+﻿@using IntelligentCarManagement.Client.Services
+
+@if (User is null)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <h4>Roles</h4>
+    <EditForm Model="UserRoles" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        @if (successStatus)
+        {
+            <div class="alert alert-success">
+                <span>@message</span>
+            </div>
+        }
+        @if (failStatus)
+        {
+            <div class="alert alert-danger">
+                <span>@message</span>
+            </div>
+        }
+
+        <div class="form-group">
+            @foreach (var role in UserRoles)
+            {
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">@role.Role.Name</label>
+                    <InputCheckbox class="form-check-input" @bind-Value="@role.IsAssigned"></InputCheckbox>
+                </div>
+            }
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+            <button type="button" class="btn btn-default">Cancel</button>
+        </div>
+    </EditForm>
+
+    <EditForm Model="Driver" OnValidSubmit="HandleSubmit">
+
+    </EditForm>
+}
+
+
+@code {
+    [Parameter]
+    public User User { get; set; }
+    Driver Driver { get; set; } = new();
+    [Parameter]
+    public IEnumerable<RolesCheckBoxModel> UserRoles { get; set; }
+    [Inject]
+    public IUsersService UsersService { get; set; }
+    private bool successStatus = false;
+    private bool failStatus = false;
+    private string message;
+
+    private async Task HandleSubmit()
+    {
+        if(UserRoles.Any(role => role.IsAssigned == true))
+        {
+            User.UserRoles.Clear();
+
+            foreach (var checkBoxRole in UserRoles)
+            {
+                if (checkBoxRole.IsAssigned is true)
+                {
+                    User.UserRoles.Add(new UserRole() { Role = checkBoxRole.Role, UserId = User.Id });
+                }
+            }
+
+            var result = await UsersService.UpdateUserRoles(User);
+
+            if(result is true)
+            {
+                successStatus = true;
+                message = "Chages saved successfully.";
+            }
+            else
+            {
+                failStatus = true;
+                message = "Failed to save the made changes.";
+            }
+        }
+        else
+        {
+            failStatus = true;
+            message = "At least one value should be chosen.";
+
+            return;
+        }
+    }
+}

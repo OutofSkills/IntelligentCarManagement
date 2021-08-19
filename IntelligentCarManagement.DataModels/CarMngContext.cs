@@ -19,20 +19,6 @@ namespace IntelligentCarManagement.DataAccess
             modelBuilder.Entity<UserAddress>().ToTable("Address");
             modelBuilder.Entity<User>().ToTable("User");
 
-            //modelBuilder.Entity<UserRole>().HasKey(ur => ur.Id);
-
-            //modelBuilder.Entity<UserRole>()
-            //    .HasOne(ur => ur.Role)
-            //    .WithMany(ur => ur.Users)
-            //    .HasForeignKey(ur => ur.RoleId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<UserRole>()
-            //    .HasOne(ur => ur.User)
-            //    .WithMany(ur => ur.Roles)
-            //    .HasForeignKey(ur => ur.UserId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
 
@@ -54,6 +40,5 @@ namespace IntelligentCarManagement.DataAccess
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
-        public DbSet<UserRole> UsersRoles { get; set; }
     }
 }

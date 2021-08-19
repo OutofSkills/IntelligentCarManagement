@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
-    public partial class UpdateDatabase : Migration
+    public partial class UserRoleChange : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -63,7 +63,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     Age = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Access_Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -281,7 +281,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
                     Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Longitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DriverID = table.Column<int>(type: "int", nullable: false)
+                    DriverID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -291,7 +291,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         column: x => x.DriverID,
                         principalTable: "Driver",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -347,7 +347,8 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 name: "IX_Car_DriverID",
                 table: "Car",
                 column: "DriverID",
-                unique: true);
+                unique: true,
+                filter: "[DriverID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersRoles_RoleId",

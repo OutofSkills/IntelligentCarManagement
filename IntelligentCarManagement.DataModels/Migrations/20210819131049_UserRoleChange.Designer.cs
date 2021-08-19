@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    [Migration("20210816133300_UserAvatarTypeChange")]
-    partial class UserAvatarTypeChange
+    [Migration("20210819131049_UserRoleChange")]
+    partial class UserRoleChange
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -398,7 +398,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("IntelligentCarManagement.Models.AccountStatus", "AccountStatus")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -494,11 +494,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("IntelligentCarManagement.Models.Driver", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>

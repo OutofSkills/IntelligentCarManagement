@@ -19,6 +19,7 @@
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-social-links">Social links</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-connections">Connections</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-notifications">Notifications</a>
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-advanced">Advanced</a>
                 </div>
             </div>
             <div class="col-md-9">
@@ -31,12 +32,10 @@
                                     <div class="col-md-2">
                                         @if (User.Avatar is null)
                                         {
-                                            <img src="/images/icons/no_avatar.png" alt="" class="d-block ui-w-80">
-                                        }
+                            <img src="/images/icons/no_avatar.png" alt="" class="d-block ui-w-80"> }
                                         else
                                         {
-                                            <img src="@User.Avatar" alt="" class="d-block ui-w-80">
-                                        }
+                            <img src="@User.Avatar" alt="" class="d-block ui-w-80">}
                                     </div>
                                     <div class="col-md-10">
                                         <label class="btn btn-outline-primary">
@@ -185,6 +184,11 @@
                                 </label>
                             </div>
 
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-advanced">
+                        <div class="card-body pb-2">
+                            <UserSettingsAdvanced User="User" UserRoles="UserCheckedRoles"></UserSettingsAdvanced>
                         </div>
                     </div>
                 </div>

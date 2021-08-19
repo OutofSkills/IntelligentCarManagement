@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Services
@@ -46,10 +47,26 @@ namespace IntelligentCarManagement.Client.Services
 
             return response.IsSuccessStatusCode;
         }
+        public async Task<bool> UpdateUserRoles(User user)
+        {
+            var response = await httpClient.PostAsJsonAsync("/api/Users/edit-roles", user);
+
+            return response.IsSuccessStatusCode;
+        }
 
         public async Task<HttpResponseMessage> GetUserAsync(int userId)
         {
             return await httpClient.GetAsync($"/api/Users/GetUser?userId={userId}");
+        }
+
+        public async Task<IEnumerable<string>> GetUserRolesAsync(int userId)
+        {
+            var httpResponse = await httpClient.GetAsync($"/api/Users/get-user-roles?userId={userId}");
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+            var userRoles = JsonSerializer.Deserialize<IEnumerable<string>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return userRoles;
         }
 
         public async Task<HttpResponseMessage> GetUsersAsync(int page = 1, int recordsPerPage = 10)

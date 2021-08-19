@@ -238,14 +238,11 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UsersRoles");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -396,7 +393,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("IntelligentCarManagement.Models.AccountStatus", "AccountStatus")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -492,11 +489,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("IntelligentCarManagement.Models.Driver", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>

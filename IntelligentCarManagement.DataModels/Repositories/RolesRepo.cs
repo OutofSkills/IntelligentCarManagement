@@ -12,7 +12,7 @@ namespace IntelligentCarManagement.DataAccess.Repositories
     {
         public RolesRepo(CarMngContext context) : base(context) { }
 
-        public IEnumerable<UserRole> GetRoles(int userId)
+        public IEnumerable<UserRole> GetUserRoles(int userId)
         {
             return (IEnumerable<UserRole>)_context.UserRoles.Where(ur => ur.UserId == userId);
         }

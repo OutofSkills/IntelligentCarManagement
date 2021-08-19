@@ -1,3 +1,4 @@
+using IntelligentCarManagement.Api.Services;
 using IntelligentCarManagement.DataAccess;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using IntelligentCarManagement.Models;
@@ -96,6 +97,7 @@ namespace IntelligentCarManagement.Api
             services.AddTransient<IDriverService, DriverService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IRolesService, RolesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

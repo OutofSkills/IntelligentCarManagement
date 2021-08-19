@@ -55,6 +55,18 @@ namespace IntelligentCarManagement.Api.Controllers
             }
             return BadRequest();
         }
+        [HttpPost]
+        [Route("edit-roles")]
+        public async Task<IActionResult> UpdateUserRolesAsync([FromBody] User user)
+        {
+            var result = await usersService.UpdateUserRoles(user);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
 
         [HttpPost]
         [Route("register")]
@@ -98,6 +110,13 @@ namespace IntelligentCarManagement.Api.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("get-user-roles")]
+        public async Task<IActionResult> GetUserRolesAsync([FromQuery] int userId)
+        {
+            return Ok(await usersService.GetUserRolesAsync(userId));
         }
     }
 }

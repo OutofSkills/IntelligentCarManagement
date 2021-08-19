@@ -27,6 +27,7 @@ namespace IntelligentCarManagement.Client
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IDriverService, DriverService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
+            builder.Services.AddScoped<IRolesService, RolesService>();
 
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();

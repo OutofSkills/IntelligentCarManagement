@@ -28,6 +28,15 @@ namespace IntelligentCarManagement.Services
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<string>> GetUserRolesAsync(int userId)
+        {
+            var user = await userManager.FindByIdAsync(userId.ToString());
+
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            return userRoles;
+        }
+
         public bool EditUser(User user)
         {
             var success = true;
@@ -136,6 +145,33 @@ namespace IntelligentCarManagement.Services
             }
 
             return success;
+        }
+
+        public async Task<bool> UpdateUserRoles(User user)
+        {
+            List<string> assignedRolesNames = new();
+            try
+            {
+
+                foreach (var userRole in user.UserRoles)
+                {
+                    assignedRolesNames.Add(userRole.Role.Name);
+                }
+                
+                var userToUpdate = await userManager.FindByEmailAsync(user.Email);
+                var rolesToRemove = await userManager.GetRolesAsync(userToUpdate);
+
+                var removeResult = await userManager.RemoveFromRolesAsync(userToUpdate, rolesToRemove);
+                var result = await userManager.AddToRolesAsync(userToUpdate, assignedRolesNames);
+
+                return result.Succeeded;
+            }
+            catch(Exception e)
+            {
+                //so something with the exception
+            }
+
+            return false;
         }
     }
 }

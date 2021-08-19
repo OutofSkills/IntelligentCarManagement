@@ -15,5 +15,7 @@ namespace IntelligentCarManagement.Client.Services
         public Task<bool> Edit(User user);
         public Task<HttpResponseMessage> GetUserAsync(int userId);
         public Task<bool> DeleteAccountAsync(int userId);
+        Task<bool> UpdateUserRoles(User user);
+        Task<IEnumerable<string>> GetUserRolesAsync(int userId);
     }
 }
