@@ -27,5 +27,32 @@ namespace IntelligentCarManagement.Api.Controllers
         {
             return Ok(driverService.GetCarDriver(carId));
         }
+
+        [HttpPost]
+        [Route("add-driver")]
+        public IActionResult AddDriver(Driver driver)
+        {
+            var result = driverService.AddDriver(driver);
+
+            if(result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+        [HttpPost]
+        [Route("update-driver")]
+        public IActionResult UpdateDriver(Driver driver)
+        {
+            var result = driverService.UpdateDriver(driver);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }

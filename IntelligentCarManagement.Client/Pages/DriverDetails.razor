@@ -15,9 +15,9 @@ else
         <div class="row">
             <div class="col-lg-4 col-sm-6">
                 <div class="card borderless">
-                    @if (Driver.License != null)
+                    @if (Driver.LicensePhoto != null)
                     {
-                        <img alt="Licence photo" value="@Driver.License" />
+                        <img alt="Licence photo" value="@Driver.LicensePhoto" />
                     }
                     else
                     {
@@ -36,7 +36,7 @@ else
                     <div class="container-fluid">
                         <div class="row mt-2">
                             <h4>
-                                @Driver.UserName
+                                @Driver.User.UserName
                             </h4>
                         </div>
                         <div class="row mt-1">
@@ -64,7 +64,7 @@ else
                             <div class="tab-content" id="myTabContent">
                                 <DriverDetailsAboutTab Driver="@Driver"></DriverDetailsAboutTab>
                                 <DriverDetailsCarTab Car="@Driver.Car"></DriverDetailsCarTab>
-                                <DriverDetailsContactTab Email="@Driver.Email" Phone="@Driver.PhoneNumber"></DriverDetailsContactTab>
+                                <DriverDetailsContactTab Email="@Driver.User.Email" Phone="@Driver.User.PhoneNumber"></DriverDetailsContactTab>
                             </div>
                         </div>
                     </div>

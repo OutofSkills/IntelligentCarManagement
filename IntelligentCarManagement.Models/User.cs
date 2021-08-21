@@ -55,6 +55,7 @@ namespace IntelligentCarManagement.Models
         public virtual AccountStatus AccountStatus { get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual IList<UserRole> UserRoles { get; set; }
+        public virtual Driver Driver { get; set; }
 
         public User()
         {

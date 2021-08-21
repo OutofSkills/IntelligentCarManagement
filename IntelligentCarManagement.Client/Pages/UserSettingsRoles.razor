@@ -43,10 +43,6 @@ else
             <button type="button" class="btn btn-default">Cancel</button>
         </div>
     </EditForm>
-
-    <EditForm Model="Driver" OnValidSubmit="HandleSubmit">
-
-    </EditForm>
 }
 
 
@@ -64,7 +60,7 @@ else
 
     private async Task HandleSubmit()
     {
-        if(UserRoles.Any(role => role.IsAssigned == true))
+        if (UserRoles.Any(role => role.IsAssigned == true))
         {
             User.UserRoles.Clear();
 
@@ -78,7 +74,7 @@ else
 
             var result = await UsersService.UpdateUserRoles(User);
 
-            if(result is true)
+            if (result is true)
             {
                 successStatus = true;
                 message = "Chages saved successfully.";

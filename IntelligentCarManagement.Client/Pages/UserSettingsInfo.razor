@@ -17,7 +17,13 @@ else
          @if(successStatus)
           {
             <div class="alert alert-success">
-                <span>@successMessage</span>
+                <span>@message</span>
+            </div>
+          }
+         @if(failStatus)
+          {
+            <div class="alert alert-danger">
+                <span>@message</span>
             </div>
           }
 
@@ -76,7 +82,8 @@ else
     [Inject]
     public IUsersService UsersService { get; set; }
     private bool successStatus = false;
-    private string successMessage;
+    private bool failStatus = false;
+    private string message;
 
     protected override void OnParametersSet()
     {
@@ -86,8 +93,17 @@ else
 
     private async Task HandleSubmit()
     {
-        successStatus = await UsersService.Edit(User);
+        var status = await UsersService.Edit(User);
 
-        successMessage = "Changes saved successfully.";
+        if(status)
+        {
+            successStatus = true;
+            message = "Changes saved successfully.";
+        }
+        else
+        {
+            failStatus = true;
+            message = "Failed to save the changes.";
+        }
     }
 }

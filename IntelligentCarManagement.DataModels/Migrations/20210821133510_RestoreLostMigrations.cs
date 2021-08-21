@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
-    public partial class UserRoleChange : Migration
+    public partial class RestoreLostMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -226,43 +226,44 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 name: "Driver",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    License = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LicensePhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Accidents = table.Column<int>(type: "int", nullable: false),
                     DeservedClients = table.Column<int>(type: "int", nullable: false),
                     Experience = table.Column<int>(type: "int", nullable: false),
-                    Rating = table.Column<float>(type: "real", nullable: false)
+                    Rating = table.Column<float>(type: "real", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Driver", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Driver_AspNetUsers_Id",
-                        column: x => x.Id,
+                        name: "FK_Driver_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsersRoles",
+                name: "UserRole",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_UserRole", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UsersRoles_AspNetRoles_RoleId",
+                        name: "FK_UserRole_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UsersRoles_AspNetUsers_UserId",
+                        name: "FK_UserRole_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -351,8 +352,14 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 filter: "[DriverID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersRoles_RoleId",
-                table: "UsersRoles",
+                name: "IX_Driver_UserId",
+                table: "Driver",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRole_RoleId",
+                table: "UserRole",
                 column: "RoleId");
         }
 
@@ -380,7 +387,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 name: "Client");
 
             migrationBuilder.DropTable(
-                name: "UsersRoles");
+                name: "UserRole");
 
             migrationBuilder.DropTable(
                 name: "Driver");

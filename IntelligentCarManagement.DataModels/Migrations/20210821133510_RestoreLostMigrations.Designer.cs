@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    [Migration("20210819131049_UserRoleChange")]
-    partial class UserRoleChange
+    [Migration("20210821133510_RestoreLostMigrations")]
+    partial class RestoreLostMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,6 +74,39 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasFilter("[DriverID] IS NOT NULL");
 
                     b.ToTable("Car");
+                });
+
+            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Accidents")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeservedClients")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LicensePhoto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Driver");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Role", b =>
@@ -240,14 +273,11 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UsersRoles");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -358,28 +388,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     b.ToTable("Client");
                 });
 
-            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
-                {
-                    b.HasBaseType("IntelligentCarManagement.Models.User");
-
-                    b.Property<int>("Accidents")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DeservedClients")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Experience")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("License")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
-
-                    b.ToTable("Driver");
-                });
-
             modelBuilder.Entity("IntelligentCarManagement.Models.Car", b =>
                 {
                     b.HasOne("IntelligentCarManagement.Models.Driver", "Driver")
@@ -387,6 +395,17 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("IntelligentCarManagement.Models.Car", "DriverID");
 
                     b.Navigation("Driver");
+                });
+
+            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
+                {
+                    b.HasOne("IntelligentCarManagement.Models.User", "User")
+                        .WithOne("Driver")
+                        .HasForeignKey("IntelligentCarManagement.Models.Driver", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
@@ -489,26 +508,19 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
                 {
-                    b.HasOne("IntelligentCarManagement.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("IntelligentCarManagement.Models.Driver", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>
                 {
+                    b.Navigation("Driver");
+
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.UserAddress", b =>
                 {
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>
-                {
-                    b.Navigation("Car");
                 });
 #pragma warning restore 612, 618
         }

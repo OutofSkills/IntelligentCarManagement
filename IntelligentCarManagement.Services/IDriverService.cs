@@ -10,5 +10,7 @@ namespace IntelligentCarManagement.Services
     {
         Task<Driver> GetDriver(int id);
         Driver GetCarDriver(int carID);
+        bool AddDriver(Driver driver);
+        bool UpdateDriver(Driver driver);
     }
 }

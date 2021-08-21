@@ -19,7 +19,14 @@
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-social-links">Social links</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-connections">Connections</a>
                     <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-notifications">Notifications</a>
-                    <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-advanced">Advanced</a>
+
+                    <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#account-advanced">Advanced</a>
+                    <div class="collapse" id="account-advanced">
+                        <ul class="list-group list-group-flush account-settings-links">
+                            <li><a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-roles">Roles</a></li>
+                            <li><a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#account-driver">Driver</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="col-md-9">
@@ -32,10 +39,10 @@
                                     <div class="col-md-2">
                                         @if (User.Avatar is null)
                                         {
-                            <img src="/images/icons/no_avatar.png" alt="" class="d-block ui-w-80"> }
+                                            <img src="/images/icons/no_avatar.png" alt="" class="d-block ui-w-80"> }
                                         else
                                         {
-                            <img src="@User.Avatar" alt="" class="d-block ui-w-80">}
+                                            <img src="@User.Avatar" alt="" class="d-block ui-w-80">}
                                     </div>
                                     <div class="col-md-10">
                                         <label class="btn btn-outline-primary">
@@ -186,9 +193,14 @@
 
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="account-advanced">
+                    <div class="tab-pane fade" id="account-roles">
                         <div class="card-body pb-2">
-                            <UserSettingsAdvanced User="User" UserRoles="UserCheckedRoles"></UserSettingsAdvanced>
+                            <UserSettingsRoles User="User" UserRoles="UserCheckedRoles"></UserSettingsRoles>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="account-driver">
+                        <div class="card-body pb-2">
+                            <UserSettingsDriver Driver="User.Driver"></UserSettingsDriver>
                         </div>
                     </div>
                 </div>

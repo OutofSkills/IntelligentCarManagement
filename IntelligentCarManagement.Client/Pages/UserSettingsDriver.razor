@@ -1,0 +1,138 @@
+﻿<h4 class="mb-1">Driver</h4>
+
+@using IntelligentCarManagement.Client.Services
+
+@if (Driver is null)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else
+{
+    <EditForm Model="Driver" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        @if (successStatus)
+        {
+            <div class="alert alert-success">
+                <span>@message</span>
+            </div>
+        }
+        @if (failStatus)
+        {
+            <div class="alert alert-danger">
+                <span>@message</span>
+            </div>
+        }
+
+        <div class="card-body pb-2">
+            <div class="form-group">
+                <label class="form-label gy-2">License Photo</label>
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        @if (Driver.LicensePhoto is null)
+                        {
+                            <img src="/images/no-image-available.jpg" alt="" class="img-fluid" style="max-height:100px;max-width:150px" />
+                        }
+                        else
+                        {
+                            <img src="@Driver.LicensePhoto" alt="" class="img-fluid" style="max-height:100px;max-width:150px" />
+                        }
+                    </div>
+
+                    <div class="col-md-8">
+                        <label class="btn btn-outline-primary">
+                            Upload Photo
+                            <InputFile class="account-settings-fileinput" OnChange="@LoadFile"></InputFile>
+                        </label> &nbsp;
+                        <ValidationMessage For="@(() => Driver.LicensePhoto)" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr class="border-light m-0">
+        <div class="card-body pb-2">
+
+            <h4 class="mb-4">About</h4>
+            <div class="form-group">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Experience</label>
+                        <InputNumber type="text" class="form-control" @bind-Value="Driver.Experience" placeholder="Years of experience."></InputNumber>
+                        <ValidationMessage For="@(() => Driver.Experience)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Accidents</label>
+                        <InputNumber type="text" class="form-control" @bind-Value="Driver.Accidents" placeholder="Number of accidents" disabled></InputNumber>
+                        <ValidationMessage For="@(() => Driver.Accidents)" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Rating</label>
+                        <InputNumber type="text" class="form-control" @bind-Value="Driver.Rating" step=".01" placeholder="Your driver rating." disabled></InputNumber>
+                        <ValidationMessage For="@(() => Driver.Rating)" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Save changes</button>&nbsp;
+            <button type="button" class="btn btn-default">Cancel</button>
+        </div>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public Driver Driver { get; set; }
+    [Inject]
+    public IDriverService DriverService { get; set; }
+    [Inject]
+    public IUsersService UsersService { get; set; }
+
+    private bool successStatus;
+    private bool failStatus;
+    private string message;
+
+    private async Task HandleSubmit()
+    {
+        bool status;
+
+        if (Driver.Id is 0)
+        {
+            status = await DriverService.AddDriver(Driver);
+        }
+        else
+        {
+            status = await DriverService.UpdateDriver(Driver);
+        }
+
+        if (status)
+        {
+            successStatus = true;
+            message = "Changes saved successfully.";
+        }
+        else
+        {
+            failStatus = true;
+            message = "Couldn't save the changes.";
+        }
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var format = "iamge/png";
+        var resizedImage = await e.File.RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImage.Size];
+
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+
+        Driver.LicensePhoto = imageData;
+    }
+}

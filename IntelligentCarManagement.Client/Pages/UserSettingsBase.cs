@@ -37,6 +37,15 @@ namespace IntelligentCarManagement.Client.Pages
 
             await AssignCheckBoxRoles();
         }
+        protected override void OnParametersSet()
+        {
+            if (User.Driver == null)
+            {
+                User.Driver = new Driver();
+                User.Driver.UserId = User.Id;
+            }
+        }
+
         protected async Task LoadFile(InputFileChangeEventArgs e)
         {
             var format = "iamge/png";
