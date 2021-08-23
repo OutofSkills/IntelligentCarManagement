@@ -19,9 +19,43 @@ namespace IntelligentCarManagement.Api.Services
             this.roleManager = roleManager;
         }
 
+        public async Task<bool> AddRoleAsync(Role role)
+        {
+            var result = await roleManager.CreateAsync(role);
+
+            return result.Succeeded;
+        }
+
+        public async Task<bool> EditRoleAsync(Role role)
+        {
+            var roleToUpdate = await roleManager.FindByIdAsync(role.Id.ToString());
+
+            roleToUpdate.Name = role.Name;
+            roleToUpdate.Description = role.Description;
+
+            var result = await roleManager.UpdateAsync(roleToUpdate);
+
+            return result.Succeeded;
+        }
+
         public async Task<IEnumerable<Role>> GetAllRolesAsync()
         {
             return await roleManager.Roles.ToListAsync(); 
+        }
+
+        public async Task<Role> GetRoleAsync(int id)
+        {
+            var role = await roleManager.FindByIdAsync(id.ToString());
+
+            return role;
+        }
+
+        public async Task<bool> RemoveRoleAsync(int id)
+        {
+            var role = await roleManager.FindByIdAsync(id.ToString());
+            var result = await roleManager.DeleteAsync(role);
+
+            return result.Succeeded;
         }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Services
@@ -17,11 +18,35 @@ namespace IntelligentCarManagement.Client.Services
             this.httpClient = httpClient;
         }
 
+        public async Task<bool> AddRoleAsync(Role newRole)
+        {
+            var result = await httpClient.PostAsJsonAsync("/api/Roles/add-role", newRole);
+
+            return result.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EditRoleAsync(Role role)
+        {
+            var result = await httpClient.PostAsJsonAsync("/api/Roles/edit-role", role);
+
+            return result.IsSuccessStatusCode;
+        }
+        public async Task<HttpResponseMessage> GetRolesAsync(int page = 1, int recordsPerPage = 10)
+        {
+            var response = await httpClient.GetAsync($"/api/Roles/get-roles?page={page}&recordsPerPage={recordsPerPage}");
+            return response;
+        }
+
         public async Task<IEnumerable<Role>> GetRolesAsync()
         {
-            var roles = await httpClient.GetJsonAsync<Role[]>("/api/Roles/get-roles");
+            return await httpClient.GetFromJsonAsync<Role[]>("/api/Roles/get-all-roles");
+        }
 
-            return roles;
+        public async Task<bool> RemoveRoleAsync(int id)
+        {
+            var result = await httpClient.GetAsync($"/api/Roles/remove-role?id={id}");
+
+            return result.IsSuccessStatusCode;
         }
     }
 }

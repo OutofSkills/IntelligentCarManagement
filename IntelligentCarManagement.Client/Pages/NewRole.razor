@@ -1,0 +1,85 @@
+﻿@using IntelligentCarManagement.Client.Services;
+
+<!-- Modal Edit Role-->
+<div class="modal fade" id="addRole" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addRoleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger" id="addRoleLabel">New Role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <EditForm Model="newRole" OnValidSubmit="AddRole">
+                <DataAnnotationsValidator />
+
+                <div class="modal-body">
+
+                    @if (isSuccess)
+                    {
+                        <div class="alert alert-success">
+                            <span>@message</span>
+                        </div>
+                    }
+                    @if (isFail)
+                    {
+                        <div class="alert alert-danger">
+                            <span>@message</span>
+                        </div>
+                    }
+
+                    <div class="form-group row mt-2">
+                        <label for="name" class="col-md-2 col-form-label">Name</label>
+                        <div class="col-md-10">
+                            <InputText id="name" class="form-control" @bind-Value="newRole.Name"></InputText>
+                            <ValidationMessage For="@(() => newRole.Name)"></ValidationMessage>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mt-2">
+                        <label for="description" class="col-md-2 col-form-label">Description</label>
+                        <div class="col-md-10">
+                            <InputTextArea id="description" rows="3" class="form-control" @bind-Value="newRole.Description"></InputTextArea>
+                            <ValidationMessage For="@(() => newRole.Description)"></ValidationMessage>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info">Submit</button>
+                </div>
+
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Role newRole = new();
+    [Inject]
+    public IRolesService RolesService { get; set; }
+    [Parameter]
+    public EventCallback OnDataChanged { get; set; }
+
+    private string message;
+    private bool isSuccess = false;
+    private bool isFail = false;
+
+    protected async Task AddRole()
+    {
+        var state = await RolesService.AddRoleAsync(newRole);
+
+        if(state is true)
+        {
+            isSuccess = true;
+            message = "The role was added successfully";
+        }
+        else
+        {
+            isFail = true;
+            message = "Something went wrong. Couldn't add the role";
+        }
+
+        await OnDataChanged.InvokeAsync(newRole.Name);
+    }
+}

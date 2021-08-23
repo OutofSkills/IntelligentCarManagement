@@ -30,14 +30,14 @@
     }
     <td>
         <a href="user/settings/@User.Id"><i class="bi bi-gear-fill"></i></a>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#removeUser" style="border:none;background:none">
+        <button type="button" data-bs-toggle="modal" data-bs-target="#removeUser-@User.Id" style="border:none;background:none">
             <i class="bi bi-archive-fill text-danger"></i>
         </button>
     </td>
 </tr>
 
 <!-- Modal Remove Warning-->
-<div class="modal fade" id="removeUser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="removeUserLabel" aria-hidden="true">
+<div class="modal fade" id="removeUser-@User.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="removeUserLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
