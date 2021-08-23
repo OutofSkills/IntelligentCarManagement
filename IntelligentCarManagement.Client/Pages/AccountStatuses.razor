@@ -1,17 +1,18 @@
-﻿@page "/roles";
-@inherits RolesBase
+﻿@page "/account-statuses"
+@inherits AccountStatusBase
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mt-2">
         <div class="col-5">
-            <h2>Roles <b>Management</b></h2>
+            <h2>Account Status <b>Management</b></h2>
         </div>
         <div class="col-7" align="right">
-            <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addRole"><i class="bi bi-plus-circle"></i> <span>Add New Role</span></a>
+            <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addStatus"><i class="bi bi-plus-circle"></i> <span>Add New Status</span></a>
         </div>
     </div>
 
-    @if (Roles == null)
+
+    @if (Statuses == null)
     {
         <div class="d-flex justify-content-center">
             <div class="spinner-border" role="status">
@@ -23,10 +24,10 @@
     {
         <div class="row mt-2">
             <div class="table-responsive">
-                <Table ColumnNames="@(new List<string> {"#", "Name", "Description"})">
-                    @foreach (var role in Roles)
+                <Table ColumnNames="@(new List<string> {"#", "Status", "Description"})">
+                    @foreach (var status in Statuses)
                     {
-                        <RolesTableRecord Role="role" OnDataChange="DataChanged"></RolesTableRecord>
+                        <AccountStatusTableRecord Status="status" OnDataChange="DataChanged"></AccountStatusTableRecord>
                     }
                 </Table>
             </div>
@@ -38,4 +39,4 @@
     }
 </div>
 
-<NewRole OnDataChanged = "DataChanged"></NewRole>
+<NewStatus OnDataChanged="DataChanged"></NewStatus>

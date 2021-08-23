@@ -10,22 +10,22 @@
             @userRole.Role.Name
         }
     </td>
-    @switch (User.AccountStatus.Status)
+    @switch (User.AccountStatus.Name)
     {
         case "PENDING-ACTIVATION":
-            <td><span class="status text-warning">&bull;</span> @User.AccountStatus.Status</td>
+            <td><span class="status text-warning">&bull;</span> @User.AccountStatus.Name</td>
             break;
         case "BANNED":
-            <td><span class="status text-dark">&bull;</span> @User.AccountStatus.Status</td>
+            <td><span class="status text-dark">&bull;</span> @User.AccountStatus.Name</td>
             break;
         case "ACTIVE":
-            <td><span class="status text-success">&bull;</span> @User.AccountStatus.Status</td>
+            <td><span class="status text-success">&bull;</span> @User.AccountStatus.Name</td>
             break;
         case "DELETED":
-            <td><span class="status text-info">&bull;</span> @User.AccountStatus.Status</td>
+            <td><span class="status text-info">&bull;</span> @User.AccountStatus.Name</td>
             break;
         default:
-            <td><span class="status text-black">&bull;</span> @User.AccountStatus.Status</td>
+            <td><span class="status text-black">&bull;</span> @User.AccountStatus.Name</td>
             break;
     }
     <td>
