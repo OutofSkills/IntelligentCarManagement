@@ -36,7 +36,7 @@ namespace IntelligentCarManagement.Client.Services
                 new KeyValuePair<string, string>("userId", userId.ToString())
             });
 
-            var response = await httpClient.PostAsync($"/api/Users/removeAccount", data);
+            var response = await httpClient.PostAsync($"/api/Users/remove-account", data);
 
             return response.IsSuccessStatusCode;
         }
@@ -56,7 +56,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<HttpResponseMessage> GetUserAsync(int userId)
         {
-            return await httpClient.GetAsync($"/api/Users/GetUser?userId={userId}");
+            return await httpClient.GetAsync($"/api/Users/get-user?userId={userId}");
         }
 
         public async Task<IEnumerable<string>> GetUserRolesAsync(int userId)
@@ -71,13 +71,8 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<HttpResponseMessage> GetUsersAsync(int page = 1, int recordsPerPage = 10)
         {
-            var response = await httpClient.GetAsync($"/api/Users/GetUsers?page={page}&recordsPerPage={recordsPerPage}");
+            var response = await httpClient.GetAsync($"/api/Users/get-users?page={page}&recordsPerPage={recordsPerPage}");
             return response;
-        }
-
-        public bool NewUser(User user)
-        {
-            return true;
         }
     }
 }

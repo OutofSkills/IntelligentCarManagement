@@ -2,6 +2,7 @@
 using IntelligentCarManagement.Models;
 using IntelligentCarManagement.Models.NotMapped_Models;
 using IntelligentCarManagement.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
+    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -24,7 +26,7 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetUsers")]
+        [Route("get-users")]
         public async Task<IActionResult> GetUsersAsync([FromQuery]Pagination pagination)
         {
             var collection = await usersService.GetAllUsersAsync();
@@ -35,7 +37,7 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetUser")]
+        [Route("get-user")]
         public async Task<IActionResult> GetUserAsync([FromQuery] int userId)
         {
             var user = await usersService.GetUserAsync(userId);
@@ -85,7 +87,7 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpPost]
-        [Route("removeAccount")]
+        [Route("remove-account")]
         public async Task<IActionResult> RemoveAccountAsync([FromForm] int userId)
         {
             var result = await usersService.RemoveUserAsync(userId);

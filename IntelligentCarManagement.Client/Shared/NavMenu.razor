@@ -1,47 +1,32 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Intelligent Car Management</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All">
+        <i class="oi oi-home" aria-hidden="true"></i> 
+        Home
+    </MudNavLink>
+    <MudNavLink Href="/dashboard">Dashboard</MudNavLink>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="cars">
-                <i class="fas fa-car"></i>&nbsp;&nbsp; Cars
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="users">
-                <i class="fas fa-users"></i>&nbsp;&nbsp; Users
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="roles">
-                <i class="fas fa-user-tie"></i>&nbsp;&nbsp; Roles
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="account-statuses">
-                <i class="fas fa-exclamation-circle"></i>&nbsp;&nbsp; Account Statuses
-            </NavLink>
-        </li>
-    </ul>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
+    <MudNavGroup Title="Settings" Expanded="true">
+        <MudNavLink Href="/users">
+            <i class="fas fa-users" aria-hidden="true"></i>
+            Users
+        </MudNavLink>
+        <MudNavLink Href="/cars">
+            <i class="fas fa-car" aria-hidden="true"></i>
+            Cars
+        </MudNavLink>
+        <MudNavLink Href="/roles">
+            <i class="fas fa-user-tie" aria-hidden="true"></i>
+            Roles
+        </MudNavLink>
+        <MudNavLink Href="/account-statuses">
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+            Account Statuses
+        </MudNavLink>
+        <MudNavLink Href="/security">
+            Security
+        </MudNavLink>
+    </MudNavGroup>
+    <MudNavLink Href="/about">
+    About
+    </MudNavLink>
+</MudNavMenu>
