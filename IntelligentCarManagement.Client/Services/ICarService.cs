@@ -13,5 +13,6 @@ namespace IntelligentCarManagement.Client.Services
         Task<Driver> GetCarDriver(int carId);
         Task<bool> RemoveCarAsync(int carId);
         Task<bool> AddNewCar(Car car);
+        Task<bool> EditCarAsync(Car car);
     }
 }

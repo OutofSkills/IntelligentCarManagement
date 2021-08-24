@@ -11,20 +11,32 @@ namespace IntelligentCarManagement.Client.Pages
 {
     public class NewCarBase : ComponentBase
     {
+        protected Car Car = new();
         [Inject]
         public ICarService CarService { get; set; }
-        [Inject]
-        public NavigationManager NavManager { get; set; }
-        protected Car Car = new();
+        [Parameter]
+        public EventCallback OnDataChanged { get; set; }
 
-        public async Task AddNewCarAsync()
+        protected string message;
+        protected bool isSuccess = false;
+        protected bool isFail = false;
+
+        protected async Task AddCar()
         {
-            var response = await CarService.AddNewCar(Car);
+            var state = await CarService.AddNewCar(Car);
 
-            if(response is true)
+            if (state is true)
             {
-                NavManager.NavigateTo("/cars");
+                isSuccess = true;
+                message = "The car was added successfully";
             }
+            else
+            {
+                isFail = true;
+                message = "Something went wrong. Couldn't add the car.";
+            }
+
+            await OnDataChanged.InvokeAsync(Car.Id);
         }
     }
 }

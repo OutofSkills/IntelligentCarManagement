@@ -23,7 +23,7 @@ namespace IntelligentCarManagement.Client.Pages
             await LoadCars();
         }
 
-        protected async Task CarRemoved()
+        protected async Task DataChanged()
         {
             await LoadCars();
         }

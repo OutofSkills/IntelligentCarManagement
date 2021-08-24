@@ -26,7 +26,7 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetCars")]
+        [Route("get-cars")]
         public async Task<IActionResult> GetCarsAsync([FromQuery] Pagination pagination) 
         {
             var collection = await carService.GetAllCars();
@@ -37,7 +37,7 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpPost]
-        [Route("removeCar")]
+        [Route("remove-car")]
         public async Task<IActionResult> RemoveCarAsync([FromForm] int carId)
         {
             var result = await carService.RemoveCarAsync(carId);
@@ -51,10 +51,24 @@ namespace IntelligentCarManagement.Api.Controllers
         }
     
         [HttpPost]
-        [Route("newCar")]
+        [Route("new-car")]
         public IActionResult AddNewCarAsync([FromBody] Car car)
         {
             var result = carService.AddCar(car);
+
+            if (result is true)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("edit-car")]
+        public IActionResult EditCarAsync([FromBody] Car car)
+        {
+            var result = carService.EditCar(car);
 
             if (result is true)
             {

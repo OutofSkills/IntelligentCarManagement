@@ -35,7 +35,18 @@ namespace IntelligentCarManagement.Services
 
         public bool EditCar(Car car)
         {
-            throw new NotImplementedException();
+            var success = true;
+
+            try
+            {
+                unitOfWork.CarsRepo.Update(car);
+                unitOfWork.SaveChanges();
+            }catch(Exception e)
+            {
+                return !success;
+            }
+
+            return success;
         }
 
         public async Task<IEnumerable<Car>> GetAllCars()
@@ -43,9 +54,9 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.CarsRepo.GetAll();
         }
 
-        public Car GetCar(int id)
+        public async Task<Car> GetCarAsync(int id)
         {
-            throw new NotImplementedException();
+            return await unitOfWork.CarsRepo.GetById(id);
         }
 
         public async Task<bool> RemoveCarAsync(int carId)
@@ -54,6 +65,7 @@ namespace IntelligentCarManagement.Services
             try
             {
                 await unitOfWork.CarsRepo.Delete(carId);
+                unitOfWork.SaveChanges();
             }
             catch(Exception e)
             {

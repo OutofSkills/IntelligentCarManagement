@@ -21,12 +21,12 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<HttpResponseMessage> GetCarsAsync(int page = 1, int recordsPerPage = 10)
         {
-            var response = await httpClient.GetAsync($"/api/Cars/GetCars?page={page}&recordsPerPage={recordsPerPage}");
+            var response = await httpClient.GetAsync($"/api/Cars/get-cars?page={page}&recordsPerPage={recordsPerPage}");
             return response;
         }
         public async Task<Driver> GetCarDriver(int carId)
         {
-            return await httpClient.GetJsonAsync<Driver>($"/api/Driver/GetDriver/{carId}");
+            return await httpClient.GetJsonAsync<Driver>($"/api/Driver/get-driver/{carId}");
         }
 
         public async Task<bool> RemoveCarAsync(int carId)
@@ -36,14 +36,21 @@ namespace IntelligentCarManagement.Client.Services
                 new KeyValuePair<string, string>("carId", carId.ToString())
             });
 
-            var response = await httpClient.PostAsync($"/api/Cars/removeCar", data);
+            var response = await httpClient.PostAsync($"/api/Cars/remove-car", data);
 
             return response.IsSuccessStatusCode;
         }
 
         public async Task<bool> AddNewCar(Car car)
         {
-            var response = await httpClient.PostAsJsonAsync($"/api/Cars/newCar", car);
+            var response = await httpClient.PostAsJsonAsync($"/api/Cars/new-car", car);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> EditCarAsync(Car car)
+        {
+            var response = await httpClient.PostAsJsonAsync($"/api/Cars/edit-car", car);
 
             return response.IsSuccessStatusCode;
         }

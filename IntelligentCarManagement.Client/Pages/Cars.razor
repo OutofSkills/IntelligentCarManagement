@@ -7,7 +7,7 @@
             <h2>Cars <b>Management</b></h2>
         </div>
         <div class="col-7" align="right">
-            <a href="cars/newCar" class="btn btn-outline-info"><i class="bi bi-plus-circle"></i> <span>Add New Car</span></a>
+            <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addCar"><i class="bi bi-plus-circle"></i> <span>Add New Car</span></a>
         </div>
     </div>
 
@@ -27,7 +27,7 @@
                 <Table ColumnNames="@(new List<string> {"#", "Brand/Model", "Current Location", "Available", "Driver", "Actions"})">
                     @foreach (var car in Cars)
                     {
-                        <CarsTableRecord Car="car" OnCarRemoved="CarRemoved"></CarsTableRecord>
+                        <CarsTableRecord Car="car" OnDataChange="DataChanged"></CarsTableRecord>
                     }
                 </Table>
             </div>
@@ -38,3 +38,5 @@
         </div>
     }
 </div>
+
+<NewCar OnDataChanged="DataChanged"></NewCar>
