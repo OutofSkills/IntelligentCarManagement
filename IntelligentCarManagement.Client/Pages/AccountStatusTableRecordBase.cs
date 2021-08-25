@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IntelligentCarManagement.Models;
 using IntelligentCarManagement.Client.Services;
+using MudBlazor;
 
 namespace IntelligentCarManagement.Client.Pages
 {
@@ -15,6 +16,8 @@ namespace IntelligentCarManagement.Client.Pages
         public AccountStatus Status { get; set; }
         [Parameter]
         public EventCallback OnDataChange { get; set; }
+        [Inject]
+        public IDialogService DialogService { get; set; }
         [Inject]
         public IAccountStatusService RolesService { get; set; }
 
@@ -39,6 +42,45 @@ namespace IntelligentCarManagement.Client.Pages
 
             await OnDataChange.InvokeAsync(Status.Id);
         }
+
+        protected async Task OpenDeleteDialogAsync()
+        {
+            var parameters = new DialogParameters
+            {
+                { "Id", Status.Id },
+                { "ContentText", $"Are you sure you want to delete the record with the id {Status.Id} ?" },
+                { "ButtonText", "Delete" },
+                { "Color", Color.Error }
+            };
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+
+            var dialog =  DialogService.Show<DialogDeleteWindow>("Delete", parameters, options);
+            var result = await dialog.Result;
+
+            if(!result.Cancelled)
+            {
+                await RemoveStatus();
+            }
+        }
+        protected async Task OpenEditDialogAsync()
+        {
+            var parameters = new DialogParameters
+            {
+                { "Status", Status }
+            };
+
+            var options = new DialogOptions() { CloseButton=true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+            var dialog = DialogService.Show<DialogEditStatusWindow>("Edit", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                await OnDataChange.InvokeAsync(Status.Id);
+            }
+        }
+
         protected async Task EditStatus()
         {
             var state = await RolesService.EditStatusAsync(Status);

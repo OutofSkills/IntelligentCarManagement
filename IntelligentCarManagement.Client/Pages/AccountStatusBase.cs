@@ -1,6 +1,7 @@
 ﻿using IntelligentCarManagement.Client.Services;
 using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace IntelligentCarManagement.Client.Pages
     {
         [Inject]
         public IAccountStatusService AccountStatusService { get; set; }
+        [Inject]
+        public IDialogService DialogService { get; set; }
         public IEnumerable<AccountStatus> Statuses { get; set; }
 
         public int NumberOfPages { get; set; }
@@ -44,6 +47,21 @@ namespace IntelligentCarManagement.Client.Pages
         {
             CurrentPage = page;
             await LoadStatuses(page);
+        }
+
+        protected async Task OpenAddDialogAsync()
+        {
+            var parameters = new DialogParameters();
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+
+            var dialog = DialogService.Show<NewStatus>("New Status", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                await DataChanged();
+            }
         }
     }
 }

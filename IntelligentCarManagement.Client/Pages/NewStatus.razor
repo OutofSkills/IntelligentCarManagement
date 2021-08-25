@@ -1,6 +1,6 @@
-﻿@inherits NewStatusBase
+﻿
 <!-- Modal Edit Role-->
-<div class="modal fade" id="addStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addStatusLabel" aria-hidden="true">
+<!--<div class="modal fade" id="addStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addStatusLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -51,4 +51,81 @@
             </EditForm>
         </div>
     </div>
-</div>
+</div>-->
+
+@using Services;
+
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.PlusOne" Class="mr-3 mb-n1" />
+            New Status
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudContainer MaxWidth="MaxWidth.Large">
+            <EditForm Model="@Status" OnValidSubmit="AddStatus">
+                <div class="row">
+                    <MudTextField Label="Name" Class="mt-3"
+                                  @bind-Value="Status.Name" For="@(() => Status.Name)" />
+                </div>
+                <div class="row">
+                    <MudTextField Label="Description" Class="mt-3"
+                                  @bind-Value="Status.Description" For="@(() => Status.Description)" />
+                </div>
+                <br />
+
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Info" Class="ml-auto">
+                    @if (currentState == taskStates.Started.ToString())
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    }
+
+                    Submit
+                </MudButton>
+            </EditForm>
+        </MudContainer>
+    </DialogContent>
+    <DialogActions></DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Inject] public IAccountStatusService StatusService { get; set; }
+
+    public AccountStatus Status { get; set; } = new();
+
+    private enum taskStates { Started, Ended };
+    private string currentState = "";
+    private bool expand = false;
+    private bool authError = false;
+    private string authErrorText = "";
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    protected async Task AddStatus()
+    {
+        currentState = taskStates.Started.ToString();
+        var state = await StatusService.AddStatus(Status);
+        currentState = taskStates.Ended.ToString();
+
+        if (state is true)
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add("Status added successfully.", Severity.Success);
+
+            MudDialog.Close(DialogResult.Ok(true));
+        }
+        else
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add("Something went wrong. Couldn't add the status.", Severity.Success);
+        }
+    }
+}

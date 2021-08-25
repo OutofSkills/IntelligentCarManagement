@@ -7,7 +7,7 @@
             <h2>Account Status <b>Management</b></h2>
         </div>
         <div class="col-7" align="right">
-            <a class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#addStatus"><i class="bi bi-plus-circle"></i> <span>Add New Status</span></a>
+            <MudButton Variant="Variant.Outlined" StartIcon="@Icons.Filled.Add" Color="Color.Info"  OnClick="@((e) =>OpenAddDialogAsync())">Add New Status</MudButton>
         </div>
     </div>
 
@@ -38,5 +38,3 @@
         </div>
     }
 </div>
-
-<NewStatus OnDataChanged="DataChanged"></NewStatus>

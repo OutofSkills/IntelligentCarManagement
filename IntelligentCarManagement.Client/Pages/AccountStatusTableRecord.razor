@@ -8,67 +8,7 @@
         <button type="button" data-bs-toggle="modal" data-bs-target="#editStatus-@Status.Id" style="border:none;background:none">
             <i class="bi bi-gear-fill"></i>
         </button>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#removeStatus-@Status.Id" style="border:none;background:none">
-            <i class="bi bi-archive-fill text-danger"></i>
-        </button>
+        <MudIconButton Icon="@Icons.Filled.Edit" Color="Color.Warning" OnClick="@((e) =>OpenEditDialogAsync())"></MudIconButton>
+        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Error" OnClick="@((e) =>OpenDeleteDialogAsync())"></MudIconButton>
     </td>
 </tr>
-
-<!-- Modal Remove Warning-->
-<div class="modal fade" id="removeStatus-@Status.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="removeStatusLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="removeStatusLabel">Warning</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to remove the status with the id @Status.Id ?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="@(() => RemoveStatus())">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Edit Role-->
-<div class="modal fade" id="editStatus-@Status.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editStatusLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-info" id="editStatusLabel">Edit</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <EditForm Model="Status" OnValidSubmit="EditStatus">
-                <DataAnnotationsValidator />
-
-                <div class="modal-body">
-                    <div class="form-group row mt-2">
-                        <label for="name" class="col-md-2 col-form-label">Name</label>
-                        <div class="col-md-10">
-                            <InputText id="name" class="form-control" @bind-Value="Status.Name"></InputText>
-                            <ValidationMessage For="@(() => Status.Name)"></ValidationMessage>
-                        </div>
-                    </div>
-
-                    <div class="form-group row mt-2">
-                        <label for="description" class="col-md-2 col-form-label">Description</label>
-                        <div class="col-md-10">
-                            <InputTextArea id="description" rows="3" class="form-control" @bind-Value="Status.Description"></InputTextArea>
-                            <ValidationMessage For="@(() => Status.Description)"></ValidationMessage>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-info">Confirm</button>
-                </div>
-
-            </EditForm>
-        </div>
-    </div>
-</div>

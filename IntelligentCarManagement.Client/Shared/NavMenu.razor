@@ -1,28 +1,23 @@
 ﻿<MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All">
-        <i class="oi oi-home" aria-hidden="true"></i> 
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="fas fa-home">
         Home
     </MudNavLink>
-    <MudNavLink Href="/dashboard">Dashboard</MudNavLink>
+    <MudNavLink Href="/dashboard" Icon="@Icons.Filled.Dashboard">Dashboard</MudNavLink>
 
-    <MudNavGroup Title="Settings" Expanded="true">
-        <MudNavLink Href="/users">
-            <i class="fas fa-users" aria-hidden="true"></i>
+    <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="false">
+        <MudNavLink Href="/users" Icon="fas fa-users">
             Users
         </MudNavLink>
-        <MudNavLink Href="/cars">
-            <i class="fas fa-car" aria-hidden="true"></i>
+        <MudNavLink Href="/cars" Icon="fas fa-car">
             Cars
         </MudNavLink>
-        <MudNavLink Href="/roles">
-            <i class="fas fa-user-tie" aria-hidden="true"></i>
+        <MudNavLink Href="/roles" Icon="fas fa-user-shield">
             Roles
         </MudNavLink>
-        <MudNavLink Href="/account-statuses">
-            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+        <MudNavLink Href="/account-statuses" Icon="fas fa-exclamation-circle">
             Account Statuses
         </MudNavLink>
-        <MudNavLink Href="/security">
+        <MudNavLink Href="/security" Icon="@Icons.Filled.Security">
             Security
         </MudNavLink>
     </MudNavGroup>
