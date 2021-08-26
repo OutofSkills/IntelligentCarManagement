@@ -5,20 +5,24 @@
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.PlusOne" Class="mr-3 mb-n1" />
-            New Status
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3 mb-n1" />
+            Edit
         </MudText>
     </TitleContent>
     <DialogContent>
         <MudContainer MaxWidth="MaxWidth.Large">
-            <EditForm Model="@Status" OnValidSubmit="AddStatus">
+            <EditForm Model="@Car" OnValidSubmit="EditCar">
                 <div class="row">
-                    <MudTextField Label="Name" Class="mt-3"
-                                  @bind-Value="Status.Name" For="@(() => Status.Name)" />
+                    <MudTextField Label="Brand" Class="mt-3"
+                                  @bind-Value="Car.Brand" For="@(() => Car.Brand)" />
                 </div>
                 <div class="row">
-                    <MudTextField Label="Description" Class="mt-3"
-                                  @bind-Value="Status.Description" For="@(() => Status.Description)" />
+                    <MudTextField Label="Model" Class="mt-3"
+                                  @bind-Value="Car.Model" For="@(() => Car.Model)" />
+                </div>
+                <div class="row">
+                    <MudTextField Label="Fuel Type" Class="mt-3"
+                                  @bind-Value="Car.FuelType" For="@(() => Car.FuelType)" />
                 </div>
                 <br />
 
@@ -28,7 +32,7 @@
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     }
 
-                    Submit
+                    Edit
                 </MudButton>
             </EditForm>
         </MudContainer>
@@ -39,38 +43,36 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Inject] public IAccountStatusService StatusService { get; set; }
+    [Parameter] public Car Car { get; set; } = new();
 
-    public AccountStatus Status { get; set; } = new();
+    [Inject] public ICarService CarService { get; set; }
 
     private enum taskStates { Started, Ended };
     private string currentState = "";
     private bool expand = false;
-    private bool authError = false;
-    private string authErrorText = "";
 
     private void Cancel()
     {
         MudDialog.Cancel();
     }
 
-    protected async Task AddStatus()
+    protected async Task EditCar()
     {
         currentState = taskStates.Started.ToString();
-        var state = await StatusService.AddStatus(Status);
+        var state = await CarService.EditCarAsync(Car);
         currentState = taskStates.Ended.ToString();
 
         if (state is true)
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-            Snackbar.Add("Status added successfully.", Severity.Success);
+            Snackbar.Add("Car edited successfully.", Severity.Success);
 
             MudDialog.Close(DialogResult.Ok(true));
         }
         else
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-            Snackbar.Add("Something went wrong. Couldn't add the status.", Severity.Success);
+            Snackbar.Add("Something went wrong. Couldn't edit the car.", Severity.Success);
         }
     }
 }

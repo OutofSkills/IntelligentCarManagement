@@ -30,27 +30,6 @@
     }
     <td>
         <a href="user/settings/@User.Id"><i class="bi bi-gear-fill"></i></a>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#removeUser-@User.Id" style="border:none;background:none">
-            <i class="bi bi-archive-fill text-danger"></i>
-        </button>
+        <MudIconButton Icon="@Icons.Filled.Delete" Color="Color.Error" OnClick="@((e) =>OpenDeleteDialogAsync())"></MudIconButton>
     </td>
 </tr>
-
-<!-- Modal Remove Warning-->
-<div class="modal fade" id="removeUser-@User.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="removeUserLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="removeUserLabel">Warning</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to remove the user with the id @User.Id ?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="@(() => DeleteUser())">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>

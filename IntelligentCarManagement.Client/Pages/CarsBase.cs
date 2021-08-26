@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
+using MudBlazor;
 
 namespace IntelligentCarManagement.Client.Pages
 {
@@ -13,6 +14,8 @@ namespace IntelligentCarManagement.Client.Pages
     {
         [Inject]
         public ICarService CarService { get; set; }
+        [Inject]
+        public IDialogService DialogService { get; set; }
         public IEnumerable<Car> Cars { get; set; }
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
@@ -43,6 +46,21 @@ namespace IntelligentCarManagement.Client.Pages
         {
             CurrentPage = page;
             await LoadCars(page);
+        }
+
+        protected async Task OpenAddDialogAsync()
+        {
+            var parameters = new DialogParameters();
+
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
+
+            var dialog = DialogService.Show<NewCar>("New Car", parameters, options);
+            var result = await dialog.Result;
+
+            if (!result.Cancelled)
+            {
+                await DataChanged();
+            }
         }
     }
 }
