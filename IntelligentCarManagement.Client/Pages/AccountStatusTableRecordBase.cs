@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using IntelligentCarManagement.Models;
 using IntelligentCarManagement.Client.Services;
 using MudBlazor;
+using IntelligentCarManagement.Client.Shared;
 
 namespace IntelligentCarManagement.Client.Pages
 {
@@ -20,6 +21,7 @@ namespace IntelligentCarManagement.Client.Pages
         public IDialogService DialogService { get; set; }
         [Inject]
         public IAccountStatusService RolesService { get; set; }
+        [Inject] public ISnackbar Snackbar { get; set; }
 
         protected string message;
         protected bool isSuccess = false;
@@ -31,13 +33,13 @@ namespace IntelligentCarManagement.Client.Pages
 
             if (state is true)
             {
-                isSuccess = true;
-                message = "The role was removed successfully.";
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add("Status deleted successfully.", Severity.Success);
             }
             else
             {
-                isFail = true;
-                message = "Something went wrong. Couldn't remove the role.";
+                Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                Snackbar.Add("Something went wrong. Couldn't remove the status.", Severity.Error);
             }
 
             await OnDataChange.InvokeAsync(Status.Id);
@@ -79,24 +81,6 @@ namespace IntelligentCarManagement.Client.Pages
             {
                 await OnDataChange.InvokeAsync(Status.Id);
             }
-        }
-
-        protected async Task EditStatus()
-        {
-            var state = await RolesService.EditStatusAsync(Status);
-
-            if(state is true)
-            {
-                isSuccess = true;
-                message = "The status was updated successfully.";
-            }
-            else
-            {
-                isFail = true;
-                message = "Something went wrong. Couldn't update the status";
-            }
-
-            await OnDataChange.InvokeAsync(Status.Id);
         }
     }
 }

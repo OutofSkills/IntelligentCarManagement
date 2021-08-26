@@ -5,13 +5,13 @@
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.PlusOne" Class="mr-3 mb-n1" />
-            New Status
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3 mb-n1" />
+            Edit
         </MudText>
     </TitleContent>
     <DialogContent>
         <MudContainer MaxWidth="MaxWidth.Large">
-            <EditForm Model="@Role" OnValidSubmit="AddRole">
+            <EditForm Model="@Role" OnValidSubmit="EditRole">
                 <div class="row">
                     <MudTextField Label="Name" Class="mt-3"
                                   @bind-Value="Role.Name" For="@(() => Role.Name)" />
@@ -28,7 +28,7 @@
                         <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     }
 
-                    Submit
+                    Edit
                 </MudButton>
             </EditForm>
         </MudContainer>
@@ -39,9 +39,9 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Inject] public IRolesService RolesService { get; set; }
+    [Parameter] public Role Role { get; set; } = new();
 
-    public Role Role { get; set; } = new();
+    [Inject] public IRolesService RolesService { get; set; }
 
     private enum taskStates { Started, Ended };
     private string currentState = "";
@@ -52,23 +52,23 @@
         MudDialog.Cancel();
     }
 
-    protected async Task AddRole()
+    protected async Task EditRole()
     {
         currentState = taskStates.Started.ToString();
-        var state = await RolesService.AddRoleAsync(Role);
+        var state = await RolesService.EditRoleAsync(Role);
         currentState = taskStates.Ended.ToString();
 
         if (state is true)
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-            Snackbar.Add("Role added successfully.", Severity.Success);
+            Snackbar.Add("Status edited successfully.", Severity.Success);
 
             MudDialog.Close(DialogResult.Ok(true));
         }
         else
         {
             Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-            Snackbar.Add("Something went wrong. Couldn't add the role.", Severity.Success);
+            Snackbar.Add("Something went wrong. Couldn't edit the status.", Severity.Success);
         }
     }
 }

@@ -23,9 +23,6 @@
 
     void Submit()
     {
-        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
-        Snackbar.Add("Status deleted", Severity.Success);
-
         MudDialog.Close(DialogResult.Ok(true));
     }
 
