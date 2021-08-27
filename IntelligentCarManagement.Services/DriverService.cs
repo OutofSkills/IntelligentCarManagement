@@ -21,6 +21,9 @@ namespace IntelligentCarManagement.Services
             var success = true;
             try
             {
+                var driverStatus = unitOfWork.DriverStatusesRepo.GetByName("Waiting-Confirmation".ToUpper());
+                driver.Status = driverStatus;
+
                 unitOfWork.DriversRepo.Insert(driver);
                 unitOfWork.SaveChanges();
             }

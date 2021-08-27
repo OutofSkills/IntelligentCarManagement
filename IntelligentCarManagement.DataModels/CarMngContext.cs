@@ -16,8 +16,8 @@ namespace IntelligentCarManagement.DataAccess
             modelBuilder.Entity<Car>().ToTable("Car");
             modelBuilder.Entity<Client>().ToTable("Client");
             modelBuilder.Entity<Driver>().ToTable("Driver");
+            modelBuilder.Entity<DriverStatus>().ToTable("DriverStatus");
             modelBuilder.Entity<UserAddress>().ToTable("Address");
-            modelBuilder.Entity<User>().ToTable("User");
 
             modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -40,5 +40,6 @@ namespace IntelligentCarManagement.DataAccess
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<DriverStatus> DriverStatuses { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
-    public partial class RestoreLostMigrations : Migration
+    public partial class DriverStatus : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -50,6 +50,20 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DriverStatus",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DriverStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,11 +242,13 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    LicensePhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LicencePhoto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Accidents = table.Column<int>(type: "int", nullable: false),
                     DeservedClients = table.Column<int>(type: "int", nullable: false),
                     Experience = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
+                    About = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DriverStatusId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -242,6 +258,12 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         name: "FK_Driver_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Driver_DriverStatus_DriverStatusId",
+                        column: x => x.DriverStatusId,
+                        principalTable: "DriverStatus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -352,6 +374,11 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                 filter: "[DriverID] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Driver_DriverStatusId",
+                table: "Driver",
+                column: "DriverStatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Driver_UserId",
                 table: "Driver",
                 column: "UserId",
@@ -397,6 +424,9 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "DriverStatus");
 
             migrationBuilder.DropTable(
                 name: "AccountStatus");

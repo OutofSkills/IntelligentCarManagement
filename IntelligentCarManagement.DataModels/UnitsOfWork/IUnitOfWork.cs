@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.DataAccess.Repositories;
+﻿using IntelligentCarManagement.Api.DataAccess.Repositories;
+using IntelligentCarManagement.DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,6 +16,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         IUsersRepo UsersRepo { get; }
         IRolesRepo RolesRepo { get; }
         IAccountStatusesRepo StatusesRepo{ get;}
+        IDriverStatusRepo DriverStatusesRepo { get; }
 
         /// <summary>
         /// Saves all pending changes

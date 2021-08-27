@@ -1,0 +1,172 @@
+﻿@page "/driver-request"
+
+@inject AuthenticationStateProvider AuthStateProvider
+@inject Services.IDriverService DriverService
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+
+
+<MudContainer>
+    <div class="row justify-content-center">
+        <div style="max-width: 800px;">
+            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator />
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Typo="Typo.h6">Driver Request</MudText>
+                        <MudDivider Class="mb-3"/>
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <InputFile id="fileInput" OnChange="LoadFile" hidden />
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Outlined"
+                                           Color="Color.Info"
+                                           StartIcon="@Icons.Filled.CloudUpload"
+                                           for="fileInput">
+                                    Upload Licence Photo
+                                </MudButton>
+                            </div>
+                            <div class="col-md-6">
+                                @if (model.LicencePhoto is not null)
+                                {
+                                    <MudItem Icon="@Icons.Filled.AttachFile">
+                                        File attached successfully.
+                                    </MudItem>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                <MudTextField Label="Experience" @bind-Value="model.Experience" For="@(() => model.Experience)" Variant="Variant.Text" Min="0" Adornment="Adornment.End" AdornmentText="years" HideSpinButtons="true" />
+                            </div>
+                            <div class="col-md-6">
+                                <MudTextField Label="About You" @bind-Value="model.About" For="@(() => model.About)" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <MudCheckBox @bind-Checked="@hasACar" Label="Do you want to use your own car?"></MudCheckBox>
+                        </div>
+
+                        @if (hasACar)
+                        {
+                            <MudText Typo="Typo.h6" Class="mt-5">Car details</MudText>
+                            <MudDivider />
+
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <MudTextField Label="Brand" @bind-Value="model.Car.Brand" For="@(() => model.Car.Brand)" />
+                                </div>
+                                <div class="col-md-4">
+                                    <MudTextField Label="Model" @bind-Value="model.Car.Model" For="@(() => model.Car.Model)" />
+                                </div>
+                                <div class="col-md-4">
+                                    <MudSelect T="string" Label="Fuel Type" @bind-Value="model.Car.FuelType">
+                                        <MudSelectItem Value="@("Petrol")" />
+                                        <MudSelectItem Value="@("Electric")" />
+                                        <MudSelectItem Value="@("Hybrid")" />
+                                    </MudSelect>
+                                </div>
+                            </div>
+                        }
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Disabled="currentTaskState == taskStates.Started.ToString() || currentTaskState == taskStates.Ended.ToString()">
+                            @if (currentTaskState == taskStates.Started.ToString())
+                            {
+                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                                <MudText Class="ms-2">Processing</MudText>
+                            }
+                            else
+                            {
+                                <MudText>Send Request</MudText>
+                            }
+                        </MudButton>
+                    </MudCardActions>
+                </MudCard>
+                <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
+                    Please fill out the form correctly.
+                </MudText>
+
+                <MudExpansionPanels>
+                    <MudExpansionPanel Text="Request Validation" @bind-IsExpanded="expand">
+                        @if (showError)
+                        {
+                            <MudText Color="@Color.Error">
+                                @message
+                            </MudText>
+                        }
+                        else
+                        {
+                            <MudText Color="@Color.Success">
+                                @message
+                            </MudText>
+                        }
+                    </MudExpansionPanel>
+                </MudExpansionPanels>
+            </EditForm>
+        </div>
+
+    </div>
+</MudContainer>
+
+@code {
+    private Driver model = new Driver() { Car = new Car() };
+
+    private bool agreeTermsConditions = false;
+    private string currentTaskState = "";
+    private enum taskStates { Started, Ended };
+    private string message;
+    private bool showError;
+    private bool expand = false;
+    private bool hasACar = false;
+
+    private async Task OnValidSubmit()
+    {
+        message = "";
+        currentTaskState = taskStates.Started.ToString();
+
+        model.UserId = await GetLoggedUserId();
+
+        var state = await DriverService.AddDriver(model);
+
+        currentTaskState = taskStates.Ended.ToString();
+        expand = true;
+
+        if (state)
+        {
+            showError = false;
+            message = "No errors.";
+
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomRight;
+            Snackbar.Add("The request was sent successfully. Please check your email or phone, we'll contact you in the near time.", Severity.Success);
+        }
+        else
+        {
+            showError = true;
+            message = "Something went wrong. Couldn't send the driver request. Please try again later.";
+        }
+    }
+
+    private async Task<int> GetLoggedUserId()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        return int.Parse(userId);
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        var format = "iamge/png";
+        var resizedImage = await e.File.RequestImageFileAsync(format, 300, 300);
+        var buffer = new byte[resizedImage.Size];
+
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+        var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+
+        model.LicencePhoto = imageData;
+    }
+}
