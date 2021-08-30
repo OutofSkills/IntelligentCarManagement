@@ -1,0 +1,14 @@
+﻿@inherits DriverRequestsTableRecordBase
+
+<tr>
+    <td>@Driver.Id</td>
+    <td><a href="#"><i class="bi bi-person-fill"></i> @Driver.User.FirstName @Driver.User.LastName</a></td>
+    <td>@Driver.Experience years</td>
+    <td>@Driver.About</td>
+    <td>@Driver.Car.Brand @Driver.Car.Model</td>
+    <td>@Driver.Status.Name</td>
+    <td>
+        <MudIconButton Icon="@Icons.Filled.Verified" Color="Color.Success" Size="Size.Small" OnClick="@((e) => OpenAcceptDialogAsync())" Disabled="@(Driver.Status.Name == "ACCEPTED" ? true:false)"></MudIconButton>
+        <MudIconButton Icon="@Icons.Filled.Close" Color="Color.Error" Size="Size.Small" OnClick="@((e) => OpenDeleteDialogAsync())" Disabled="@(Driver.Status.Name == "REJECTED" ? true:false)"></MudIconButton>
+    </td>
+</tr>

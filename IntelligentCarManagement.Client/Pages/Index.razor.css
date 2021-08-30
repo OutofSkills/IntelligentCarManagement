@@ -1,14 +1,9 @@
-﻿.wrapper {
-    padding-left: 10vw;
-}
+﻿
 .card-size {
     max-width: 500px;
 }
 
 @media (max-width: 480px) {
-    .wrapper {
-        margin: 0 auto;
-    }
     .card-size {
         max-width: 400px;
     }

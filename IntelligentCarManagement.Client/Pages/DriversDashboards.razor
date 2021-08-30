@@ -1,0 +1,47 @@
+﻿@page "/drivers-dashboard"
+
+@using Services;
+
+<MudContainer Fixed="true">
+    <MudGrid>
+        <MudItem lg="3" md="3" sm="6">
+
+            <MudCard>
+                <MudCardContent>
+                    <div class="container">
+                        @if (Drivers != null)
+                        {
+                            <div class="row text-center">
+                                <MudText Typo="Typo.h5">@Drivers.Count()</MudText>
+                            </div>
+                            <div class="row text-center">
+                                <MudLink Href="/driver-requests">Driver Requests</MudLink>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row justify-content-center">
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Width="10%"/>
+                            </div>
+                            <div class="row justify-content-center">
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Width="40%" />
+                            </div>
+                        }
+                    </div>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    [Inject] public IDriverService DriverService { get; set; }
+    protected IEnumerable<Driver> Drivers { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Drivers = await DriverService.GetAllDriversAsync();
+    }
+}

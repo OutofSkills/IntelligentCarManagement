@@ -45,6 +45,11 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.DriversRepo.GetById(id);
         }
 
+        public async Task<IEnumerable<Driver>> GetDrivers()
+        {
+            return await unitOfWork.DriversRepo.GetAll();
+        }
+
         public bool UpdateDriver(Driver driver)
         {
             var success = true;

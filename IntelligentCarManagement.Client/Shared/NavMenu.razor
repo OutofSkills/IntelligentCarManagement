@@ -2,7 +2,10 @@
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="fas fa-home">
         Home
     </MudNavLink>
-    <MudNavLink Href="/dashboard" Icon="@Icons.Filled.Dashboard">Dashboard</MudNavLink>
+
+    <MudNavGroup Title="Dashboards" Icon="@Icons.Filled.Dashboard" Expanded="false">
+        <MudNavLink Href="/drivers-dashboard" Icon="fas fa-id-card">Drivers Dashboard</MudNavLink>
+    </MudNavGroup>
 
     <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="false">
         <MudNavLink Href="/users" Icon="fas fa-users">
@@ -22,6 +25,6 @@
         </MudNavLink>
     </MudNavGroup>
     <MudNavLink Href="/about">
-    About
+        About
     </MudNavLink>
 </MudNavMenu>

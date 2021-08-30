@@ -12,5 +12,6 @@ namespace IntelligentCarManagement.Services
         Driver GetCarDriver(int carID);
         bool AddDriver(Driver driver);
         bool UpdateDriver(Driver driver);
+        Task<IEnumerable<Driver>> GetDrivers();
     }
 }
