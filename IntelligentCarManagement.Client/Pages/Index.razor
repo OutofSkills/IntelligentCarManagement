@@ -60,15 +60,12 @@
             </div>
         </MudItem>
         <MudItem lg="6" md="6" xs="12" sm="12">
-            @if (displayMap)
-            { 
                 <MudCard>
-                    <MudCardContent>
+                    <MudCardContent hidden=@(!displayMap)>
                         <div id="map" style="height:500px;width:100%;">
                         </div>
                     </MudCardContent>
                 </MudCard>
-            }
         </MudItem>
     </MudGrid>
 </MudContainer>

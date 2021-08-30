@@ -14,13 +14,17 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected bool displayMap = false;
 
-        protected async Task OpenMap()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            displayMap = !displayMap;
-            if (displayMap)
+            if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("initialize", null);
             }
+        }
+
+        protected void OpenMap()
+        {
+            displayMap = !displayMap;
         }
     }
 }
