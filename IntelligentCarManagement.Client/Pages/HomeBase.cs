@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Pages
 {
-    public class IndexBase : ComponentBase
+    public class HomeBase : ComponentBase
     {
         protected Ride Ride { get; set; } = new();
         [Inject]
@@ -17,7 +17,7 @@ namespace IntelligentCarManagement.Client.Pages
         protected string DestinationInputIcon = "";
         protected string PickUpInputIcon = Icons.Filled.AddLocationAlt;
 
-        protected enum taskStates { Started, Ended };
+        protected enum TaskStates { Started, Ended };
         protected string currentState = "";
 
         protected override void OnInitialized()

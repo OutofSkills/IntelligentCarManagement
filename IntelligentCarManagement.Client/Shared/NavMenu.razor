@@ -7,7 +7,7 @@
         <MudNavLink Href="/drivers-dashboard" Icon="fas fa-id-card">Drivers Dashboard</MudNavLink>
     </MudNavGroup>
 
-    <MudNavGroup Title="Settings" Icon="@Icons.Filled.Settings" Expanded="false">
+    <MudNavGroup Title="Management" Icon="@Icons.Filled.ManageAccounts" Expanded="false">
         <MudNavLink Href="/users" Icon="fas fa-users">
             Users
         </MudNavLink>
@@ -24,6 +24,13 @@
             Security
         </MudNavLink>
     </MudNavGroup>
+    <AuthorizeView>
+        <Authorized>
+            <MudNavLink Href="/settings" Icon="@Icons.Filled.Settings">
+                Settings
+            </MudNavLink>
+        </Authorized>
+    </AuthorizeView>
     <MudNavLink Href="/about">
         About
     </MudNavLink>

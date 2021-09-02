@@ -1,0 +1,69 @@
+﻿@page "/settings"
+
+@inherits SettingsBase
+@attribute [Authorize]
+
+<link href="/css/UserSettings.css" rel="stylesheet" />
+
+@if (User.Id is 0)
+{
+    <div class="text-center">
+        <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+    </div>
+}
+else
+{
+    <MudTabs Outlined="true" Position="Position.Left" Rounded="true" Border="true"
+             ApplyEffectsToContainer="true" Class="mt-8" PanelClass="pa-6">
+        <MudTabPanel Text="General">
+            <!--General info about the user-->
+            <MudContainer>
+                <MudGrid>
+                    <MudItem lg="3" md="3" sm="3">
+                        @if (User.Avatar is null)
+                        {
+                            <img src="/images/icons/no_avatar.png" alt="" class="d-block ui-w-80"> }
+                        else
+                        {
+                            <img src="@User.Avatar" alt="" class="d-block ui-w-80">
+                        }
+                    </MudItem>
+                    <MudItem lg="9" md="9" sm="9">
+                        <label class="btn btn-outline-primary">
+                            Upload avatar
+                            <InputFile class="account-settings-fileinput" OnChange="@LoadFile"></InputFile>
+                        </label> &nbsp;
+                        <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+
+                        <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                    </MudItem>
+                    <hr class="border-light m-0">
+                    <MudItem lg="12" md="12" sm="12">
+                        <UserSettingsGeneral User="User"></UserSettingsGeneral>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        </MudTabPanel>
+
+        <MudTabPanel Text="Change Password">
+            <MudContainer>
+                <UserSettingsChangePassword ResetPasswordModel="ResetPasswordModel"></UserSettingsChangePassword>
+            </MudContainer>
+        </MudTabPanel>
+
+        <MudTabPanel Text="Info">
+            <MudContainer>
+                <UserSettingsInfo User="User"></UserSettingsInfo>
+            </MudContainer>
+        </MudTabPanel>
+
+        @if (User.Driver is not null)
+        {
+            <MudTabPanel Text="Driver">
+                <MudContainer>
+                    <UserSettingsDriver Driver="User.Driver"></UserSettingsDriver>
+                </MudContainer>
+            </MudTabPanel>
+        }
+    </MudTabs>
+}

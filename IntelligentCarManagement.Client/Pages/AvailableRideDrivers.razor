@@ -1,0 +1,116 @@
+﻿@page "/ride/available-drivers"
+
+<MudContainer>
+    <MudGrid>
+        <MudItem lg="4" md="4" sm="12">
+            <div class="card-size">
+                <MudCard>
+                    <MudCardContent>
+                        <MudTimeline>
+                            <MudTimelineItem Color="Color.Success">
+                                <MudText Typo="Typo.body1">Pick-up Location</MudText>
+                                <MudText Typo="Typo.body2">@*@Ride.PickUpLocation*@ Picked Location</MudText>
+                                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">@*@Ride.PickUpTime*@ Today: 16:33</MudText>
+                            </MudTimelineItem>
+                            <MudTimelineItem Color="Color.Primary">
+                                <MudText Typo="Typo.body1">Destination</MudText>
+                                <MudText Typo="Typo.body2">@*@Ride.Destination*@ Picked Destination</MudText>
+                            </MudTimelineItem>
+                        </MudTimeline>
+                    </MudCardContent>
+                </MudCard>
+            </div>
+        </MudItem>
+        <MudItem lg="8" md="8" sm="12">
+            <MudCard Style="background-color: #F5F5F5">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText>Available Drivers</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudPaper MinWidth="inherit" Class="mb-4">
+                        <MudContainer>
+                            <MudGrid>
+                                <MudItem lg="1" md="1" sm="1">
+                                    <MudIcon Icon="far fa-thumbs-up" Color="Color.Success"  Size="Size.Small" Title="Recommended by our algorithm!"></MudIcon>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
+                                        Cojocaru Ion
+                                    </MudLink>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    BMW X2
+                                </MudItem>
+                                <MudItem lg="2" md="2" sm="2">
+                                    <MudRating Disabled="true" SelectedValue="3" Size="Size.Small" />
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudContainer>
+                    </MudPaper>
+                    <MudPaper MinWidth="inherit" Class="mb-4">
+                        <MudContainer>
+                            <MudGrid>
+                                <MudItem lg="1" md="1" sm="1">
+                                    <MudIcon Icon="far fa-thumbs-up"  Size="Size.Small" Color="Color.Default"></MudIcon>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
+                                        Micu Mihai
+                                    </MudLink>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    Skoda Octavia
+                                </MudItem>
+                                <MudItem lg="2" md="2" sm="2">
+                                    <MudRating Disabled="true" SelectedValue="4" Size="Size.Small" />
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudContainer>
+                    </MudPaper>
+                    <MudPaper MinWidth="inherit" Class="mb-4">
+                        <MudContainer>
+                            <MudGrid>
+                                <MudItem lg="1" md="1" sm="1">
+                                    <MudIcon Icon="far fa-thumbs-down" Color="Color.Error" Size="Size.Small" Title="Not recommended by our algorithm!"></MudIcon>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
+                                       Andrei Vasile
+                                    </MudLink>
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    Dacia Logan
+                                </MudItem>
+                                <MudItem lg="2" md="2" sm="2">
+                                    <MudRating Disabled="true" SelectedValue="2" Size="Size.Small" />
+                                </MudItem>
+                                <MudItem lg="3" md="3" sm="3">
+                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudContainer>
+                    </MudPaper>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+
+    [Parameter] public Ride Ride { get; set; }
+    [Inject] public IDialogService DialogService { get; set; }
+
+    protected void OpenDetailsDialog(int driverId)
+    {
+        DialogService.Show<DialogDriverDetails>("Simple Dialog");
+    }
+}

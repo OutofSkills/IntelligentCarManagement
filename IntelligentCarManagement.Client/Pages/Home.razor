@@ -1,7 +1,7 @@
 ﻿@page "/"
 
-@inherits IndexBase
-@*<div class="wrapper">*@
+@inherits HomeBase
+
 <MudContainer>
     <MudGrid>
         <MudItem lg="6" md="6" xs="12" sm="12">
@@ -28,7 +28,7 @@
                                 <div class="row mt-5">
                                     <div class="col-md-5 col-5">
                                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
-                                            @if (currentState == taskStates.Started.ToString())
+                                            @if (currentState == TaskStates.Started.ToString())
                                             {
                                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                             }
