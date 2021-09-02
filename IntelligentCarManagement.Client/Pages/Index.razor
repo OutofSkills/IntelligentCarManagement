@@ -12,29 +12,35 @@
                         <br />
 
                         <div class="container">
-                            <div class="row">
-                                <div class="col-md-10 col-10">
-                                    <MudField Label="Pick-up location" Variant="Variant.Text"></MudField>
+                            <EditForm Model="Ride" OnValidSubmit="HandleSubmit">
+                                <div class="row">
+                                    <div class="col-md-12 col-12">
+                                        <MudTextField id="pickUpLocation" Placeholder="" Value="Ride.PickUpLocation" Label="Pick-up location" Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@PickUpInputIcon" OnAdornmentClick="OpenMapAsync" ValueChanged="@((string v) => OnPickUpInputChangeAsync(v))" @onfocus="AutoCompletePickUp"></MudTextField>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 col-2">
-                                    <MudIconButton Icon="@Icons.Filled.AddLocationAlt" OnClick="OpenMap"></MudIconButton>
-                                </div>
-                            </div>
 
-                            <div class="row mb-5">
-                                <div class="col-md-12">
-                                    <MudField Label="Destination" Variant="Variant.Text"></MudField>
+                                <div class="row mb-5">
+                                    <div class="col-md-12">
+                                        <MudTextField id="destination" Placeholder="" Value="Ride.Destination" Label="Destination" Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@DestinationInputIcon" OnAdornmentClick="@(e => ClearInput("Destination"))" ValueChanged="@((string v) => OnDestinationInputChange(v))" @onfocus="AutoCompleteDestination"></MudTextField>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="row mt-5">
-                                <div class="col-md-5 col-5">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Primary">Request Now</MudButton>
+                                <div class="row mt-5">
+                                    <div class="col-md-5 col-5">
+                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                                            @if (currentState == taskStates.Started.ToString())
+                                            {
+                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                            }
+
+                                            Request Now
+                                        </MudButton>
+                                    </div>
+                                    <div class="col-md-7 col-7">
+                                        <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
+                                    </div>
                                 </div>
-                                <div class="col-md-7 col-7">
-                                    <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
-                                </div>
-                            </div>
+                            </EditForm>
                         </div>
                     </MudTabPanel>
                     <MudTabPanel Text="Drive" Icon="fas fa-coins">
@@ -69,57 +75,3 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
-@*<div class="card-size">
-        <MudTabs Elevation="2" Rounded="true" Centered="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-            <MudTabPanel Text="Ride" Icon="@Icons.Filled.CarRental">
-                <MudText Typo="Typo.h4">Request a ride</MudText>
-                <br />
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-10 col-10">
-                            <MudField Label="Pick-up location" Variant="Variant.Text"></MudField>
-                        </div>
-                        <div class="col-md-2 col-2">
-                            <MudIconButton Icon="@Icons.Filled.AddLocationAlt" OnClick="OpenMap"></MudIconButton>
-                        </div>
-                    </div>
-
-                    <div class="row mb-5">
-                        <div class="col-md-12">
-                            <MudField Label="Destination" Variant="Variant.Text"></MudField>
-                        </div>
-                    </div>
-
-                    <div class="row mt-5">
-                        <div class="col-md-5 col-5">
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary">Request Now</MudButton>
-                        </div>
-                        <div class="col-md-7 col-7">
-                            <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
-                        </div>
-                    </div>
-                </div>
-            </MudTabPanel>
-            <MudTabPanel Text="Drive" Icon="fas fa-coins">
-                <MudText Typo="Typo.h4">You like to drive and you don't have a job?</MudText>
-                <br />
-                <MudText Typo="Typo.h6">Join our platform and get paid.</MudText>
-                <br />
-                <AuthorizeView>
-                    <Authorized>
-                        <MudButton StartIcon="fas fa-car" Variant="Variant.Filled" Color="Color.Primary" Link="/driver-request">Send Request</MudButton>
-                    </Authorized>
-                    <NotAuthorized>
-                        <MudButton StartIcon="fas fa-car" Variant="Variant.Filled" Color="Color.Primary" Disabled="true">Send Request</MudButton>
-                        <MudText Typo="Typo.caption">
-                            Please  <MudLink Href="/register" Typo="Typo.inherit">sign up</MudLink> or <MudLink Href="/login" Typo="Typo.inherit">login</MudLink> first.
-                        </MudText>
-                    </NotAuthorized>
-                </AuthorizeView>
-                <br /><br />
-                <MudLink Href="#"> Learn more about driving. </MudLink>
-            </MudTabPanel>
-        </MudTabs>
-    </div>*@
-@*</div>*@

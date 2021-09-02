@@ -12,10 +12,10 @@
                         @if (Drivers != null)
                         {
                             <div class="row text-center">
-                                <MudText Typo="Typo.h5">@Drivers.Count()</MudText>
+                                <MudText Typo="Typo.h5">@Requests</MudText>
                             </div>
                             <div class="row text-center">
-                                <MudLink Href="/driver-requests">Driver Requests</MudLink>
+                                <MudLink Href="/driver-requests">New Driver Requests</MudLink>
                             </div>
                         }
                         else
@@ -39,9 +39,11 @@
 @code {
     [Inject] public IDriverService DriverService { get; set; }
     protected IEnumerable<Driver> Drivers { get; set; }
+    protected int Requests = 0;
 
     protected override async Task OnInitializedAsync()
     {
         Drivers = await DriverService.GetAllDriversAsync();
+        Requests = Drivers.Where(d => d.Status.Name == "WAITING-CONFIRMATION").Count();
     }
 }
