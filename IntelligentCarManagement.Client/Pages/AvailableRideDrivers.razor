@@ -1,116 +1,276 @@
-﻿@page "/ride/available-drivers"
+﻿@page "/ride/complete-request"
 
-<MudContainer>
-    <MudGrid>
-        <MudItem lg="4" md="4" sm="12">
-            <div class="card-size">
-                <MudCard>
-                    <MudCardContent>
-                        <MudTimeline>
-                            <MudTimelineItem Color="Color.Success">
-                                <MudText Typo="Typo.body1">Pick-up Location</MudText>
-                                <MudText Typo="Typo.body2">@*@Ride.PickUpLocation*@ Picked Location</MudText>
-                                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">@*@Ride.PickUpTime*@ Today: 16:33</MudText>
-                            </MudTimelineItem>
-                            <MudTimelineItem Color="Color.Primary">
-                                <MudText Typo="Typo.body1">Destination</MudText>
-                                <MudText Typo="Typo.body2">@*@Ride.Destination*@ Picked Destination</MudText>
-                            </MudTimelineItem>
-                        </MudTimeline>
-                    </MudCardContent>
-                </MudCard>
-            </div>
-        </MudItem>
-        <MudItem lg="8" md="8" sm="12">
-            <MudCard Style="background-color: #F5F5F5">
-                <MudCardHeader>
-                    <CardHeaderContent>
-                        <MudText>Available Drivers</MudText>
-                    </CardHeaderContent>
-                </MudCardHeader>
-                <MudCardContent>
-                    <MudPaper MinWidth="inherit" Class="mb-4">
-                        <MudContainer>
-                            <MudGrid>
-                                <MudItem lg="1" md="1" sm="1">
-                                    <MudIcon Icon="far fa-thumbs-up" Color="Color.Success"  Size="Size.Small" Title="Recommended by our algorithm!"></MudIcon>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
-                                        Cojocaru Ion
-                                    </MudLink>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    BMW X2
-                                </MudItem>
-                                <MudItem lg="2" md="2" sm="2">
-                                    <MudRating Disabled="true" SelectedValue="3" Size="Size.Small" />
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
-                                </MudItem>
-                            </MudGrid>
-                        </MudContainer>
-                    </MudPaper>
-                    <MudPaper MinWidth="inherit" Class="mb-4">
-                        <MudContainer>
-                            <MudGrid>
-                                <MudItem lg="1" md="1" sm="1">
-                                    <MudIcon Icon="far fa-thumbs-up"  Size="Size.Small" Color="Color.Default"></MudIcon>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
-                                        Micu Mihai
-                                    </MudLink>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    Skoda Octavia
-                                </MudItem>
-                                <MudItem lg="2" md="2" sm="2">
-                                    <MudRating Disabled="true" SelectedValue="4" Size="Size.Small" />
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
-                                </MudItem>
-                            </MudGrid>
-                        </MudContainer>
-                    </MudPaper>
-                    <MudPaper MinWidth="inherit" Class="mb-4">
-                        <MudContainer>
-                            <MudGrid>
-                                <MudItem lg="1" md="1" sm="1">
-                                    <MudIcon Icon="far fa-thumbs-down" Color="Color.Error" Size="Size.Small" Title="Not recommended by our algorithm!"></MudIcon>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudLink @onclick="@(() => OpenDetailsDialog(1))" Style="cursor:pointer">
-                                       Andrei Vasile
-                                    </MudLink>
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    Dacia Logan
-                                </MudItem>
-                                <MudItem lg="2" md="2" sm="2">
-                                    <MudRating Disabled="true" SelectedValue="2" Size="Size.Small" />
-                                </MudItem>
-                                <MudItem lg="3" md="3" sm="3">
-                                    <MudButton Color="Color.Info" Size="Size.Small">Choose</MudButton>
-                                </MudItem>
-                            </MudGrid>
-                        </MudContainer>
-                    </MudPaper>
-                </MudCardContent>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+<link rel="stylesheet" href="/css/Available-Ride-Drivers.css"/>
+<MudGrid>
+    <MudItem lg="4" md="4" sm="6" xs="12">
+        <MudPaper Class="ml-lg-2 ml-md-1">
+            <MudContainer>
+                <MudTimeline Class="mb-2">
+                    <MudTimelineItem Color="Color.Success">
+                        <MudText Typo="Typo.h6">Pick-up Location</MudText>
+                        <MudText Typo="Typo.body2">@*@Ride.PickUpLocation*@ Picked Location</MudText>
+                        <MudText Typo="Typo.subtitle1" Class="mud-text-secondary">@*@Ride.PickUpTime*@ Today: 16:33</MudText>
+                    </MudTimelineItem>
+                    <MudTimelineItem Color="Color.Primary">
+                        <MudText Typo="Typo.h6">Destination</MudText>
+                        <MudText Typo="Typo.body2">@*@Ride.Destination*@ Picked Destination</MudText>
+                    </MudTimelineItem>
+                </MudTimeline>
+
+                <MudText Typo="Typo.h5" Class="mt-5"> Your Contact Details</MudText>
+                <MudDivider />
+                <EditForm Model="Ride">
+                    <MudTextField T="string" Label="First Name"></MudTextField>
+                    <MudTextField T="string" Label="Last Name"></MudTextField>
+                    <MudTextField T="string" Label="Phone Number"></MudTextField>
+                    <MudTextField T="string" Label="Email"></MudTextField>
+
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" Class="mb-3 mt-3">Save</MudButton>
+                </EditForm>
+
+            </MudContainer>
+        </MudPaper>
+    </MudItem>
+    <MudItem lg="8" md="8" sm="6" xs="12">
+        <MudPaper>
+            <div id="map" style="height: 530px; width: 100%;"></div>
+        </MudPaper>
+    </MudItem>
+    <MudItem lg="12" md="12" sm="12" Class="mt-5">
+        <MudCard id="available-drivers" Style="@($"background-color:{Colors.Grey.Lighten2};")">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h5">Available Drivers</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudPaper MinWidth="inherit" Class="mb-4" Elevation="0">
+                    <MudGrid>
+                        <MudItem xs="12" md="2" lg="2">
+                            <MudPaper Width="inherit" Class="sugested-paper ml-lg-3 ml-md-3 mud-theme-info" Style="position: relative;">
+                                <MudElement Class="center-content-vh">
+                                    <MudIcon Icon="far fa-thumbs-up" Size="Size.Large" Color="Color.Default" Class="ml-3"></MudIcon>
+                                    <MudText Typo="Typo.h6">Sugested</MudText>
+                                </MudElement>
+
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="12" md="10" lg="10">
+                            <MudPaper Class="mt-lg-3 mt-md-3 mr-lg-3 mr-md-2 mb-3">
+                                <MudContainer>
+                                    <MudGrid>
+                                        <MudItem lg="6" md="6" sm="12">
+                                            <MudGrid>
+                                                <MudItem lg="12" md="12" sm="12" xs="12">
+                                                    <MudText Typo="Typo.h6">Contact Info</MudText>
+                                                    <MudDivider />
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="fas fa-ghost" Size="Size.Small"></MudIcon>
+                                                        <b> Username:</b>
+                                                        BadLobster777
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Person"></MudIcon>
+                                                        <b> Name: </b>
+                                                        Cojocaru Ion
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Phone"></MudIcon>
+                                                        <b>Phone:</b>
+                                                        077777777
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Email"></MudIcon>
+                                                        <b>Email:</b>
+                                                        gigel@gmail.com
+                                                    </MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem lg="6" md="6" sm="12">
+                                            <MudGrid>
+                                                <MudItem lg="12" md="12" sm="12" xs="12">
+                                                    <MudText Typo="Typo.h6">Details</MudText>
+                                                    <MudDivider />
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="fas fa-car" Size="Size.Small"></MudIcon>
+                                                        <b>Car:</b>
+                                                        iCar Pro Max
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Money"></MudIcon>
+                                                        <b>Price:</b>
+                                                        ~$12
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Map"></MudIcon>
+                                                        <b>Distance:</b>
+                                                        ~7 Km away
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.RateReview"></MudIcon>
+                                                        <b>Rating:</b>
+                                                        <MudRating Disabled="true" SelectedValue="4" Size="Size.Small" />(210)
+                                                    </MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem lg="12" md="12" sm="12" xs="12">
+                                            <MudDivider Class="mb-2" />
+                                            <MudButton Variant="Variant.Filled" Color="Color.Primary">
+                                                Choose driver
+                                            </MudButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudContainer>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+
+                <MudPaper MinWidth="inherit" Class="mb-4" Elevation="0">
+                    <MudGrid>
+                        <MudItem xs="12" md="2" lg="2">
+                            <MudPaper Width="inherit" Class="sugested-paper ml-lg-3 ml-md-3 mud-theme-info" Style="position: relative;">
+                                <MudElement Class="center-content-vh">
+                                    <MudIcon Icon="far fa-thumbs-up" Size="Size.Large" Color="Color.Default" Class="ml-3"></MudIcon>
+                                    <MudText Typo="Typo.h6">Sugested</MudText>
+                                </MudElement>
+
+                            </MudPaper>
+                        </MudItem>
+                        <MudItem xs="12" md="10" lg="10">
+                            <MudPaper Class="mt-lg-3 mt-md-3 mr-lg-3 mr-md-2 mb-3">
+                                <MudContainer>
+                                    <MudGrid>
+                                        <MudItem lg="6" md="6" sm="12">
+                                            <MudGrid>
+                                                <MudItem lg="12" md="12" sm="12" xs="12">
+                                                    <MudText Typo="Typo.h6">Contact Info</MudText>
+                                                    <MudDivider />
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="fas fa-ghost" Size="Size.Small"></MudIcon>
+                                                        <b> Username:</b>
+                                                        BadLobster777
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Person"></MudIcon>
+                                                        <b> Name: </b>
+                                                        Cojocaru Ion
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Phone"></MudIcon>
+                                                        <b>Phone:</b>
+                                                        077777777
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Email"></MudIcon>
+                                                        <b>Email:</b>
+                                                        gigel@gmail.com
+                                                    </MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem lg="6" md="6" sm="12">
+                                            <MudGrid>
+                                                <MudItem lg="12" md="12" sm="12" xs="12">
+                                                    <MudText Typo="Typo.h6">Details</MudText>
+                                                    <MudDivider />
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="fas fa-car" Size="Size.Small"></MudIcon>
+                                                        <b>Car:</b>
+                                                        iCar Pro Max
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Money"></MudIcon>
+                                                        <b>Price:</b>
+                                                        ~$12
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.Map"></MudIcon>
+                                                        <b>Distance:</b>
+                                                        ~7 Km away
+                                                    </MudText>
+                                                </MudItem>
+                                                <MudItem lg="6" md="12" sm="12" xs="12">
+                                                    <MudText>
+                                                        <MudIcon Icon="@Icons.Filled.RateReview"></MudIcon>
+                                                        <b>Rating:</b>
+                                                        <MudRating Disabled="true" SelectedValue="4" Size="Size.Small" />(210)
+                                                    </MudText>
+                                                </MudItem>
+                                            </MudGrid>
+                                        </MudItem>
+                                        <MudItem lg="12" md="12" sm="12" xs="12">
+                                            <MudDivider Class="mb-2" />
+                                            <MudButton Variant="Variant.Filled" Color="Color.Primary">
+                                                Choose driver
+                                            </MudButton>
+                                        </MudItem>
+                                    </MudGrid>
+                                </MudContainer>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+
+                <br />
+                <MudPagination Variant="Variant.Filled" Count="4" Class="mt-5 d-flex justify-end" />
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
 
 @code {
 
-    [Parameter] public Ride Ride { get; set; }
+    [Parameter] public Ride Ride { get; set; } = new();
+
     [Inject] public IDialogService DialogService { get; set; }
 
-    protected void OpenDetailsDialog(int driverId)
+    [Inject] public IJSRuntime JSRuntime { get; set; }
+
+    private List<BreadcrumbItem> _items = new List<BreadcrumbItem>
+{
+        new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
+        new BreadcrumbItem("Videos", href: "#", icon: Icons.Material.Filled.VideoLibrary),
+        new BreadcrumbItem("Create", href: null, disabled: true, icon: Icons.Material.Filled.Create)
+    };
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        DialogService.Show<DialogDriverDetails>("Simple Dialog");
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initialize", null);
+        }
     }
 }

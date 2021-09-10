@@ -1,0 +1,22 @@
+﻿.sugested-paper {
+    height: 225px
+}
+
+@media only screen and (min-width: 960px) and (max-width:1280px) {
+    .sugested-paper {
+        height: 323px
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .sugested-paper {
+        height: 125px
+    }
+}
+
+.center-content-vh {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

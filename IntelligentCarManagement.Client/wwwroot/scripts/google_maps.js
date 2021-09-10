@@ -10,6 +10,10 @@ function initialize() {
     map = new google.maps.Map(document.getElementById
         ("map"), options);
     infoWindow = new google.maps.InfoWindow();
+
+    google.maps.event.addDomListener(window, 'resize', function () {
+        map.setCenter(latlng);
+    });
 }
 
 // Get the current location of the device and set it to a textbox
