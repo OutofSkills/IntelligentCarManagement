@@ -1,4 +1,8 @@
 ﻿@inherits LayoutComponentBase
+
+@using Services;
+@using System.Text.Json;
+
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -11,13 +15,40 @@
 
         <AuthorizeView>
             <Authorized>
-                <MudIconButton>
-                    <MudAvatar Class="text-light" Style="border-color:white" Variant="Variant.Outlined">
-                        @(context.User.FindFirst(ClaimTypes.Name).Value.ToUpper().Substring(0, 1))
-                    </MudAvatar>
-                </MudIconButton>
+                <Notifications />
 
-                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Title="Logout" Link="/logout" />
+                    <MudMenu Direction="Direction.Right" OffsetY="true" OffsetX="true" Dense="true">
+                        <ActivatorContent>
+                            @if (user.Avatar is null)
+                            {
+                                <MudAvatar Class="text-light" Style="border-color:white" Variant="Variant.Outlined" Size="Size.Small">
+                                    @(context.User.FindFirst(ClaimTypes.Name).Value.ToUpper().Substring(0, 1))
+                                </MudAvatar>
+                            }
+                            else
+                            {
+                                <MudAvatar Image=@user.Avatar />
+                            }
+                        </ActivatorContent>
+                        <ChildContent>
+                            @if (user.Avatar is null)
+                            {
+                                <CardPerson Class="mt-n2" Name=@(context.User.FindFirst(ClaimTypes.Name).Value)
+                                            Role=@(context.User.FindFirst(ClaimTypes.Role).Value)
+                                            Image=@(context.User.FindFirst(ClaimTypes.Name).Value.ToUpper().Substring(0, 1)) />
+                            }
+                            else
+                            {
+                                <CardPerson Class="mt-n2" Name=@(context.User.FindFirst(ClaimTypes.Name).Value)
+                                            Role=@(context.User.FindFirst(ClaimTypes.Role).Value)
+                                            Image=@user.Avatar />
+                            }
+
+                            <MudDivider Class="mb-2" />
+                            <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/settings" />
+                            <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/logout" />
+                        </ChildContent>
+                    </MudMenu>
             </Authorized>
             <NotAuthorized>
                 <MudIconButton Color="Color.Inherit" Title="Register" Link="/register">
@@ -39,10 +70,34 @@
 
 
 @code{
+    User user = new();
+
+    [Inject] public IUsersService UsersService { get; set; }
+
+    [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
+
     bool _drawerOpen = false;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = await GetLoggedUserId();
+        var httpResponse = await UsersService.GetUserAsync(id);
+
+        var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+        user = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    }
+
+    private async Task<int> GetLoggedUserId()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        return int.Parse(userId);
     }
 }

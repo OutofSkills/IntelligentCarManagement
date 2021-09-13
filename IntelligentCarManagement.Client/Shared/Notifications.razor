@@ -1,0 +1,131 @@
+﻿@using Services;
+@using Helpers;
+
+<link rel="stylesheet" href="/css/notifications.css" />
+
+@if (UserNotifications is null || UserNotifications.Count() == 0)
+{
+    <MudBadge Overlap="true" Class="mx-6 my-4">
+        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" Size="Size.Medium" Title="Notifications" OnClick="@(() => OpenDrawer(Anchor.End))" />
+    </MudBadge>
+}
+else
+{ 
+    <MudBadge Content="@UserNotifications.Count()" Color="Color.Warning" Overlap="false" Class="mx-6 my-4">
+        <MudIconButton Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" Size="Size.Medium" Title="Notifications" OnClick="@(() => OpenDrawer(Anchor.End))" />
+    </MudBadge>
+}
+
+
+
+<MudDrawer @bind-Open="@openNotificationsMenu" Anchor="@anchor" Elevation="1" Variant="@DrawerVariant.Temporary" Width="500px">
+    <MudDrawerHeader>
+        <MudText Typo="Typo.h5"><b>Notifications</b></MudText>
+    </MudDrawerHeader>
+    <MudDivider />
+
+    <div class="container mt-2">
+        @if (UserNotifications is null || UserNotifications.Count() == 0)
+        {
+            <div class="align-items-center text-center">
+                <MudElement Class="flex-column">
+                    <MudIcon Icon="@Icons.Filled.Notifications" Size="Size.Large" Color="Color.Default" />
+                    <MudText Typo="Typo.h6" Color="Color.Default">No new available notifications.</MudText>
+                </MudElement>
+            </div>
+        }
+        else
+        {
+            @foreach (var notification in UserNotifications)
+            {
+                <div class="notification row mb-3">
+                    <div class="col-1 d-flex align-items-center">
+                        <MudElement>
+                            <MudIcon Icon="@Icons.Material.Filled.Done" Color="Color.Success" />
+                        </MudElement>
+                    </div>
+                    <div class="col-9">
+                        <MudElement Class="flex-column">
+                            <MudElement>
+                                <MudText Typo="Typo.body1"><b>@notification.EventName</b></MudText>
+                            </MudElement>
+                            <MudElement>
+                                <MudText Typo="Typo.body2">@notification.EventContent</MudText>
+                            </MudElement>
+                            <MudElement>
+                                <MudText Typo="Typo.caption">@(notification.DateTime.TimeAgo())</MudText>
+                            </MudElement>
+                        </MudElement>
+                    </div>
+                    <div class="col-2 d-flex align-items-center">
+                        <MudElement>
+                            <MudIconButton Icon="@Icons.Filled.Close" Color="Color.Warning" Title="Remove Notification" OnClick="@(() => RemoveNotification(notification.Id))" />
+                        </MudElement>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</MudDrawer>
+
+@code{
+    [Inject] public INotificationsService NotificationsService { get; set; }
+
+    [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
+
+    [Inject] public ISnackbar Snackbar { get; set; }
+
+    IEnumerable<Notification> UserNotifications;
+
+    Anchor anchor;
+    protected bool openNotificationsMenu = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SeedNotifications();
+    }
+
+    public void OnToggledChanged()
+    {
+        // Because variable is not two-way bound, we need to update it ourself
+        openNotificationsMenu = !openNotificationsMenu;
+    }
+
+    void OpenDrawer(Anchor anchor)
+    {
+        openNotificationsMenu = true;
+        this.anchor = anchor;
+    }
+
+    async Task RemoveNotification(int id)
+    {
+        var result = await NotificationsService.RemoveNotification(id);
+
+        if(result is true)
+        {
+            await SeedNotifications();
+        }
+        else
+        {
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomCenter;
+            Snackbar.Add("Something went wrong. Couldn't remove the notification.", Severity.Error);
+        }
+    }
+
+    private async Task<int> GetLoggedUserId()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        return int.Parse(userId);
+    }
+
+    private async Task SeedNotifications()
+    {
+        var userId = await GetLoggedUserId();
+        if (userId != 0)
+        {
+            UserNotifications = await NotificationsService.GetUserNotifications(userId);
+        }
+    }
+}

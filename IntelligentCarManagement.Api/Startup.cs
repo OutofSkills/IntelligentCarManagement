@@ -101,6 +101,7 @@ namespace IntelligentCarManagement.Api
             services.AddTransient<IRolesService, RolesService>();
             services.AddTransient<IAccountStatusService, AccountStatusService>();
             services.AddTransient<IDriverStatusService, DriverStatusService>();
+            services.AddTransient<INotificationService, NotificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

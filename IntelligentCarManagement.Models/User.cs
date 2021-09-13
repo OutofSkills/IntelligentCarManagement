@@ -51,15 +51,21 @@ namespace IntelligentCarManagement.Models
 
         [ForeignKey(nameof(AddressId))]
         public virtual UserAddress Address { get; set; }
+
         [ForeignKey(nameof(StatusId))]
         public virtual AccountStatus AccountStatus { get; set; }
+
         [ForeignKey(nameof(RoleId))]
         public virtual IList<UserRole> UserRoles { get; set; }
+
         public virtual Driver Driver { get; set; }
+
+        public virtual IEnumerable<Notification> Notifications { get; set; }
 
         public User()
         {
             UserRoles = new List<UserRole>();
+            Notifications = new HashSet<Notification>();
         }
     }
 }

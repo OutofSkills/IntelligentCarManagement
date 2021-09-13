@@ -1,4 +1,11 @@
-﻿.sugested-paper {
+﻿/*Css for map*/
+.map-size {
+    height: 560px;
+    width: 100%;
+}
+
+/*Css for sugested drivers*/
+.sugested-paper {
     height: 225px
 }
 

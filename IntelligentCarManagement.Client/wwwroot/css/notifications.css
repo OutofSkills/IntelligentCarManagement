@@ -1,0 +1,7 @@
+﻿.notification:hover {
+    background-color: #EEEEEE;
+}
+
+.notification{
+    cursor:pointer;
+}

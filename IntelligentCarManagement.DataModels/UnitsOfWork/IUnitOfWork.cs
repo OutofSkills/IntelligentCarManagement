@@ -17,6 +17,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         IRolesRepo RolesRepo { get; }
         IAccountStatusesRepo StatusesRepo{ get;}
         IDriverStatusRepo DriverStatusesRepo { get; }
+        INotificationsRepo NotificationsRepo { get; }
 
         /// <summary>
         /// Saves all pending changes
