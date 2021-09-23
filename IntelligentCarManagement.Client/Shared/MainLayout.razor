@@ -86,18 +86,30 @@
     protected override async Task OnInitializedAsync()
     {
         var id = await GetLoggedUserId();
-        var httpResponse = await UsersService.GetUserAsync(id);
+        if(id != 0)
+        {
+            var httpResponse = await UsersService.GetUserAsync(id);
 
-        var responseString = await httpResponse.Content.ReadAsStringAsync();
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-        user = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            user = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            user = null;
+        }
     }
 
     private async Task<int> GetLoggedUserId()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-        return int.Parse(userId);
+            return int.Parse(userId);
+        }
+
+        return 0;
     }
 }

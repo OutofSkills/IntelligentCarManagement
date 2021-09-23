@@ -1,76 +1,77 @@
 ﻿@page "/login"
 
-@using Services;
-@using System.ComponentModel.DataAnnotations;
+@layout LoginLayout
 
 @inject IAuthenticationService AuthService
 @inject NavigationManager NavManager
+@inject ISnackbar Snackbar
 
-<MudContainer>
-    <div class="row justify-content-center">
-        <div style="max-width: 400px;">
-            <EditForm Model="@model" OnValidSubmit="ExecuteLogin">
-                <MudCard>
-                    <MudCardContent>
-                        <MudTextField Label="Email" Class="mt-3"
-                                      @bind-Value="model.Email" For="@(() => model.Email)" />
-                        <MudTextField Label="Password" Class="mt-3"
-                                      @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                            @if (currentState == taskStates.Started.ToString())
-                            {
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            }
+<MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
 
-                            Login
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-                <br />
+<MudText>Don't have an account? <MudLink Href="Y/register">Sign Up</MudLink></MudText>
 
-                <MudExpansionPanels>
-                    <MudExpansionPanel Text="Login Validation" @bind-IsExpanded="expand">
-                        @if (authError)
-                        {
-                            <MudText Color="@Color.Error">
-                                @authErrorText
-                            </MudText>
-                        }
-                        else
-                        {
-                            <MudText Color="@Color.Dark">
-                                No errors.
-                            </MudText>
-                        }
-                    </MudExpansionPanel>
-                </MudExpansionPanels>
-            </EditForm>
-        </div>
+<EditForm Model="@model" OnValidSubmit="ExecuteLogin">
+
+    <MudTextField @bind-Value="model.Email" Label="E-mail" For="@(() => model.Email)" Variant="Variant.Outlined" Class="my-6"></MudTextField>
+
+    <MudTextField @bind-Value="@model.Password" Label="Password" For="@(() => model.Password)" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+
+    <div Class="d-flex justify-space-between align-center">
+        <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+        <MudLink Href="/pages/authentication/forgot-password">Forgot password?</MudLink>
     </div>
-</MudContainer>
 
+    <MudButton Disabled="@(processLogin)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+        @if (processLogin)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Sign In</MudText>
+        }
+    </MudButton>
+
+</EditForm>
 
 @code {
     LoginModel model = new();
 
-    private enum taskStates { Started, Ended };
-    private string currentState = "";
-    private bool expand = false;
-    private bool authError = false;
-    private string authErrorText = "";
+    bool processLogin;
+
+    bool authError;
+
+    bool PasswordVisibility;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
 
     private async Task ExecuteLogin()
     {
-
-        currentState = taskStates.Started.ToString();
         authError = false;
 
-        var result = await AuthService.Login(model);
+        var authTask = AuthService.Login(model);
+        processLogin = true;
+        var result = await authTask;
 
-        currentState = taskStates.Ended.ToString();
-        expand = true;
+        
+        processLogin = false;
 
         if (result is not null)
         {
@@ -78,7 +79,7 @@
         }
         else
         {
-            authErrorText = "There was an error when trying to log in. ";
+            Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
             authError = true;
         }
 

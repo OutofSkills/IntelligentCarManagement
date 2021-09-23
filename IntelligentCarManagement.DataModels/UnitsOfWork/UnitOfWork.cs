@@ -15,10 +15,9 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         public IUsersRepo UsersRepo { get; private set; }
         public IRolesRepo RolesRepo { get; private set; }
         public IAccountStatusesRepo StatusesRepo { get; private set; }
-
         public IDriverStatusRepo DriverStatusesRepo { get; set; }
-
         public INotificationsRepo NotificationsRepo { get; set; }
+        public IAddressRepo AdressRepo { get; set; }
 
         /// <summary>
         /// The DbContext

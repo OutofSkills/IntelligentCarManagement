@@ -45,9 +45,9 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("edit")]
-        public IActionResult UpdateUser([FromBody]User user)
+        public async Task<IActionResult> UpdateUserAsync([FromBody]User user)
         {
             var result = usersService.EditUser(user);
 

@@ -43,7 +43,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> Edit(User user)
         {
-            var response = await httpClient.PostAsJsonAsync("/api/Users/edit", user);
+            var response = await httpClient.PutAsJsonAsync("/api/Users/edit", user);
 
             return response.IsSuccessStatusCode;
         }

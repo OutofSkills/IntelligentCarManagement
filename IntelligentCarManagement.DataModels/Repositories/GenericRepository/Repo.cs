@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,17 @@ namespace IntelligentCarManagement.DataAccess.Repositories.GenericRepository
         }
         public void Update(TEntity obj)
         {
+            // Update parent object
             table.Attach(obj);
             _context.Entry(obj).State = EntityState.Modified;
+
+            // Update children objects
+            IEnumerable<EntityEntry> unchangedEntities = _context.ChangeTracker.Entries().Where(x => x.State == EntityState.Unchanged);
+
+            foreach (EntityEntry ee in unchangedEntities)
+            {
+                ee.State = EntityState.Modified;
+            }
         }
         public async Task Delete(object id)
         {
