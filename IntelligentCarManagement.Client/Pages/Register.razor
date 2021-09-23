@@ -1,127 +1,194 @@
 ﻿@page "/register"
 
-@inject Services.IAuthenticationService AuthService
+@layout LoginLayout
+
+@inject IAuthenticationService AuthService
 @inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+@*<MudContainer>
+        <div class="row justify-content-center">
+            <div style="max-width: 800px;">
+                <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+                    <DataAnnotationsValidator />
+                    <MudCard>
+                        <MudCardContent>
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <MudTextField Label="First name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
+                                </div>
+                                <div class="col-md-6">
+                                    <MudTextField Label="Last name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
+                                </div>
+                            </div>
 
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <MudTextField Label="Username" @bind-Value="model.UserName" For="@(() => model.UserName)" HelperText="A nickname that represents you." />
+                                </div>
+                                <div class="col-md-6">
+                                    <MudNumericField Label="Age" @bind-Value="model.Age" For="@(() => model.Age)" Variant="Variant.Text" Min="0"  Adornment="Adornment.End" AdornmentText="years" HideSpinButtons="true"/>
+                                </div>
+                            </div>
 
-<MudContainer>
-    <div class="row justify-content-center">
-        <div style="max-width: 800px;">
-            <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-                <DataAnnotationsValidator />
-                <MudCard>
-                    <MudCardContent>
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <MudTextField Label="First name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <MudTextField Label="Email" @bind-Value="model.Email" For="@(() => model.Email)" HelperText="The email should be unique." />
+                                </div>
+                                <div class="col-md-6">
+                                    <MudTextField Label="Phone Number" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" HelperText="Provide your real phone number." />
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <MudTextField Label="Last name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
-                            </div>
-                        </div>
 
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <MudTextField Label="Username" @bind-Value="model.UserName" For="@(() => model.UserName)" HelperText="A nickname that represents you." />
+                            <div class="row g-2 mb-2">
+                                <div class="col-md-6">
+                                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                                                  @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+                                </div>
+                                <div class="col-md-6">
+                                    <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
+                                                  @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" />
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <MudNumericField Label="Age" @bind-Value="model.Age" For="@(() => model.Age)" Variant="Variant.Text" Min="0"  Adornment="Adornment.End" AdornmentText="years" HideSpinButtons="true"/>
-                            </div>
-                        </div>
 
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <MudTextField Label="Email" @bind-Value="model.Email" For="@(() => model.Email)" HelperText="The email should be unique." />
-                            </div>
-                            <div class="col-md-6">
-                                <MudTextField Label="Phone Number" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" HelperText="Provide your real phone number." />
-                            </div>
-                        </div>
+                            <MudCheckBox T="bool" Required="true" @bind-Checked="agreeTermsConditions" RequiredError="You must agree" Class="ml-n2"
+                                         Label="I agree with the Terms and Conditions." />
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Disabled="!agreeTermsConditions">
+                                @if (currentTaskState == taskStates.Started.ToString())
+                                {
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                }
 
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                                              @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                            </div>
-                            <div class="col-md-6">
-                                <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
-                                              @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" />
-                            </div>
-                        </div>
+                                Register
+                            </MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                    <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
+                        Fill out the form correctly to sign-up.
+                    </MudText>
 
-                        <MudCheckBox T="bool" Required="true" @bind-Checked="agreeTermsConditions" RequiredError="You must agree" Class="ml-n2"
-                                     Label="I agree with the Terms and Conditions." />
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Disabled="!agreeTermsConditions">
-                            @if (currentTaskState == taskStates.Started.ToString())
+                    <MudExpansionPanels>
+                        <MudExpansionPanel Text="Sign-Up Validation" @bind-IsExpanded="expand">
+                            @if (showError)
                             {
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <MudText Color="@Color.Error">
+                                    @errorMessage
+                                </MudText>
                             }
+                            else
+                            {
+                                <MudText Color="@Color.Dark">
+                                    No errors.
+                                </MudText>
+                            }
+                        </MudExpansionPanel>
+                    </MudExpansionPanels>
+                </EditForm>
+            </div>
 
-                            Register
-                        </MudButton>
-                    </MudCardActions>
-                </MudCard>
-                <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
-                    Fill out the form correctly to sign-up.
-                </MudText>
-
-                <MudExpansionPanels>
-                    <MudExpansionPanel Text="Sign-Up Validation" @bind-IsExpanded="expand">
-                        @if (showError)
-                        {
-                            <MudText Color="@Color.Error">
-                                @errorMessage
-                            </MudText>
-                        }
-                        else
-                        {
-                            <MudText Color="@Color.Dark">
-                                No errors.
-                            </MudText>
-                        }
-                    </MudExpansionPanel>
-                </MudExpansionPanels>
-            </EditForm>
         </div>
+    </MudContainer>*@
 
-    </div>
-</MudContainer>
+
+<MudText Typo="Typo.h4" GutterBottom="true">Sign Up</MudText>
+<MudText>Already have an account? <MudLink Href="/login">Sign In</MudLink></MudText>
+
+<EditForm Model="model" OnValidSubmit="HandleRegister">
+    <MudTextField @bind-Value="model.UserName" Label="Username" Variant="Variant.Outlined" For="@(() => model.UserName)" Class="my-4"></MudTextField>
+
+    <MudElement Class="d-flex my-4">
+        <MudTextField @bind-Value="model.FirstName" Label="First Name" Variant="Variant.Outlined" For="@(() => model.FirstName)" Class="mr-1"></MudTextField>
+        <MudTextField @bind-Value="model.LastName" Label="Last Name" Variant="Variant.Outlined" For="@(() => model.LastName)" Class="ml-1"></MudTextField>
+    </MudElement>
+
+    <MudTextField @bind-Value="model.Email" Label="E-mail" Variant="Variant.Outlined" For="@(() => model.Email)"></MudTextField>
+
+    <MudTextField @bind-Value="@model.Password" Label="Password" For="@(() => model.Password)" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" Class="mt-4" />
+    <MudTextField @bind-Value="@model.ConfirmPassword" Label="Confirm Password" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" InputType="@ConfirmPasswordInput" Adornment="Adornment.End" AdornmentIcon="@ConfirmPasswordInputIcon" OnAdornmentClick="ToggleConfirmPasswordVisibility" Class="mt-4" />
+
+    <MudCheckBox @bind-Checked="@AgreeToTerms" Label="I agree to the terms and privacy" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+
+    <MudButton Disabled="@(processRegister || !AgreeToTerms)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+        @if (processRegister)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Register</MudText>
+        }
+    </MudButton>
+</EditForm>
 
 @code {
-    private User model = new User() { Address = new UserAddress() };
+    private User model = new();
 
-    private bool agreeTermsConditions = false;
-    private string currentTaskState = "";
-    private enum taskStates { Started, Ended };
-    private string errorMessage;
-    private bool showError;
-    private bool expand = false;
+    private bool processRegister;
 
-    private async Task OnValidSubmit()
+    private bool registerError;
+    public bool AgreeToTerms;
+
+    public bool PasswordVisibility, ConfirmPasswordVisibility;
+    public InputType PasswordInput = InputType.Password;
+    public InputType ConfirmPasswordInput = InputType.Password;
+    public string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    public string ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
     {
-        errorMessage = "";
-        currentTaskState = taskStates.Started.ToString();
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+    void ToggleConfirmPasswordVisibility()
+    {
+        @if (ConfirmPasswordVisibility)
+        {
+            ConfirmPasswordVisibility = false;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            ConfirmPasswordInput = InputType.Password;
+        }
+        else
+        {
+            ConfirmPasswordVisibility = true;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.Visibility;
+            ConfirmPasswordInput = InputType.Text;
+        }
+    }
 
-        errorMessage = await AuthService.Register(model);
+    private async Task HandleRegister()
+    {
+        var resultMessage = "";
 
-        currentTaskState = taskStates.Ended.ToString();
-        expand = true;
+        processRegister = true;
 
-        if (errorMessage.ToLower() == "success")
+        resultMessage = await AuthService.Register(model);
+        processRegister = false;
+
+        if (resultMessage.ToLower() == "success")
         {
             await ExecuteLogin();
         }
         else
         {
-            showError = true;
+            Snackbar.Add("There was an error when trying to register. ", Severity.Error);
         }
     }
 
     private async Task ExecuteLogin()
     {
-        showError = false;
+        registerError = false;
 
         var result = await AuthService.Login(new LoginModel { Email = model.Email, Password = model.Password, Grant_Type = "password" });
 
@@ -131,8 +198,7 @@
         }
         else
         {
-            errorMessage = "There was an error when trying to log in. ";
-            showError = true;
+            Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
         }
 
     }
