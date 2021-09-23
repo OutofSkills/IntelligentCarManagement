@@ -67,6 +67,7 @@ namespace IntelligentCarManagement.Services
             // Set status to pendind activation
             userToRegister.AccountStatus = await unitOfWork.StatusesRepo.GetById(1);
             userToRegister.RegistrationDate = DateTime.Now;
+            userToRegister.Address = new UserAddress();
             /*End completing*/
 
             User existingUser = await userManager.FindByEmailAsync(userToRegister.Email);
