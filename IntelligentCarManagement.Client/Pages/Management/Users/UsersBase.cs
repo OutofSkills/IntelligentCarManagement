@@ -4,46 +4,48 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
+using System.Text.Json;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Management.Users
 {
-    public class DriverRequestsBase: ComponentBase
+    public class UsersBase: ComponentBase
     {
         [Inject]
-        public IDriverService DriverService { get; set; }
+        public IUsersService UsersService { get; set; }
 
-        public IEnumerable<Driver> Drivers { get; set; }
+        public IEnumerable<User> Users { get; set; }
 
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadDrivers();
+            await LoadUsers();
         }
 
         public async Task SelectedPage(int page)
         {
             CurrentPage = page;
-            await LoadDrivers(page);
+            await LoadUsers(page);
         }
 
-        private async Task LoadDrivers(int page = 1)
+        private async Task LoadUsers(int page = 1)
         {
-            var httpResponse = await DriverService.GetDriversAsync(page);
+            var httpResponse = await UsersService.GetUsersAsync(page);
 
             NumberOfPages = int.Parse(httpResponse.Headers.GetValues("numberOfPages").FirstOrDefault());
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            Drivers = JsonSerializer.Deserialize<IEnumerable<Driver>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            Users = JsonSerializer.Deserialize<IEnumerable<User>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
         }
 
-        public async Task DataChanged()
+        public async Task UserRemoved()
         {
-            await LoadDrivers();
+            await LoadUsers();
         }
+
     }
 }
+

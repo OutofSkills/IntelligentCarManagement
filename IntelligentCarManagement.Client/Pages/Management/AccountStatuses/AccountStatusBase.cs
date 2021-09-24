@@ -1,60 +1,61 @@
-﻿using IntelligentCarManagement.Models;
-using IntelligentCarManagement.Client.Services;
+﻿using IntelligentCarManagement.Client.Services;
+using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.Json;
-using MudBlazor;
+using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Management.AccountStatuses
 {
-    public class CarsBase: ComponentBase
+    public class AccountStatusBase: ComponentBase
     {
         [Inject]
-        public ICarService CarService { get; set; }
+        public IAccountStatusService AccountStatusService { get; set; }
         [Inject]
         public IDialogService DialogService { get; set; }
-        public IEnumerable<Car> Cars { get; set; }
+        public IEnumerable<AccountStatus> Statuses { get; set; }
+
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
 
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadCars();
+            await LoadStatuses();
         }
 
         protected async Task DataChanged()
         {
-            await LoadCars();
+            await LoadStatuses();
         }
 
-        private async Task LoadCars(int page = 1)
+        private async Task LoadStatuses(int page = 1)
         {
-            var httpResponse = await CarService.GetCarsAsync(page);
+            var httpResponse = await AccountStatusService.GetStatusesAsync(page);
 
             NumberOfPages = int.Parse(httpResponse.Headers.GetValues("numberOfPages").FirstOrDefault());
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            Cars = JsonSerializer.Deserialize<IEnumerable<Car>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            Statuses = JsonSerializer.Deserialize<IEnumerable<AccountStatus>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         public async Task SelectedPage(int page)
         {
             CurrentPage = page;
-            await LoadCars(page);
+            await LoadStatuses(page);
         }
 
         protected async Task OpenAddDialogAsync()
         {
             var parameters = new DialogParameters();
 
-            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
 
-            var dialog = DialogService.Show<NewCar>("New Car", parameters, options);
+            var dialog = DialogService.Show<NewStatus>("New Status", parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)

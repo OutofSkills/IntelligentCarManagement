@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Management.Cars
 {
     public class NewCarBase : ComponentBase
     {

@@ -4,48 +4,46 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Management.Drivers
 {
-    public class UsersBase: ComponentBase
+    public class DriverRequestsBase: ComponentBase
     {
         [Inject]
-        public IUsersService UsersService { get; set; }
+        public IDriverService DriverService { get; set; }
 
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<Driver> Drivers { get; set; }
 
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadUsers();
+            await LoadDrivers();
         }
 
         public async Task SelectedPage(int page)
         {
             CurrentPage = page;
-            await LoadUsers(page);
+            await LoadDrivers(page);
         }
 
-        private async Task LoadUsers(int page = 1)
+        private async Task LoadDrivers(int page = 1)
         {
-            var httpResponse = await UsersService.GetUsersAsync(page);
+            var httpResponse = await DriverService.GetDriversAsync(page);
 
             NumberOfPages = int.Parse(httpResponse.Headers.GetValues("numberOfPages").FirstOrDefault());
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            Users = JsonSerializer.Deserialize<IEnumerable<User>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
+            Drivers = JsonSerializer.Deserialize<IEnumerable<Driver>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task UserRemoved()
+        public async Task DataChanged()
         {
-            await LoadUsers();
+            await LoadDrivers();
         }
-
     }
 }
-

@@ -1,0 +1,165 @@
+﻿@page "/admin/dashboard"
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Admin Dashboard</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+            <MudIcon Icon="@Icons.Material.Filled.Euro" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+            <div>
+                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Income</MudText>
+                <MudText Typo="Typo.h5">3,125,000</MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+            <MudIcon Icon="@Icons.Material.Filled.PeopleAlt" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+            <div>
+                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Drivers</MudText>
+                <MudText Typo="Typo.h5">
+                    <MudTooltip Text="Active">
+                        412
+                    </MudTooltip>
+                     / 
+                    <MudTooltip Text="Total">
+                        510
+                    </MudTooltip>
+                </MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+            <MudIcon Icon="fas fa-check-circle" Size="Size.Large" Color="Color.Success" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
+            <div>
+                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Deserved Clients</MudText>
+                <MudText Typo="Typo.h5">120</MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+            <MudIcon Icon="fas fa-user" Size="Size.Large" Color="Color.Warning" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
+            <div>
+                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">New Clients</MudText>
+                <MudText Typo="Typo.h5">12</MudText>
+            </div>
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="8">
+        <MudPaper Class="pa-4" Style="height:300px;">
+            Charts comming soon...
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4" Style="height:300px;">
+            Charts comming soon...
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudCard Style="height:100%;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Earning Report</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0">
+                <MudSimpleTable Elevation="0" Hover="true">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Deserved Clients</th>
+                            <th>Earnings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var report in earningReports.OrderByDescending(x => x.Earnings))
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex flex-row">
+                                        <MudAvatar Image="@report.Avatar" Class="mud-elevation-25" />
+                                        <div class="ml-6">
+                                            <MudText Typo="Typo.subtitle2">@report.Name</MudText>
+                                            <MudText Typo="Typo.body2">@report.Title</MudText>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><MudText>@report.DeservedClients</MudText></td>
+                                <td><MudText><b>$</b>@report.Earnings</MudText></td>
+                            </tr>
+                        }
+                    </tbody>
+                </MudSimpleTable>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="12" md="6">
+        <MudCard Style="height:100%;">
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">Recent incidents</MudText>
+                </CardHeaderContent>
+            </MudCardHeader>
+            <MudCardContent Class="px-0">
+                <MudList Clickable="true">
+                    <MudListItem>
+                        <div class="d-flex flex-row">
+                            <MudAvatar Class="mud-elevation-25">
+                                <MudIcon Icon="fas fa-car-crash" Size="Size.Large" Class="mx-4" />
+                            </MudAvatar>
+                            <div class="ml-6">
+                                <MudText Typo="Typo.subtitle2">Accident</MudText>
+                                <MudText Typo="Typo.body2">Driver <MudLink>BadLobster69</MudLink> has crashed his car while working.</MudText>
+                            </div>
+                            <MudChip Label="true" Color="Color.Error" Size="Size.Small" Class="ml-auto mud-elevation-25">Danger</MudChip>
+                        </div>
+                    </MudListItem>
+                    <MudListItem>
+                        <div class="d-flex flex-row">
+                            <MudAvatar Class="mud-elevation-25">
+                                <MudIcon Icon="@Icons.Filled.Money" Class="mx-4" />
+                            </MudAvatar>
+                            <div class="ml-6">
+                                <MudText Typo="Typo.subtitle2">Payment Issue</MudText>
+                                <MudText Typo="Typo.body2">Client <MudLink>Ionut777</MudLink> refused to pay for his ride.</MudText>
+                            </div>
+                            <MudChip Label="true" Color="Color.Secondary" Size="Size.Small" Class="ml-auto mud-elevation-25">Medium</MudChip>
+                        </div>
+                    </MudListItem>
+                    <MudListItem>
+                        <div class="d-flex flex-row">
+                            <MudAvatar Class="mud-elevation-25">
+                                <MudIcon Icon="fas fa-car-crash" Size="Size.Large" Class="mx-4" />
+                            </MudAvatar>
+                            <div class="ml-6">
+                                <MudText Typo="Typo.subtitle2">Accident</MudText>
+                                <MudText Typo="Typo.body2">Driver <MudLink>NoobMaster</MudLink> has crashed his car while working.</MudText>
+                            </div>
+                            <MudChip Label="true" Color="Color.Error" Size="Size.Small" Class="ml-auto mud-elevation-25">Danger</MudChip>
+                        </div>
+                    </MudListItem>
+                </MudList>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+
+    EarningReport[] earningReports = new EarningReport[]
+    {
+        new EarningReport { Name = "Lunees", Title = "Driver", Avatar = "https://avatars2.githubusercontent.com/u/71094850?s=460&u=66c16f5bb7d27dc751f6759a82a3a070c8c7fe4b&v=4", Earnings = 27.99, DeservedClients = 10},
+        new EarningReport { Name = "Mikes-gh", Title = "Driver", Avatar = "https://avatars.githubusercontent.com/u/16208742?s=120&v=4", Earnings = 109.12, DeservedClients = 21},
+        new EarningReport { Name = "Garderoben", Title = "Driver", Avatar = "https://avatars2.githubusercontent.com/u/10367109?s=460&amp;u=2abf95f9e01132e8e2915def42895ffe99c5d2c6&amp;v=4", Earnings = 420, DeservedClients = 17},
+    };
+
+    class EarningReport
+    {
+        public string Avatar;
+        public string Name;
+        public string Title;
+        public int DeservedClients;
+        public double Earnings;
+    }
+}

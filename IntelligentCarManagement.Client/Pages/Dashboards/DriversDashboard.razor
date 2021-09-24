@@ -1,0 +1,34 @@
+﻿@page "/drivers-dashboard"
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Drivers Dashboard</MudText>
+<MudGrid>
+    <MudItem xs="12" sm="6" md="3">
+        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+            <MudIcon Icon="@Icons.Material.Filled.PersonAdd" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+            <div>
+                @if (Drivers is null)
+                {
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                    <MudSkeleton SkeletonType="SkeletonType.Text" Width="20px" />
+                }
+                else
+                {
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1"><MudLink Href="/driver-requests">Driver Requests</MudLink></MudText>
+                    <MudText Typo="Typo.h5">@Requests</MudText>
+                }
+            </div>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Inject] public IDriverService DriverService { get; set; }
+    protected IEnumerable<Driver> Drivers { get; set; }
+    protected int Requests = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Drivers = await DriverService.GetAllDriversAsync();
+        Requests = Drivers.Where(d => d.Status.Name == "WAITING-CONFIRMATION").Count();
+    }
+}

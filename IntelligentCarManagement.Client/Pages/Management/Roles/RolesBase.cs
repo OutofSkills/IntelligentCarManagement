@@ -8,15 +8,15 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Management.Roles
 {
-    public class AccountStatusBase: ComponentBase
+    public class RolesBase: ComponentBase
     {
         [Inject]
-        public IAccountStatusService AccountStatusService { get; set; }
+        public IRolesService RolesService { get; set; }
         [Inject]
         public IDialogService DialogService { get; set; }
-        public IEnumerable<AccountStatus> Statuses { get; set; }
+        protected IEnumerable<Role> Roles { get; set; }
 
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
@@ -24,38 +24,38 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            await LoadStatuses();
+            await LoadRoles();
         }
 
         protected async Task DataChanged()
         {
-            await LoadStatuses();
+            await LoadRoles();
         }
 
-        private async Task LoadStatuses(int page = 1)
+        private async Task LoadRoles(int page = 1)
         {
-            var httpResponse = await AccountStatusService.GetStatusesAsync(page);
+            var httpResponse = await RolesService.GetRolesAsync(page);
 
             NumberOfPages = int.Parse(httpResponse.Headers.GetValues("numberOfPages").FirstOrDefault());
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            Statuses = JsonSerializer.Deserialize<IEnumerable<AccountStatus>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            Roles = JsonSerializer.Deserialize<IEnumerable<Role>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         public async Task SelectedPage(int page)
         {
             CurrentPage = page;
-            await LoadStatuses(page);
+            await LoadRoles(page);
         }
 
         protected async Task OpenAddDialogAsync()
         {
             var parameters = new DialogParameters();
 
-            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true };
+            var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall, FullWidth = true };
 
-            var dialog = DialogService.Show<NewStatus>("New Status", parameters, options);
+            var dialog = DialogService.Show<NewRole>("New Role", parameters, options);
             var result = await dialog.Result;
 
             if (!result.Cancelled)
