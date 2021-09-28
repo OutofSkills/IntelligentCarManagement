@@ -27,22 +27,22 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
         protected override async Task OnInitializedAsync()
         {
             var httpResponse = await UsersService.GetUserAsync(int.Parse(Id));
-
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
             User = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             ResetPasswordModel.Email = User.Email;
 
-
             await AssignCheckBoxRoles();
         }
         protected override void OnParametersSet()
         {
-            if (User.Driver == null)
+            if (User.Driver is null)
             {
-                User.Driver = new Driver();
-                User.Driver.UserId = User.Id;
+                User.Driver = new Driver
+                {
+                    UserId = User.Id
+                };
             }
         }
 

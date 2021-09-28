@@ -31,7 +31,6 @@ namespace IntelligentCarManagement.Services
         public async Task<IEnumerable<string>> GetUserRolesAsync(int userId)
         {
             var user = await userManager.FindByIdAsync(userId.ToString());
-
             var userRoles = await userManager.GetRolesAsync(user);
 
             return userRoles;

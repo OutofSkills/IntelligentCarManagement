@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -45,9 +46,10 @@ namespace IntelligentCarManagement.Services
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
 
-            foreach (var role in user.UserRoles)
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretSecurityKey.DontTouchIt")), SecurityAlgorithms.HmacSha256)), new JwtPayload(claims));

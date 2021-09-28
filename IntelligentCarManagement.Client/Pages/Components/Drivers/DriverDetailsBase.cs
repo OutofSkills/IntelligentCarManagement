@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Client.Pages
+namespace IntelligentCarManagement.Client.Pages.Components.Drivers
 {
     public class DriverDetailsBase: ComponentBase
     {

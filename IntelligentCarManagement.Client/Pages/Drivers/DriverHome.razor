@@ -1,0 +1,45 @@
+﻿@page "/driver/home"
+
+@inherits DriverHomeBase
+@attribute [Authorize(Roles = "DRIVER")]
+
+<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Driver Home</MudText>
+<MudGrid>
+
+    <MudItem xs="12" sm="4">
+        <MudPaper Class="pa-4" Style="height:300px;">
+            @if (User is null || User.Driver is null)
+            {
+                <MudText Typo="Typo.h6">
+                    Account State
+                    <MudProgressCircular Indeterminate="true" Size="Size.Small"></MudProgressCircular>
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">Account State</MudText>
+                <div class="d-flex d-row mt-2">
+                    <MudSwitch @bind-Checked="User.Driver.IsAvailable" Color="Color.Primary">
+                        @if (User.Driver.IsAvailable)
+                            {
+                            <MudText Typo="Typo.subtitle1">Available</MudText>
+                            <MudText Typo="Typo.body2">Ready to receive client request.</MudText>
+                            }
+                            else
+                            {
+                            <MudText Typo="Typo.subtitle1">Not Available</MudText>
+                            <MudText Typo="Typo.body2">Clients won't be able to send you a ride request.</MudText>
+                            }
+                    </MudSwitch>
+                </div>
+            }
+
+        </MudPaper>
+    </MudItem>
+    <MudItem xs="12" sm="8">
+        <MudPaper Class="pa-4" Style="height:300px;">
+            Charts comming soon...
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
