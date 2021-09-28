@@ -16,23 +16,13 @@ namespace IntelligentCarManagement.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public bool AddDriver(Driver driver)
+        public void AddDriver(Driver driver)
         {
-            var success = true;
-            try
-            {
-                var driverStatus = unitOfWork.DriverStatusesRepo.GetByName("Waiting-Confirmation".ToUpper());
-                driver.Status = driverStatus;
+            var driverStatus = unitOfWork.DriverStatusesRepo.GetByName("Waiting-Confirmation".ToUpper());
+            driver.Status = driverStatus;
 
-                unitOfWork.DriversRepo.Insert(driver);
-                unitOfWork.SaveChanges();
-            }
-            catch(Exception e)
-            {
-                return !success;
-            }
-
-            return success;
+            unitOfWork.DriversRepo.Insert(driver);
+            unitOfWork.SaveChanges();
         }
 
         public Driver GetCarDriver(int carID)
@@ -50,20 +40,21 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.DriversRepo.GetAll();
         }
 
-        public bool UpdateDriver(Driver driver)
+        public void UpdateDriver(Driver driver)
         {
-            var success = true;
-            try
-            {
-                unitOfWork.DriversRepo.Update(driver);
-                unitOfWork.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                return !success;
-            }
+            unitOfWork.DriversRepo.Update(driver);
+            unitOfWork.SaveChanges();
+        }
 
-            return success;
+        public async Task ChangeDriverStatusAsync(int driverId, string statusName)
+        {
+            var driver = await unitOfWork.DriversRepo.GetById(driverId);
+            var status = unitOfWork.DriverStatusesRepo.GetByName(statusName);
+
+            driver.Status = status;
+
+            unitOfWork.DriversRepo.Update(driver);
+            unitOfWork.SaveChanges();
         }
     }
 }

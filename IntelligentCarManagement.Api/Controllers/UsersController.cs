@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
@@ -47,71 +49,117 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPut]
         [Route("edit")]
-        public async Task<IActionResult> UpdateUserAsync([FromBody]User user)
+        public IActionResult UpdateUser([FromBody]User user)
         {
-            var result = usersService.EditUser(user);
-
-            if(result is true)
+            try
             {
-                return Ok();
+                usersService.EditUser(user);
             }
-            return BadRequest();
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Edit user error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
+            }
+
+            return Ok();
         }
+
         [HttpPost]
         [Route("edit-roles")]
         public async Task<IActionResult> UpdateUserRolesAsync([FromBody] User user)
         {
-            var result = await usersService.UpdateUserRoles(user);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                await usersService.UpdateUserRoles(user);
             }
-            return BadRequest();
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Edit user error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
+            }
+
+            return Ok();
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody]User user)
         {
-            var result = await usersService.RegisterUser(user);
+            try
+            {
+                await usersService.RegisterUser(user);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Edit user error"
 
-            if (result.ToLower() == "success")
-            {
-                return Ok(result);
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
-            else
-            {
-                return BadRequest(result);
-            }
+
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("remove-account")]
-        public async Task<IActionResult> RemoveAccountAsync([FromForm] int userId)
+        public async Task<IActionResult> RemoveAccountAsync([FromForm] int id)
         {
-            var result = await usersService.RemoveUserAsync(userId);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                await usersService.RemoveUserAsync(id);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Remove user error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
         [HttpPost]
         [Route("change-password")]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ResetPasswordModel resetPasswordModel)
-        {
-            var result = await usersService.ChangePasswordAsync(resetPasswordModel); 
-
-            if (result is true)
+        { 
+            try
             {
-                return Ok();
+                await usersService.ChangePasswordAsync(resetPasswordModel);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Reset password error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
         [HttpGet]

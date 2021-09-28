@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Cors;
 using IntelligentCarManagement.Services;
 using IntelligentCarManagement.Models.NotMapped_Models;
 using IntelligentCarManagement.Api.Helpers;
+using System.Net.Http;
+using System.Net;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -36,46 +38,73 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok(collection.Paginate(pagination).ToList());
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("remove-car")]
-        public async Task<IActionResult> RemoveCarAsync([FromForm] int carId)
+        public async Task<IActionResult> RemoveCarAsync([FromQuery] int id)
         {
-            var result = await carService.RemoveCarAsync(carId);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                await carService.RemoveCarAsync(id);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Remove car error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
     
         [HttpPost]
         [Route("new-car")]
-        public IActionResult AddNewCarAsync([FromBody] Car car)
+        public IActionResult AddNewCar([FromBody] Car car)
         {
-            var result = carService.AddCar(car);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                carService.AddCar(car);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Insert car error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("edit-car")]
-        public IActionResult EditCarAsync([FromBody] Car car)
+        public IActionResult EditCar([FromBody] Car car)
         {
-            var result = carService.EditCar(car);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                carService.EditCar(car);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Edit car error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

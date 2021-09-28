@@ -27,7 +27,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> EditRoleAsync(Role role)
         {
-            var result = await httpClient.PostAsJsonAsync("/api/Roles/edit-role", role);
+            var result = await httpClient.PutAsJsonAsync("/api/Roles/edit-role", role);
 
             return result.IsSuccessStatusCode;
         }
@@ -44,7 +44,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> RemoveRoleAsync(int id)
         {
-            var result = await httpClient.GetAsync($"/api/Roles/remove-role?id={id}");
+            var result = await httpClient.DeleteAsync($"/api/Roles/remove-role?id={id}");
 
             return result.IsSuccessStatusCode;
         }

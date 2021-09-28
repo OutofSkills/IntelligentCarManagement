@@ -49,14 +49,14 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok(await rolesService.GetRoleAsync(id));
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("remove-role")]
         public async Task<IActionResult> RemoveRoleAsync([FromQuery] int id)
         {
             return Ok(await rolesService.RemoveRoleAsync(id));
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("edit-role")]
         public async Task<IActionResult> EditRoleAsync([FromBody] Role role)
         {

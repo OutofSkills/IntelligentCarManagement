@@ -46,7 +46,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Drivers
 
         protected async Task DeclineDriverRequest()
         {
-            var state = await DriverService.DeclineDriverRequest(Driver.Id);
+            var state = await DriverService.UpdateDriverStatus(Driver.Id, "REJECTED");
 
             if (state is true)
             {
@@ -85,7 +85,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Drivers
 
         private async Task AcceptDriverRequest()
         {
-            var state = await DriverService.AcceptDriverRequest(Driver.Id);
+            var state = await DriverService.UpdateDriverStatus(Driver.Id, "ACCEPTED");
 
             if (state is true)
             {

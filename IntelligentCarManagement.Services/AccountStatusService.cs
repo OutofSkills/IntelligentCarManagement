@@ -18,39 +18,16 @@ namespace IntelligentCarManagement.Api.Services
         }
 
 
-        public bool AddStatus(AccountStatus status)
+        public void AddStatus(AccountStatus status)
         {
-            var success = true;
-
-            try
-            {
-                unitOfWork.StatusesRepo.Insert(status);
-                unitOfWork.SaveChanges();
-            }catch(Exception e)
-            {
-                // Do something with the exception
-                return false;
-            }
-
-            return success;
+            unitOfWork.StatusesRepo.Insert(status);
+            unitOfWork.SaveChanges();
         }
 
-        public bool EditStatusAsync(AccountStatus status)
+        public void EditStatus(AccountStatus status)
         {
-            var success = true;
-
-            try
-            {
-                unitOfWork.StatusesRepo.Update(status);
-                unitOfWork.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                // Do something with the exception
-                return false;
-            }
-
-            return success;
+            unitOfWork.StatusesRepo.Update(status);
+            unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<AccountStatus>> GetAllStatusesAsync()
@@ -63,22 +40,10 @@ namespace IntelligentCarManagement.Api.Services
             return await unitOfWork.StatusesRepo.GetById(id);
         }
 
-        public async Task<bool> RemoveStatusAsync(int id)
+        public async Task RemoveStatusAsync(int id)
         {
-            var success = true;
-
-            try
-            {
-                await unitOfWork.StatusesRepo.Delete(id);
-                unitOfWork.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                // Do something with the exception
-                return false;
-            }
-
-            return success;
+            await unitOfWork.StatusesRepo.Delete(id);
+            unitOfWork.SaveChanges();
         }
     }
 }

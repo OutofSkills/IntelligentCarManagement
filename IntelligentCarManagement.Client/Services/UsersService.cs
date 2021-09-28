@@ -31,12 +31,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> DeleteAccountAsync(int userId)
         {
-            var data = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string>("userId", userId.ToString())
-            });
-
-            var response = await httpClient.PostAsync($"/api/Users/remove-account", data);
+            var response = await httpClient.DeleteAsync($"/api/Users/remove-account?id={userId}");
 
             return response.IsSuccessStatusCode;
         }

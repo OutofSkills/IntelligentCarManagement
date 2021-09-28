@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
@@ -42,46 +44,73 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok(collection.Paginate(pagination).ToList());
         }
 
-        [HttpGet]
+        [HttpDelete]
         [Route("remove-status")]
         public async Task<IActionResult> RemoveStatusAsync([FromQuery] int id)
         {
-            var result = await accountStatusService.RemoveStatusAsync(id);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                await accountStatusService.RemoveStatusAsync(id);
+            }
+            catch(Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Remove status error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
         [HttpPost]
         [Route("add-status")]
         public IActionResult AddNewStatusAsync([FromBody] AccountStatus status)
         {
-            var result = accountStatusService.AddStatus(status);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                accountStatusService.AddStatus(status);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Insert status error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("edit-status")]
         public IActionResult EditStatusAsync([FromBody] AccountStatus status)
         {
-            var result = accountStatusService.EditStatusAsync(status);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                accountStatusService.EditStatus(status);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Edit status error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

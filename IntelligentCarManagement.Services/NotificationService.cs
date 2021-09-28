@@ -17,21 +17,10 @@ namespace IntelligentCarManagement.Api.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public bool AddNewNotification(Notification notification)
+        public void AddNewNotification(Notification notification)
         {
-            var success = true;
-
-            try
-            {
-                unitOfWork.NotificationsRepo.Insert(notification);
-                unitOfWork.SaveChanges();
-            }catch(Exception e)
-            {
-                // Do something with the exception
-                return !success;
-            }
-
-            return success;
+            unitOfWork.NotificationsRepo.Insert(notification);
+            unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<Notification>> GetUserNotificationsAsync(int userId)
@@ -39,22 +28,10 @@ namespace IntelligentCarManagement.Api.Services
             return await unitOfWork.NotificationsRepo.GetUserNotificationsAsync(userId);
         }
 
-        public async Task<bool> RemoveNotificationAsync(int id)
+        public async Task RemoveNotificationAsync(int id)
         {
-            var success = true;
-
-            try
-            {
-                await unitOfWork.NotificationsRepo.Delete(id);
-                unitOfWork.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                // Do something with the exception
-                return !success;
-            }
-
-            return success;
+            await unitOfWork.NotificationsRepo.Delete(id);
+            unitOfWork.SaveChanges();
         }
     }
 }

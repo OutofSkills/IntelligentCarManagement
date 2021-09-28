@@ -11,8 +11,8 @@ namespace IntelligentCarManagement.Api.Services
     {
         Task<IEnumerable<AccountStatus>> GetAllStatusesAsync();
         Task<AccountStatus> GetStatusAsync(int id);
-        Task<bool> RemoveStatusAsync(int id);
-        bool EditStatusAsync(AccountStatus status);
-        bool AddStatus(AccountStatus status);
+        Task RemoveStatusAsync(int id);
+        void EditStatus(AccountStatus status);
+        void AddStatus(AccountStatus status);
     }
 }

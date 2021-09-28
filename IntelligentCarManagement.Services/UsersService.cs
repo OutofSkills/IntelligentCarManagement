@@ -23,11 +23,6 @@ namespace IntelligentCarManagement.Services
             this.roleManager = roleManager;
         }
 
-        public bool AddUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<string>> GetUserRolesAsync(int userId)
         {
             var user = await userManager.FindByIdAsync(userId.ToString());
@@ -36,18 +31,10 @@ namespace IntelligentCarManagement.Services
             return userRoles;
         }
 
-        public bool EditUser(User user)
+        public void EditUser(User user)
         {
-            var success = true;
-            try
-            {
-                unitOfWork.UsersRepo.Update(user);
-                unitOfWork.SaveChanges();
-            }catch(Exception e)
-            {
-                return !success;
-            }
-            return success;
+            unitOfWork.UsersRepo.Update(user);
+            unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -60,118 +47,99 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.UsersRepo.GetById(id);
         }
 
-        public async Task<string> RegisterUser(User userToRegister)
+        public async Task RegisterUser(User userToRegister)
         {
-            /*Completing default user data*/
+            /* Completing default user data */
             // Set status to pendind activation
             userToRegister.AccountStatus = await unitOfWork.StatusesRepo.GetById(1);
             userToRegister.RegistrationDate = DateTime.Now;
             userToRegister.Address = new UserAddress();
-            /*End completing*/
+            /* End completing */
 
-            User existingUser = await userManager.FindByEmailAsync(userToRegister.Email);
-
-            if(existingUser is not null)
+            if(!await IsValidAsync(userToRegister))
             {
-                return "A user with this email already exists.";
+                throw new Exception("A user with this email already exists.");
             }
 
-            try
-            {
-                IdentityResult result = await userManager.CreateAsync(userToRegister, userToRegister.Password);
+            IdentityResult result = await userManager.CreateAsync(userToRegister, userToRegister.Password);
 
-                if(result.Succeeded is false) { return "Something went wrong, please try again."; }
+            if(result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
 
-                string defaultRole = "USER";
-                var roleExists = await roleManager.RoleExistsAsync(defaultRole);
+            await AssignToDefaultRole(userToRegister);   
 
-                if(roleExists is not true)
-                {
-                    Role role = new()
-                    {
-                        Name = defaultRole,
-                        Description = "Basic user that can see his profile and can choose to be a driver or a client"
-                    };
-
-                    var roleCreationResult = await roleManager.CreateAsync(role);
-
-                    if(roleCreationResult.Succeeded is false)
-                    {
-                        return "Sorry, could not assign to role";
-                    }
-                }
-
-                await userManager.AddToRoleAsync(userToRegister, defaultRole);
-
-                var roleToAssign = await roleManager.FindByNameAsync(defaultRole);
-                userToRegister.UserRoles.Add(new UserRole { Role = roleToAssign, RoleId = roleToAssign.Id, User = userToRegister});
-                
-                var updateResult = await userManager.UpdateAsync(userToRegister);
-
-                if (updateResult.Succeeded)
-                {
-                    return "Success";
-                }
-            }
-            catch(Exception e)
-            {
-                return e.InnerException.Message.ToString();
-            }
-
-            return "Fail";
         }
 
-        public async Task<bool> ChangePasswordAsync(ResetPasswordModel resetPasswordModel)
+
+        public async Task ChangePasswordAsync(ResetPasswordModel resetPasswordModel)
         {
             var user = await userManager.FindByEmailAsync(resetPasswordModel.Email);
             var result = await userManager.ChangePasswordAsync(user, resetPasswordModel.CurrentPassword, resetPasswordModel.Password);
 
-            return result.Succeeded;
+            if (!result.Succeeded) { throw new Exception("Couldn't change the password."); }
         }
 
-        public async Task<bool> RemoveUserAsync(int userId)
+        public async Task RemoveUserAsync(int userId)
         {
-            var success = true;
-
-            try
-            {
-                await unitOfWork.UsersRepo.Delete(userId);
-                unitOfWork.SaveChanges();
-            }
-            catch(Exception e)
-            {
-                // Should do something with the exception
-                return !success;
-            }
-
-            return success;
+            await unitOfWork.UsersRepo.Delete(userId);
+            unitOfWork.SaveChanges();
         }
 
-        public async Task<bool> UpdateUserRoles(User user)
+        public async Task UpdateUserRoles(User user)
         {
             List<string> assignedRolesNames = new();
-            try
+
+            foreach (var userRole in user.UserRoles)
             {
-
-                foreach (var userRole in user.UserRoles)
-                {
-                    assignedRolesNames.Add(userRole.Role.Name);
-                }
-                
-                var userToUpdate = await userManager.FindByEmailAsync(user.Email);
-                var rolesToRemove = await userManager.GetRolesAsync(userToUpdate);
-
-                var removeResult = await userManager.RemoveFromRolesAsync(userToUpdate, rolesToRemove);
-                var result = await userManager.AddToRolesAsync(userToUpdate, assignedRolesNames);
-
-                return result.Succeeded;
+                assignedRolesNames.Add(userRole.Role.Name);
             }
-            catch(Exception e)
+                
+            var userToUpdate = await userManager.FindByEmailAsync(user.Email);
+            var rolesToRemove = await userManager.GetRolesAsync(userToUpdate);
+
+            var removeResult = await userManager.RemoveFromRolesAsync(userToUpdate, rolesToRemove);
+            if(!removeResult.Succeeded){ throw new Exception("Couldn't remove old roles."); }
+
+            var result = await userManager.AddToRolesAsync(userToUpdate, assignedRolesNames);
+            if (!result.Succeeded) { throw new Exception("Couldn't assign default role."); }
+        }
+
+        private async Task<bool> IsValidAsync(User userToRegister)
+        {
+            User existingUser = await userManager.FindByEmailAsync(userToRegister.Email);
+
+            if (existingUser is null)
             {
-                //so something with the exception
+                return true;
             }
 
             return false;
+        }
+
+        private async Task AssignToDefaultRole(User userToRegister)
+        {
+            var defaultRole = "USER";
+            var description = "Basic user that can see his profile and can choose to be a driver or a client";
+
+            var roleExists = await roleManager.RoleExistsAsync(defaultRole);
+
+            if (roleExists)
+            {
+                await userManager.AddToRoleAsync(userToRegister, defaultRole);
+                return;
+            }
+
+            Role role = new()
+            {
+                Name = defaultRole,
+                Description = description
+            };
+
+            var roleCreationResult = await roleManager.CreateAsync(role);
+
+            if (roleCreationResult.Succeeded is false)
+            {
+                throw new Exception("Sorry, could not assign to role");
+            }
         }
     }
 }

@@ -11,6 +11,8 @@ using IntelligentCarManagement.Models.NotMapped_Models;
 using IntelligentCarManagement.Api.Helpers;
 using IntelligentCarManagement.Api.Services;
 using Microsoft.AspNetCore.Cors;
+using System.Net.Http;
+using System.Net;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -20,12 +22,10 @@ namespace IntelligentCarManagement.Api.Controllers
     public class DriverController : ControllerBase
     {
         private readonly IDriverService driverService;
-        private readonly IDriverStatusService driverStatusService;
 
-        public DriverController(IDriverService driverService, IDriverStatusService driverStatusService)
+        public DriverController(IDriverService driverService)
         {
             this.driverService = driverService;
-            this.driverStatusService = driverStatusService;
         }
 
         [HttpGet]
@@ -47,43 +47,26 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("accept-request")]
-        public async Task<IActionResult> AcceptDriverAsync([FromQuery]int id)
+        [Route("update-request")]
+        public async Task<IActionResult> UpdateDriverStatusAsync([FromQuery]int id, string status)
         {
-            var driver = await driverService.GetDriver(id);
-            var status = driverStatusService.GetStatusByName("ACCEPTED");
-
-            driver.Status = status;
-
-            var result = driverService.UpdateDriver(driver);
-
-
-            if (result is true)
+            try
             {
-                return Ok();
+                await driverService.ChangeDriverStatusAsync(id, status);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Update driver status error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
-        }
-
-        [HttpGet]
-        [Route("decline-request")]
-        public async Task<IActionResult> DeclineDriverAsync([FromQuery]int id)
-        {
-            var driver = await driverService.GetDriver(id);
-            var status = driverStatusService.GetStatusByName("REJECTED");
-
-            driver.Status = status;
-
-            var result = driverService.UpdateDriver(driver);
-
-
-            if (result is true)
-            {
-                return Ok();
-            }
-
-            return BadRequest();
+            return Ok();
         }
 
         [HttpGet]
@@ -97,28 +80,46 @@ namespace IntelligentCarManagement.Api.Controllers
         [Route("add-driver")]
         public IActionResult AddDriver(Driver driver)
         {
-            var result = driverService.AddDriver(driver);
-
-            if(result is true)
+            try
             {
-                return Ok();
+                driverService.AddDriver(driver);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Insert driver status error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("update-driver")]
         public IActionResult UpdateDriver(Driver driver)
         {
-            var result = driverService.UpdateDriver(driver);
-
-            if (result is true)
+            try
             {
-                return Ok();
+                driverService.UpdateDriver(driver);
+            }
+            catch (Exception e)
+            {
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Update driver error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
 
-            return BadRequest();
+            return Ok();
         }
     }
 }

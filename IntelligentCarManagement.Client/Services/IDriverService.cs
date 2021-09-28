@@ -13,7 +13,6 @@ namespace IntelligentCarManagement.Client.Services
         public Task<bool> UpdateDriver(Driver driver);
         public Task<HttpResponseMessage> GetDriversAsync(int page = 1, int recordsPerPage = 10);
         public Task<IEnumerable<Driver>> GetAllDriversAsync();
-        Task<bool> DeclineDriverRequest(int id);
-        Task<bool> AcceptDriverRequest(int id);
+        Task<bool> UpdateDriverStatus(int id, string statusName);
     }
 }

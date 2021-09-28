@@ -16,37 +16,16 @@ namespace IntelligentCarManagement.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public bool AddCar(Car car)
+        public void AddCar(Car car)
         {
-            var success = true;
-            try
-            {
-                unitOfWork.CarsRepo.Insert(car);
-                unitOfWork.SaveChanges();
-            }
-            catch(Exception e)
-            {
-                //handle exception
-                return !success;
-            }
-
-            return success;
+            unitOfWork.CarsRepo.Insert(car);
+            unitOfWork.SaveChanges();
         }
 
-        public bool EditCar(Car car)
+        public void EditCar(Car car)
         {
-            var success = true;
-
-            try
-            {
-                unitOfWork.CarsRepo.Update(car);
-                unitOfWork.SaveChanges();
-            }catch(Exception e)
-            {
-                return !success;
-            }
-
-            return success;
+            unitOfWork.CarsRepo.Update(car);
+            unitOfWork.SaveChanges();
         }
 
         public async Task<IEnumerable<Car>> GetAllCars()
@@ -59,20 +38,10 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.CarsRepo.GetById(id);
         }
 
-        public async Task<bool> RemoveCarAsync(int carId)
+        public async Task RemoveCarAsync(int carId)
         {
-            var success = true;
-            try
-            {
-                await unitOfWork.CarsRepo.Delete(carId);
-                unitOfWork.SaveChanges();
-            }
-            catch(Exception e)
-            {
-                return !success;
-            }
-
-            return success;
+            await unitOfWork.CarsRepo.Delete(carId);
+            unitOfWork.SaveChanges();
         }
     }
 }

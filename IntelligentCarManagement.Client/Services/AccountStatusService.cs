@@ -26,7 +26,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> EditStatusAsync(AccountStatus status)
         {
-            var result = await httpClient.PostAsJsonAsync("/api/AccountStatus/edit-status", status);
+            var result = await httpClient.PutAsJsonAsync("/api/AccountStatus/edit-status", status);
 
             return result.IsSuccessStatusCode;
         }
@@ -54,7 +54,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> RemoveStatusAsync(int id)
         {
-            var result = await httpClient.GetAsync($"/api/AccountStatus/remove-status?id={id}");
+            var result = await httpClient.DeleteAsync($"/api/AccountStatus/remove-status?id={id}");
 
             return result.IsSuccessStatusCode;
         }

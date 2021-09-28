@@ -10,8 +10,9 @@ namespace IntelligentCarManagement.Services
     {
         Task<Driver> GetDriver(int id);
         Driver GetCarDriver(int carID);
-        bool AddDriver(Driver driver);
-        bool UpdateDriver(Driver driver);
+        void AddDriver(Driver driver);
+        void UpdateDriver(Driver driver);
         Task<IEnumerable<Driver>> GetDrivers();
+        Task ChangeDriverStatusAsync(int driverId, string statusName);
     }
 }

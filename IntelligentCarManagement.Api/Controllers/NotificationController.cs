@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
@@ -33,15 +35,23 @@ namespace IntelligentCarManagement.Api.Controllers
         [Route("remove-notification")]
         public async Task<IActionResult>RemoveNotificationAsync([FromQuery] int id)
         {
-            var result = await notificationService.RemoveNotificationAsync(id);
-            if (result)
+            try
             {
-                return Ok();
+                await notificationService.RemoveNotificationAsync(id);
             }
-            else
+            catch (Exception e)
             {
-                return BadRequest();
+                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent(e.Message),
+                    ReasonPhrase = "Remove notification error"
+
+                };
+
+                throw new System.Web.Http.HttpResponseException(response);
             }
+
+            return Ok();
         }
     }
 }

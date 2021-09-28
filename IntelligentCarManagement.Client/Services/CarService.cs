@@ -31,12 +31,8 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> RemoveCarAsync(int carId)
         {
-            var data = new FormUrlEncodedContent(new[]
-             {
-                new KeyValuePair<string, string>("carId", carId.ToString())
-            });
 
-            var response = await httpClient.PostAsync($"/api/Cars/remove-car", data);
+            var response = await httpClient.DeleteAsync($"/api/Cars/remove-car?id={carId}");
 
             return response.IsSuccessStatusCode;
         }
@@ -50,7 +46,7 @@ namespace IntelligentCarManagement.Client.Services
 
         public async Task<bool> EditCarAsync(Car car)
         {
-            var response = await httpClient.PostAsJsonAsync($"/api/Cars/edit-car", car);
+            var response = await httpClient.PutAsJsonAsync($"/api/Cars/edit-car", car);
 
             return response.IsSuccessStatusCode;
         }
