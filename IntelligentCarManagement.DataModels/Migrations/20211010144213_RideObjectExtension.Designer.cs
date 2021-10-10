@@ -4,14 +4,16 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20211010144213_RideObjectExtension")]
+    partial class RideObjectExtension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,38 +162,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.Ride", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Destination")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DestinationCoordinates")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PickUpCoordinates")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PickUpLocation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PickUpTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("Rides");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Role", b =>
@@ -506,15 +476,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.Ride", b =>
-                {
-                    b.HasOne("IntelligentCarManagement.Models.Driver", "Driver")
-                        .WithMany()
-                        .HasForeignKey("DriverId");
-
-                    b.Navigation("Driver");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.User", b =>

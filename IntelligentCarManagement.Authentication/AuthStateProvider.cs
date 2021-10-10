@@ -32,6 +32,17 @@ namespace IntelligentCarManagement.Authentication
                 return _anonimous;
             }
 
+            var claims = JwtParser.ParseClaimsFromJwt(token);
+            // Checks the exp field of the token
+            var expiry = claims.Where(claim => claim.Type.Equals("exp")).FirstOrDefault();
+            if (expiry == null)
+                return _anonimous;
+
+            // The exp field is in Unix time
+            var datetime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expiry.Value));
+            if (datetime.UtcDateTime <= DateTime.UtcNow)
+                return _anonimous;
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(JwtParser.ParseClaimsFromJwt(token), "jwtAuthType")));

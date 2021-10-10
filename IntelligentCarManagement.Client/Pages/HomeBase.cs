@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.Models;
+﻿using IntelligentCarManagement.Client.Services;
+using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
@@ -9,10 +10,10 @@ namespace IntelligentCarManagement.Client.Pages
     public class HomeBase : ComponentBase
     {
         protected Ride Ride { get; set; } = new();
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; }
 
-        protected bool displayMap = false;
+        [Inject] public IRidesService RidesService { get; set; }
+        [Inject] public IJSRuntime JSRuntime { get; set; }
+        [Inject] public NavigationManager NavManager { get; set; }
 
         protected string DestinationInputIcon = "";
         protected string PickUpInputIcon = Icons.Filled.AddLocationAlt;
@@ -20,10 +21,13 @@ namespace IntelligentCarManagement.Client.Pages
         protected enum TaskStates { Started, Ended };
         protected string currentState = "";
 
-        protected override void OnInitialized()
+        protected override async Task OnInitializedAsync()
         {
             Ride.PickUpLocation = "";
             Ride.Destination = "";
+
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("GLOBAL.SetDotnetReference", dotNetReference);
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -36,16 +40,18 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected async Task HandleSubmit()
         {
-
+            var rideId = await RidesService.SheduleNewRideAsync(Ride);
+            if (!string.IsNullOrEmpty(rideId))
+                NavManager.NavigateTo($"/ride/complete-request/{rideId}");
         }
 
         protected async Task AutoCompletePickUp()
         {
-            await JSRuntime.InvokeVoidAsync("getPickUpLocation", null);
+            await JSRuntime.InvokeVoidAsync("autocompletePickUp", null);
         }
         protected async Task AutoCompleteDestination()
         {
-            await JSRuntime.InvokeVoidAsync("getDestinationLocation", null);
+            await JSRuntime.InvokeVoidAsync("autocompleteDestination", null);
         }
 
         protected void OnPickUpInputChangeAsync(string pickUpLocation)
@@ -76,19 +82,15 @@ namespace IntelligentCarManagement.Client.Pages
             }
         }
 
-        protected async Task OpenMapAsync()
+        protected async Task FindMyLocationAsync()
         {
             if (PickUpInputIcon == Icons.Filled.AddLocationAlt)
             {
-                // Display the map only when asking to find your location 
-                displayMap = true;
                 // Get the location
                 await JSRuntime.InvokeVoidAsync("getCurrentLocation", null);
             }
             else
             {
-                //Close the map if there's no location given
-                displayMap = false;
                 // Clear the input
                 ClearInput("PickUp");
             }
@@ -118,5 +120,18 @@ namespace IntelligentCarManagement.Client.Pages
                     break;
             }
         }
+
+        [JSInvokable]
+        public void AssignPickUpCoordinates(string latlng)
+        {
+            Ride.PickUpCoordinates = latlng;
+        }
+
+        [JSInvokable("AssignDestinationCoordinates")]
+        public void AssignDestinationCoordinates(string latlng)
+        {
+            Ride.DestinationCoordinates = latlng;
+        }
+
     }
 }

@@ -1,18 +1,25 @@
 ﻿
-let map, infoWindow;
+let map, infoWindow, geocoder;
+let pickUpMarker, destinationMarker;
+const center = { lat: 47.3737746, lng: 28.3859587 };
+
 // Initialize the map in the selected div using it's id and set it's initial location
 function initialize() {
-    var latlng = new google.maps.LatLng(45.716948, -74.003563);
     var options = {
-        zoom: 14, center: latlng,
+        zoom: 10, center: center,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById
         ("map"), options);
+
     infoWindow = new google.maps.InfoWindow();
+    geocoder = new google.maps.Geocoder();
+
+    pickUpMarker = new google.maps.Marker({ map: map, draggable: false });
+    destinationMarker = new google.maps.Marker({ map: map, draggable: false });
 
     google.maps.event.addDomListener(window, 'resize', function () {
-        map.setCenter(latlng);
+         map.setCenter(center);
     });
 }
 
@@ -30,11 +37,9 @@ function getCurrentLocation() {
                             lat: position.coords.latitude,
                             lng: position.coords.longitude,
                         };
-                        report('Lat: ' + pos.lat);
-                        report('Long: ' + pos.lng);
-
-                        addMarker(pos);
-                        map.setCenter(pos);
+                        // Set the marker and fill the input
+                        renderAddress(pos, pickUpMarker);
+                        setPickUpAddress(pos.lat, pos.lng);
                     }
                 );
             } else {
@@ -67,56 +72,132 @@ function report(message) {
     console.log(message);
 }
 
-// Get the current location of the device and set it to a textbox
-function getPickUpLocation() {
-    const center = { lat: 47.3737746, lng: 28.3859587 };
-    // Create a bounding box with sides ~10km away from the center point
-    const defaultBounds = {
-        north: center.lat + 0.1,
-        south: center.lat - 0.1,
-        east: center.lng + 0.1,
-        west: center.lng - 0.1,
-    };
+// Create a bounding box with sides ~10km away from the center point
+const defaultAutocompleteBounds = {
+    north: center.lat + 0.1,
+    south: center.lat - 0.1,
+    east: center.lng + 0.1,
+    west: center.lng - 0.1,
+};
+
+function autocompletePickUp() {
     const input = document.getElementById("pickUpLocation");
+
     const options = {
-        bounds: defaultBounds,
+        bounds: defaultAutocompleteBounds,
         componentRestrictions: { country: "md" },
         fields: ["address_components", "geometry", "icon", "name"],
         strictBounds: false,
         types: ["establishment"],
     };
     const autocomplete = new google.maps.places.Autocomplete(input, options);
-
     autocomplete.bindTo("bounds", map);
-}
 
-// Get the current location of the device and set it to a textbox
-function getDestinationLocation() {
-    const center = { lat: 47.3737746, lng: 28.3859587 };
-    // Create a bounding box with sides ~10km away from the center point
-    const defaultBounds = {
-        north: center.lat + 0.1,
-        south: center.lat - 0.1,
-        east: center.lng + 0.1,
-        west: center.lng - 0.1,
-    };
-    const input = document.getElementById("destination");
-    const options = {
-        bounds: defaultBounds,
-        componentRestrictions: { country: "md" },
-        fields: ["address_components", "geometry", "icon", "name"],
-        strictBounds: false,
-        types: ["establishment"],
-    };
-    const autocomplete = new google.maps.places.Autocomplete(input, options);
-
-    autocomplete.bindTo("bounds", map);
-}
-
-// Adds a marker to the map and push to the array.
-function addMarker(location) {
-    const marker = new google.maps.Marker({
-        position: location,
-        map: map,
+    autocomplete.addListener('place_changed', function () {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert('No details available for input: \'' + place.name + '\'');
+            return;
+        }
+        renderAddress(place.geometry.location, pickUpMarker);
+        setPickUpAddress(place.geometry.location.lat(), place.geometry.location.lng());
     });
+}
+
+
+// Autocomplete selected input
+function autocompleteDestination() {
+    const input = document.getElementById("destination");
+
+    const options = {
+        bounds: defaultAutocompleteBounds,
+        componentRestrictions: { country: "md" },
+        fields: ["address_components", "geometry", "icon", "name"],
+        strictBounds: false,
+        types: ["establishment"],
+    };
+    const autocomplete = new google.maps.places.Autocomplete(input, options);
+    autocomplete.bindTo("bounds", map);
+
+    autocomplete.addListener('place_changed', function () {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and
+            // pressed the Enter key, or the Place Details request failed.
+            window.alert('No details available for input: \'' + place.name + '\'');
+            return;
+        }
+        renderAddress(place.geometry.location, destinationMarker);
+        setDestinationAddress(place.geometry.location.lat(), place.geometry.location.lng());
+    });
+}
+
+// Add a marker or change its position to the given place 
+function renderAddress(location, marker) {
+    map.setCenter(location, 10);
+    marker.setPosition(location);
+    marker.setVisible(true);
+    fitMarkerBounds();
+}
+
+// Fit the markers on the map
+function fitMarkerBounds() {
+    if (pickUpMarker.getPosition() == undefined || destinationMarker.getPosition() == undefined)
+        return;
+
+    bounds = new google.maps.LatLngBounds();
+    report(pickUpMarker.getPosition().lat());
+    bounds.extend(pickUpMarker.getPosition());
+    bounds.extend(destinationMarker.getPosition());
+    map.fitBounds(bounds);
+}
+
+// Converts lat long coordinates to address
+async function convertPositionAddress(lat, lng) {
+    let address;
+    const latlng = {
+        lat: lat,
+        lng: lng,
+    };
+    let response = await geocoder.geocode({ location: latlng });
+
+    if (response.results[0]) {
+        report(response.results[0].formatted_address);
+        address =  response.results[0].formatted_address;
+    } else {
+        window.alert("No results found");
+    }  
+
+    return address;
+}
+
+var GLOBAL = {};
+GLOBAL.DotNetReference = null;
+GLOBAL.SetDotnetReference = function (pDotNetReference) {
+    GLOBAL.DotNetReference = pDotNetReference;
+};
+
+// Asigns to the PickUp input the covnerted address
+async function setPickUpAddress(lat, lng) {
+    pickUpInput = document.getElementById("pickUpLocation");
+    pickUpValue = await convertPositionAddress(lat, lng);
+    pickUpInput.value = pickUpValue.toString();
+
+    GLOBAL.DotNetReference.invokeMethodAsync("AssignPickUpCoordinates", lat + ';' + lng);
+
+    var event = new Event('change');
+    pickUpInput.dispatchEvent(event);
+}
+// Asigns to the Destination input the covnerted address
+async function setDestinationAddress(lat, lng) {
+    destinationInput = document.getElementById("destination");
+    destinationValue = await convertPositionAddress(lat, lng);
+    destinationInput.value = destinationValue.toString();
+
+    GLOBAL.DotNetReference.invokeMethodAsync("AssignDestinationCoordinates", lat + ';' + lng);
+
+    var event = new Event('change');
+    destinationInput.dispatchEvent(event);
 }
