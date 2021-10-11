@@ -4,14 +4,16 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20211011154626_AccountStatusModelChange")]
+    partial class AccountStatusModelChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,7 +325,8 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("StatusId");
+                    b.HasIndex("StatusId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers");
                 });
@@ -533,8 +536,8 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("AddressId");
 
                     b.HasOne("IntelligentCarManagement.Models.AccountStatus", "AccountStatus")
-                        .WithMany("Users")
-                        .HasForeignKey("StatusId")
+                        .WithOne("User")
+                        .HasForeignKey("IntelligentCarManagement.Models.User", "StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -624,7 +627,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
 
             modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
                 {
-                    b.Navigation("Users");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>

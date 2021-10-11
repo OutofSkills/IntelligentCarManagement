@@ -24,12 +24,16 @@
                     <MudText Typo="Typo.h5" Class="mt-5"> Your Contact Details</MudText>
                     <MudDivider />
                     <EditForm Model="Ride" OnSubmit="HandleSubmitAsync">
-                        <MudTextField T="string" Label="First Name"></MudTextField>
-                        <MudTextField T="string" Label="Last Name"></MudTextField>
-                        <MudTextField T="string" Label="Phone Number"></MudTextField>
-                        <MudTextField T="string" Label="Email"></MudTextField>
-
-                        <MudButton type="submit" OnClick="HandleSubmitAsync" Color="Color.Primary" Variant="Variant.Filled" Class="mb-3 mt-3">Save</MudButton>
+                        @if (Ride.User is null)
+                        {
+                            <MudProgressCircular Color="Color.Default" Indeterminate="true" Class="mt-1 mb-1" /> <br />
+                            <MudButton type="submit" OnClick="HandleSubmitAsync" Color="Color.Primary" Variant="Variant.Filled" Class="mb-3 mt-3" Disabled="true">Save</MudButton>
+                        }
+                        else
+                        {
+                            <MudTextField @bind-Value="Ride.User.PhoneNumber" Label="Phone Number" Adornment="Adornment.Start" AdornmentIcon="@Icons.Filled.Phone" />
+                            <MudButton type="submit" OnClick="HandleSubmitAsync" Color="Color.Primary" Variant="Variant.Filled" Class="mb-3 mt-3">Save</MudButton>
+                        }
                     </EditForm>
 
                 </MudContainer>
@@ -43,7 +47,7 @@
     </div>
     <div class="row mt-5 mb-5">
         <div class="col-12">
-            <MudCard id="available-drivers" Style="@($"background-color:{Colors.Grey.Lighten2};")">
+            <MudCard id="available-drivers" Style="@($"background-color:{Colors.Grey.Lighten2};")" Hidden="@hideDriverList">
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText Typo="Typo.h5">Available Drivers</MudText>

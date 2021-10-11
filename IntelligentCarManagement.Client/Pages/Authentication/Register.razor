@@ -5,91 +5,6 @@
 @inject IAuthenticationService AuthService
 @inject NavigationManager NavManager
 @inject ISnackbar Snackbar
-@*<MudContainer>
-        <div class="row justify-content-center">
-            <div style="max-width: 800px;">
-                <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-                    <DataAnnotationsValidator />
-                    <MudCard>
-                        <MudCardContent>
-                            <div class="row g-2 mb-2">
-                                <div class="col-md-6">
-                                    <MudTextField Label="First name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
-                                </div>
-                                <div class="col-md-6">
-                                    <MudTextField Label="Last name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mb-2">
-                                <div class="col-md-6">
-                                    <MudTextField Label="Username" @bind-Value="model.UserName" For="@(() => model.UserName)" HelperText="A nickname that represents you." />
-                                </div>
-                                <div class="col-md-6">
-                                    <MudNumericField Label="Age" @bind-Value="model.Age" For="@(() => model.Age)" Variant="Variant.Text" Min="0"  Adornment="Adornment.End" AdornmentText="years" HideSpinButtons="true"/>
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mb-2">
-                                <div class="col-md-6">
-                                    <MudTextField Label="Email" @bind-Value="model.Email" For="@(() => model.Email)" HelperText="The email should be unique." />
-                                </div>
-                                <div class="col-md-6">
-                                    <MudTextField Label="Phone Number" @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)" HelperText="Provide your real phone number." />
-                                </div>
-                            </div>
-
-                            <div class="row g-2 mb-2">
-                                <div class="col-md-6">
-                                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                                                  @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                                </div>
-                                <div class="col-md-6">
-                                    <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
-                                                  @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" />
-                                </div>
-                            </div>
-
-                            <MudCheckBox T="bool" Required="true" @bind-Checked="agreeTermsConditions" RequiredError="You must agree" Class="ml-n2"
-                                         Label="I agree with the Terms and Conditions." />
-                        </MudCardContent>
-                        <MudCardActions>
-                            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Disabled="!agreeTermsConditions">
-                                @if (currentTaskState == taskStates.Started.ToString())
-                                {
-                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                }
-
-                                Register
-                            </MudButton>
-                        </MudCardActions>
-                    </MudCard>
-                    <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
-                        Fill out the form correctly to sign-up.
-                    </MudText>
-
-                    <MudExpansionPanels>
-                        <MudExpansionPanel Text="Sign-Up Validation" @bind-IsExpanded="expand">
-                            @if (showError)
-                            {
-                                <MudText Color="@Color.Error">
-                                    @errorMessage
-                                </MudText>
-                            }
-                            else
-                            {
-                                <MudText Color="@Color.Dark">
-                                    No errors.
-                                </MudText>
-                            }
-                        </MudExpansionPanel>
-                    </MudExpansionPanels>
-                </EditForm>
-            </div>
-
-        </div>
-    </MudContainer>*@
-
 
 <MudText Typo="Typo.h4" GutterBottom="true">Sign Up</MudText>
 <MudText>Already have an account? <MudLink Href="/login">Sign In</MudLink></MudText>
@@ -123,7 +38,7 @@
 </EditForm>
 
 @code {
-    private User model = new();
+    private RegisterModel model = new();
 
     private bool processRegister;
 

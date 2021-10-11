@@ -95,11 +95,11 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody]User user)
+        public async Task<IActionResult> Register([FromBody]RegisterModel model)
         {
             try
             {
-                await usersService.RegisterUser(user);
+                await usersService.RegisterUser(model);
             }
             catch (Exception e)
             {

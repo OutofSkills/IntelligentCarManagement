@@ -16,18 +16,18 @@ namespace IntelligentCarManagement.Client.Pages
         [Parameter] public Ride Ride { get; set; } = new();
 
         [Inject] public IRidesService RidesService { get; set; }
+        [Inject] public IUsersService UsersService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
 
-        protected List<BreadcrumbItem> _items = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem("Home", href: "#", icon: Icons.Material.Filled.Home),
-            new BreadcrumbItem("Videos", href: "#", icon: Icons.Material.Filled.VideoLibrary),
-            new BreadcrumbItem("Create", href: null, disabled: true, icon: Icons.Material.Filled.Create)
-        };
+        protected bool hideDriverList = true;
 
         protected override async Task OnInitializedAsync()
         {
             Ride = await RidesService.FindRideAsync(int.Parse(Id));
+
+            var pickUpLatLng = Ride.PickUpCoordinates.Split(';');
+            var destinationLatLng = Ride.DestinationCoordinates.Split(';');
+            await JSRuntime.InvokeVoidAsync("initMarkers", pickUpLatLng, destinationLatLng); // 0 - latitude; 1 - longitude
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -40,7 +40,11 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected async Task HandleSubmitAsync()
         {
-            await JSRuntime.InvokeVoidAsync("scrollToDrivers", null);
+            hideDriverList = false;
+            var result = await UsersService.Edit(Ride.User);
+
+            if(result)
+                await JSRuntime.InvokeVoidAsync("scrollToDrivers", null);
         }
     }
 }

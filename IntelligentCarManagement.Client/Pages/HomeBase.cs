@@ -1,8 +1,10 @@
 ﻿using IntelligentCarManagement.Client.Services;
 using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using MudBlazor;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Pages
@@ -14,6 +16,8 @@ namespace IntelligentCarManagement.Client.Pages
         [Inject] public IRidesService RidesService { get; set; }
         [Inject] public IJSRuntime JSRuntime { get; set; }
         [Inject] public NavigationManager NavManager { get; set; }
+        [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
+        [Inject] public ISnackbar Snackbar { get; set; }
 
         protected string DestinationInputIcon = "";
         protected string PickUpInputIcon = Icons.Filled.AddLocationAlt;
@@ -40,9 +44,19 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected async Task HandleSubmit()
         {
-            var rideId = await RidesService.SheduleNewRideAsync(Ride);
-            if (!string.IsNullOrEmpty(rideId))
-                NavManager.NavigateTo($"/ride/complete-request/{rideId}");
+            var userId = await GetLoggedUserId();
+            if(userId is not 0)
+            {
+                // Assign the logged user
+                Ride.ClientId = userId;
+                var rideId = await RidesService.SheduleNewRideAsync(Ride);
+                if (!string.IsNullOrEmpty(rideId))
+                    NavManager.NavigateTo($"/ride/complete-request/{rideId}");
+            }
+            else
+            {
+                Snackbar.Add("Please sign up or login!", Severity.Error);
+            }
         }
 
         protected async Task AutoCompletePickUp()
@@ -131,6 +145,14 @@ namespace IntelligentCarManagement.Client.Pages
         public void AssignDestinationCoordinates(string latlng)
         {
             Ride.DestinationCoordinates = latlng;
+        }
+
+        private async Task<int> GetLoggedUserId()
+        {
+            var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+            var userId = authState.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return int.Parse(userId);
         }
 
     }

@@ -161,10 +161,9 @@ async function convertPositionAddress(lat, lng) {
         lat: lat,
         lng: lng,
     };
-    let response = await geocoder.geocode({ location: latlng });
 
+    let response = await geocoder.geocode({ location: latlng });
     if (response.results[0]) {
-        report(response.results[0].formatted_address);
         address =  response.results[0].formatted_address;
     } else {
         window.alert("No results found");
@@ -200,4 +199,15 @@ async function setDestinationAddress(lat, lng) {
 
     var event = new Event('change');
     destinationInput.dispatchEvent(event);
+}
+
+// Add Pick-Up and Destination marker on the Map
+function initMarkers(pickLatLng, destLatLng) {
+    pickUpMarker.setPosition({ lat: parseFloat(pickLatLng[0]), lng: parseFloat(pickLatLng[1]) });
+    pickUpMarker.setVisible(true);
+
+    destinationMarker.setPosition({ lat: parseFloat(destLatLng[0]), lng: parseFloat(destLatLng[1]) });
+    destinationMarker.setVisible(true);
+
+    fitMarkerBounds();
 }

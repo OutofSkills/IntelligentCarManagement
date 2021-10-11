@@ -14,7 +14,7 @@ namespace IntelligentCarManagement.Services
         Task RemoveUserAsync(int userId);
         Task UpdateUserRoles(User user);
         void EditUser(User user);
-        Task RegisterUser(User user);
+        Task RegisterUser(RegisterModel model);
         Task ChangePasswordAsync(ResetPasswordModel model);
         Task<IEnumerable<string>> GetUserRolesAsync(int userId);
     }

@@ -4,14 +4,16 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IntelligentCarManagement.Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20211011145831_UserModelChange")]
+    partial class UserModelChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -533,7 +535,7 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("AddressId");
 
                     b.HasOne("IntelligentCarManagement.Models.AccountStatus", "AccountStatus")
-                        .WithMany("Users")
+                        .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -620,11 +622,6 @@ namespace IntelligentCarManagement.Api.DataAccess.Migrations
                         .HasForeignKey("IntelligentCarManagement.Models.Client", "Id")
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("IntelligentCarManagement.Models.AccountStatus", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("IntelligentCarManagement.Models.Driver", b =>

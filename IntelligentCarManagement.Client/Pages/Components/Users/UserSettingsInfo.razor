@@ -26,9 +26,6 @@ else
             </div>
           }
 
-        <InputText class="form-control" @bind-Value="User.Password" hidden></InputText>
-        <InputText class="form-control" @bind-Value="User.ConfirmPassword" hidden></InputText>
-
         <div class="card-body pb-2">
             <div class="form-group">
                 <label class="form-label">Age</label>
@@ -83,12 +80,6 @@ else
     private bool successStatus = false;
     private bool failStatus = false;
     private string message;
-
-    protected override void OnParametersSet()
-    {
-        User.Password = "PreventValidationError123456";
-        User.ConfirmPassword = "PreventValidationError123456";
-    }
 
     private async Task HandleSubmit()
     {

@@ -63,9 +63,9 @@ namespace IntelligentCarManagement.Client.Services
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<string> Register(User user)
+        public async Task<string> Register(RegisterModel model)
         {
-            var registerResult = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/register", user);
+            var registerResult = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/register", model);
 
             if(registerResult.IsSuccessStatusCode is false)
             {

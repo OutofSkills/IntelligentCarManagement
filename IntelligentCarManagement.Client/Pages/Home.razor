@@ -34,19 +34,36 @@
                                 </div>
 
                                 <div class="row mt-5">
-                                    <div class="col-md-5 col-5">
-                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
-                                            @if (currentState == TaskStates.Started.ToString())
-                                            {
-                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            }
+                                    
+                                        <MudElement Class="d-flex flex-column">
+                                            <AuthorizeView>
+                                                <Authorized Context="Ride">
+                                                    <MudElement Class="d-flex justify-space-between">
+                                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">
+                                                            @if (currentState == TaskStates.Started.ToString())
+                                                            {
+                                                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                            }
 
-                                            Request Now
-                                        </MudButton>
-                                    </div>
-                                    <div class="col-md-7 col-7">
-                                        <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
-                                    </div>
+                                                            Request Now
+                                                        </MudButton>
+                                                        <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
+                                                    </MudElement>
+                                                </Authorized>
+                                                <NotAuthorized Context="Ride">
+                                                    <MudElement Class="d-flex justify-space-between">
+                                                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Disabled="true">
+                                                            Request Now
+                                                        </MudButton>
+                                                        <MudButton Variant="Variant.Filled" Color="Color.Transparent">Shedule for later</MudButton>
+                                                    </MudElement>
+                                                    <MudText Typo="Typo.caption">
+                                                        Please  <MudLink Href="/register" Typo="Typo.inherit">sign up</MudLink> or <MudLink Href="/login" Typo="Typo.inherit">login</MudLink> first.
+                                                    </MudText>
+                                                </NotAuthorized>
+                                            </AuthorizeView>
+                                        </MudElement>
+                                    
                                 </div>
                             </EditForm>
                         </div>
@@ -57,10 +74,10 @@
                         <MudText Typo="Typo.h6">Join our platform and get paid.</MudText>
                         <br />
                         <AuthorizeView>
-                            <Authorized>
+                            <Authorized Context="Driver">
                                 <MudButton StartIcon="fas fa-car" Variant="Variant.Filled" Color="Color.Primary" Link="/driver-request">Send Request</MudButton>
                             </Authorized>
-                            <NotAuthorized>
+                            <NotAuthorized Context="Driver">
                                 <MudButton StartIcon="fas fa-car" Variant="Variant.Filled" Color="Color.Primary" Disabled="true">Send Request</MudButton>
                                 <MudText Typo="Typo.caption">
                                     Please  <MudLink Href="/register" Typo="Typo.inherit">sign up</MudLink> or <MudLink Href="/login" Typo="Typo.inherit">login</MudLink> first.

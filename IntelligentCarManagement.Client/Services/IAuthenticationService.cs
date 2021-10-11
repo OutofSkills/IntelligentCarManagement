@@ -6,7 +6,7 @@ namespace IntelligentCarManagement.Client.Services
 {
     public interface IAuthenticationService
     {
-        Task<string> Register(User user);
+        Task<string> Register(RegisterModel model);
         Task<bool> ChangePasswordAsync(ResetPasswordModel model);
         Task<User> Login(LoginModel userForAtuthetication);
         Task Logout();

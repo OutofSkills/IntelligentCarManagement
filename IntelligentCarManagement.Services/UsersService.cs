@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.DataAccess.UnitsOfWork;
+﻿using AutoMapper;
+using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using IntelligentCarManagement.Models;
 using IntelligentCarManagement.Models.NotMapped_Models;
 using Microsoft.AspNetCore.Identity;
@@ -47,8 +48,17 @@ namespace IntelligentCarManagement.Services
             return await unitOfWork.UsersRepo.GetById(id);
         }
 
-        public async Task RegisterUser(User userToRegister)
+        public async Task RegisterUser(RegisterModel model)
         {
+            User userToRegister = new();
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<RegisterModel, User>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            userToRegister = iMapper.Map<RegisterModel, User>(model);
+
             /* Completing default user data */
             // Set status to pendind activation
             userToRegister.AccountStatus = await unitOfWork.StatusesRepo.GetById(1);
@@ -61,7 +71,7 @@ namespace IntelligentCarManagement.Services
                 throw new Exception("A user with this email already exists.");
             }
 
-            IdentityResult result = await userManager.CreateAsync(userToRegister, userToRegister.Password);
+            IdentityResult result = await userManager.CreateAsync(userToRegister, model.Password);
 
             if(result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
 

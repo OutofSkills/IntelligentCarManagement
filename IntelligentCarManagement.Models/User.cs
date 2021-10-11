@@ -29,30 +29,11 @@ namespace IntelligentCarManagement.Models
 
         public string Avatar { get; set; }
 
-        [Required(ErrorMessage = "Email address is required.")]
         [DataType(DataType.EmailAddress)]
 
         public override string Email { get; set; }
 
-        [Required(ErrorMessage = "Username is required.")]
-        [MinLength(3)]
         public override string UserName { get; set; }
-
-        [Required(ErrorMessage = "Password is required.")]
-        [MinLength(4)]
-        [DataType(DataType.Password)]
-        [NotMapped]
-        public string Password { get; set; }
-
-        [Required]
-        [MinLength(4)]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "The password do not match.")]
-        [NotMapped]
-        public string ConfirmPassword { get; set; }
-
-        [NotMapped]
-        public string CurrentPassword { get; set; }
 
         public string Access_Token { get; set; }
 
