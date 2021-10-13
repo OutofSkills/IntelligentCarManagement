@@ -22,6 +22,9 @@ namespace IntelligentCarManagement.Api.Services
             if (ride is null)
                 throw new Exception("No data provided");
 
+            if (ride.PickUpTime == default)
+                ride.PickUpTime = DateTime.Now;
+
             unitOfWork.RidesRepo.Insert(ride);
             unitOfWork.SaveChanges();
 

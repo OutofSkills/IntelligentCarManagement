@@ -18,18 +18,19 @@
 
                                 <div class="row">
                                     <div class="col-md-12 col-12">
-                                        <MudTextField id="pickUpLocation" Placeholder="" Value="Ride.PickUpLocation" Label="Pick-up location"
-                                                      Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@PickUpInputIcon" OnAdornmentClick="FindMyLocationAsync"
-                                                      ValueChanged="@((string v) => OnPickUpInputChangeAsync(v))" @onfocus="AutoCompletePickUp" />
+                                        <MudTextField id="pickUpLocation" Placeholder="" Value="Ride.PickUpLocation" Label="Pick-up location" For="@(() => Ride.PickUpLocation)"
+                                                      Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@PickUpInputIcon" HelperText="Use your current location or select a location from autocomplete."
+                                                      OnAdornmentClick="FindMyLocationAsync" ValueChanged="@((string v) => OnPickUpInputChangeAsync(v))" 
+                                                      @onfocus="AutoCompletePickUp" Required="true" RequiredError="We need to know where to pick you up." />
                                     </div>
                                 </div>
 
                                 <div class="row mb-5">
                                     <div class="col-md-12">
-                                        <MudTextField id="destination" Placeholder="" Value="Ride.Destination" Label="Destination"
+                                        <MudTextField id="destination" Placeholder="" Value="Ride.Destination" Label="Destination" For="@(() => Ride.Destination)"
                                                       Variant="Variant.Text" Adornment="Adornment.End" AdornmentIcon="@DestinationInputIcon"
                                                       OnAdornmentClick="@(e => ClearInput("Destination"))" ValueChanged="@((string v) => OnDestinationInputChange(v))"
-                                                      @onfocus="AutoCompleteDestination" />
+                                                      @onfocus="AutoCompleteDestination"  Required="true" RequiredError="We need to know the destination of your ride request." />
                                     </div>
                                 </div>
 

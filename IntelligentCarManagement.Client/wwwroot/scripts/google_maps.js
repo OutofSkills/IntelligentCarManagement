@@ -6,7 +6,7 @@ const center = { lat: 47.3737746, lng: 28.3859587 };
 // Initialize the map in the selected div using it's id and set it's initial location
 function initialize() {
     var options = {
-        zoom: 10, center: center,
+        zoom: 8, center: center,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById
@@ -15,8 +15,16 @@ function initialize() {
     infoWindow = new google.maps.InfoWindow();
     geocoder = new google.maps.Geocoder();
 
-    pickUpMarker = new google.maps.Marker({ map: map, draggable: false });
-    destinationMarker = new google.maps.Marker({ map: map, draggable: false });
+    pickUpMarker = new google.maps.Marker({
+        map: map,
+        draggable: false,
+        icon: '/images/icons/red_MarkerP.png'
+    });
+    destinationMarker = new google.maps.Marker({
+        map: map,
+        draggable: false,
+        icon: '/images/icons/blue_MarkerD.png'
+    });
 
     google.maps.event.addDomListener(window, 'resize', function () {
          map.setCenter(center);
