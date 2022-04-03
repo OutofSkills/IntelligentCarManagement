@@ -10,7 +10,7 @@
 <MudText>Already have an account? <MudLink Href="/login">Sign In</MudLink></MudText>
 
 <EditForm Model="model" OnValidSubmit="HandleRegister">
-    <MudTextField @bind-Value="model.UserName" Label="Username" Variant="Variant.Outlined" For="@(() => model.UserName)" Class="my-4"></MudTextField>
+    <MudTextField @bind-Value="model.PhoneNumber" Label="Phone Number" Variant="Variant.Outlined" For="@(() => model.PhoneNumber)" Class="my-4"></MudTextField>
 
     <MudElement Class="d-flex my-4">
         <MudTextField @bind-Value="model.FirstName" Label="First Name" Variant="Variant.Outlined" For="@(() => model.FirstName)" Class="mr-1"></MudTextField>

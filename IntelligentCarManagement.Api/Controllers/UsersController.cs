@@ -93,29 +93,6 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register([FromBody]RegisterModel model)
-        {
-            try
-            {
-                await usersService.RegisterUser(model);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Edit user error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
-        }
-
         [HttpGet]
         [Route("get-user-roles")]
         public async Task<IActionResult> GetUserRolesAsync([FromQuery] int userId)

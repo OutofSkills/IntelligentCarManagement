@@ -58,6 +58,10 @@ namespace Models
         {
             UserRoles = new List<UserRole>();
             Notifications = new HashSet<Notification>();
+            // Defult account data
+            StatusId = 1; // pendind activation
+            RegistrationDate = DateTime.Now; // current date
+            Address = new(); // empty address
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Api.Services.CustomExceptions
 {
-    public class InvalidCredentialsException: Exception
+    public class UserNotFoundException: Exception
     {
-        public InvalidCredentialsException(string message): base(message)
+        public UserNotFoundException(string message) : base(message)
         { }
     }
 }

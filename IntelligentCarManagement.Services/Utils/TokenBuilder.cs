@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Services
 {
-    public class TokenService : ITokenService
+    public class TokenBuilder : ITokenBuilder
     {
         private readonly IUnitOfWork _repository;
         private readonly UserManager<UserBase> _userManager;
         private readonly SignInManager<UserBase> _signInManager;
 
-        public TokenService(IUnitOfWork unitOfWork, UserManager<UserBase> userManager, SignInManager<UserBase> signInManager)
+        public TokenBuilder(IUnitOfWork unitOfWork, UserManager<UserBase> userManager, SignInManager<UserBase> signInManager)
         {
             _repository = unitOfWork;
             _userManager = userManager;

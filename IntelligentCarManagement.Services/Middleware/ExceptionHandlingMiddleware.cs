@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Models.View_Models;
 using Newtonsoft.Json;
-using RESTApi.Services.CustomExceptions;
+using Api.Services.CustomExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +43,10 @@ namespace Api.Services.Middleware
                 case InvalidCredentialsException:
                     errorMessageObject.ErrorCode = "401";
                     statusCode = (int)HttpStatusCode.Unauthorized;
+                    break;
+                case UserNotFoundException:
+                    errorMessageObject.ErrorCode = "404";
+                    statusCode = (int)HttpStatusCode.NotFound;
                     break;
             }
 

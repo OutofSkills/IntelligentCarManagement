@@ -2,7 +2,7 @@
 
 namespace IntelligentCarManagement.Services
 {
-    public interface ITokenService
+    public interface ITokenBuilder
     {
         Task<dynamic> GenerateToken(string username);
         Task<bool> IsValidUsernameAndPassword(string username, string password);

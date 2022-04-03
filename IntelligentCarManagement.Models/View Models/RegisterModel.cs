@@ -9,6 +9,8 @@ namespace Models.View_Models
 {
     public class RegisterModel
     {
+        public byte[] Image { get; set; }
+
         [Required]
         [MinLength(3)]
         public string FirstName { get; set; }
@@ -22,9 +24,9 @@ namespace Models.View_Models
 
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "Username is required.")]
-        [MinLength(3)]
-        public string UserName { get; set; }
+        [Required(ErrorMessage = "Phone number is required.")]
+        [MinLength(9)]
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [MinLength(4)]

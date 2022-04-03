@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RESTApi.Services.CustomExceptions
+namespace Api.Services.CustomExceptions
 {
     public class InvalidAuthenticationException: Exception
     {

@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.Services;
+﻿using Api.Services.Interfaces;
+using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,73 +16,41 @@ namespace IntelligentCarManagement.Api.Controllers
     [ApiController]
     public class AccountController : Controller
     {
-        private readonly ITokenService tokenService;
-        private readonly IUsersService usersService;
+        private readonly IAccountService accountService;
 
-        public AccountController(ITokenService tokenService, IUsersService usersService)
+        public AccountController(IAccountService accountService)
         {
-            this.tokenService = tokenService;
-            this.usersService = usersService;
+            this.accountService = accountService;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        public async Task<string> Login([FromBody] LoginModel loginModel)
         {
-            if(await tokenService.IsValidUsernameAndPassword(loginModel.Email, loginModel.Password))
-            {
-                return Ok(await tokenService.GenerateToken(loginModel.Email));
-            }
-            else
-            {
-                return BadRequest();
-            }    
+            var token = await accountService.Login(loginModel);
+
+            return token;
         }
 
-        //[HttpDelete]
-        //[Route("remove-account")]
-        //public async Task<IActionResult> RemoveAccountAsync([FromForm] int id)
-        //{
-        //    try
-        //    {
-        //        await usersService.RemoveUserAsync(id);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-        //        {
-        //            Content = new StringContent(e.Message),
-        //            ReasonPhrase = "Remove user error"
+        [HttpPost]
+        [Route("register")]
+        public async Task Register([FromBody] RegisterModel model)
+        {
+            await accountService.Register(model);
+        }
 
-        //        };
+        [HttpDelete]
+        [Route("delete")]
+        public async Task RemoveAccountAsync([FromQuery] int id)
+        {
+            await accountService.Remove(id);
+        }
 
-        //        throw new System.Web.Http.HttpResponseException(response);
-        //    }
-
-        //    return Ok();
-        //}
-
-        //[HttpPost]
-        //[Route("change-password")]
-        //public async Task<IActionResult> ChangePasswordAsync([FromBody] ResetPasswordModel resetPasswordModel)
-        //{
-        //    try
-        //    {
-        //        await usersService.ChangePasswordAsync(resetPasswordModel);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-        //        {
-        //            Content = new StringContent(e.Message),
-        //            ReasonPhrase = "Reset password error"
-
-        //        };
-
-        //        throw new System.Web.Http.HttpResponseException(response);
-        //    }
-
-        //    return Ok();
-        //}
+        [HttpPost]
+        [Route("password")]
+        public async Task ChangePasswordAsync([FromBody] ResetPasswordModel resetPasswordModel)
+        {
+           await accountService.ChangePassword(resetPasswordModel);
+        }
     }
 }

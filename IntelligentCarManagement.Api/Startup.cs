@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Api.Services.Interfaces;
+using Api.Services.Implementations;
 
 namespace IntelligentCarManagement.Api
 {
@@ -84,7 +86,10 @@ namespace IntelligentCarManagement.Api
 
             services.AddDbContext<CarMngContext>(options =>
                 options.UseLazyLoadingProxies()
-                       .UseSqlServer(Configuration.GetConnectionString("CarMngmentConnection")));
+                       .UseSqlServer(Configuration.GetConnectionString("CarMngmentConnection"), builder =>
+                       {
+                           builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(1), null);
+                       }));
 
             services.AddSwaggerGen(setup =>
             {
@@ -95,15 +100,16 @@ namespace IntelligentCarManagement.Api
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddTransient<ICarService, CarService>();
-            services.AddTransient<IDriverService, DriverService>();
-            services.AddTransient<IUsersService, UsersService>();
-            services.AddTransient<ITokenService, TokenService>();
-            services.AddTransient<IRolesService, RolesService>();
-            services.AddTransient<IAccountStatusService, AccountStatusService>();
-            services.AddTransient<IDriverStatusService, DriverStatusService>();
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<IRidesService, RidesService>();
+            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<IDriverService, DriverService>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<ITokenBuilder, TokenBuilder>();
+            services.AddScoped<IRolesService, RolesService>();
+            services.AddScoped<IAccountStatusService, AccountStatusService>();
+            services.AddScoped<IDriverStatusService, DriverStatusService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IRidesService, RidesService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
