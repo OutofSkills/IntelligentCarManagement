@@ -37,14 +37,14 @@
                             </div>
                         </div>
 
-                        <div class="row g-2 mb-2">
+                        @*<div class="row g-2 mb-2">
                             <div class="col-md-6">
                                 <MudTextField Label="Experience" @bind-Value="model.Experience" For="@(() => model.Experience)" Variant="Variant.Text" Min="0" Adornment="Adornment.End" AdornmentText="years" HideSpinButtons="true" />
                             </div>
                             <div class="col-md-6">
                                 <MudTextField Label="About You" @bind-Value="model.About" For="@(() => model.About)" />
                             </div>
-                        </div>
+                        </div>*@
 
                         <div class="row mb-2">
                             <MudCheckBox @bind-Checked="@hasACar" Label="Do you want to use your own car?"></MudCheckBox>
@@ -128,7 +128,7 @@
         message = "";
         currentTaskState = taskStates.Started.ToString();
 
-        model.UserId = await GetLoggedUserId();
+        model.Id = await GetLoggedUserId();
 
         var state = await DriverService.AddDriver(model);
 

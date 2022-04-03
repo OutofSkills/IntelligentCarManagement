@@ -18,7 +18,7 @@
                 <Notifications />
 
                     <MudMenu Direction="Direction.Right" OffsetY="true" OffsetX="true" Dense="true">
-                        <ActivatorContent>
+                       @* <ActivatorContent>
                             @if (user.Avatar is null)
                             {
                                 <MudAvatar Class="text-light" Style="border-color:white" Variant="Variant.Outlined" Size="Size.Small">
@@ -47,7 +47,7 @@
                             <MudDivider Class="mb-2" />
                             <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/settings" />
                             <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/logout" />
-                        </ChildContent>
+                        </ChildContent>*@
                     </MudMenu>
             </Authorized>
             <NotAuthorized>
@@ -72,7 +72,7 @@
 
 
 @code{
-    User user = new();
+    UserBase user = new();
 
     [Inject] public IUsersService UsersService { get; set; }
 
@@ -94,7 +94,7 @@
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            user = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            user = JsonSerializer.Deserialize<UserBase>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
         else
         {

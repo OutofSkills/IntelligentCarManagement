@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class Notification
     {
@@ -16,6 +16,6 @@ namespace IntelligentCarManagement.Models
         public int UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public virtual User User { get; set; }
+        public virtual UserBase User { get; set; }
     }
 }

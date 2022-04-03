@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
-    public class Client: User
+    public class Client: UserBase
     {
     }
 }

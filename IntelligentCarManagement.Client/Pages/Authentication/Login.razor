@@ -64,24 +64,24 @@
 
     private async Task ExecuteLogin()
     {
-        authError = false;
+        //authError = false;
 
-        var authTask = AuthService.Login(model);
-        processLogin = true;
-        var result = await authTask;
+        //var authTask = AuthService.Login(model);
+        //processLogin = true;
+        //var result = await authTask;
 
         
-        processLogin = false;
+        //processLogin = false;
 
-        if (result is not null)
-        {
-            NavManager.NavigateTo("/");
-        }
-        else
-        {
-            Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
-            authError = true;
-        }
+        //if (result is not null)
+        //{
+        //    NavManager.NavigateTo("/");
+        //}
+        //else
+        //{
+        //    Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
+        //    authError = true;
+        //}
 
     }
 }

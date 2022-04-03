@@ -1,5 +1,4 @@
-﻿using IntelligentCarManagement.Models;
-using IntelligentCarManagement.DataAccess.UnitsOfWork;
+﻿using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,10 +7,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using IntelligentCarManagement.Services;
-using IntelligentCarManagement.Models.NotMapped_Models;
 using IntelligentCarManagement.Api.Helpers;
 using System.Net.Http;
 using System.Net;
+using Models.View_Models;
+using Models;
 
 namespace IntelligentCarManagement.Api.Controllers
 {

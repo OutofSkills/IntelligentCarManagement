@@ -3,12 +3,12 @@
 @inherits DriverHomeBase
 @attribute [Authorize(Roles = "DRIVER")]
 
-<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Driver Home</MudText>
+@*<MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Driver Home</MudText>
 <MudGrid>
 
     <MudItem xs="12" sm="4">
         <MudPaper Class="pa-4" Style="height:300px;">
-            @if (User is null || User.Driver is null)
+            @if (User is null)
             {
                 <MudText Typo="Typo.h6">
                     Account State
@@ -43,3 +43,4 @@
     </MudItem>
 </MudGrid>
 
+*@

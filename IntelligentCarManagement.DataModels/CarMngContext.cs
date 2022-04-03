@@ -1,4 +1,4 @@
-﻿using IntelligentCarManagement.Models;
+﻿using Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -7,7 +7,7 @@ using System.Text;
 
 namespace IntelligentCarManagement.DataAccess
 {
-    public class CarMngContext: IdentityDbContext<User, Role, int>
+    public class CarMngContext: IdentityDbContext<UserBase, Role, int>
     {
         public CarMngContext(DbContextOptions options): base(options){ }
 

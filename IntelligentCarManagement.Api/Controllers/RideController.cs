@@ -1,7 +1,7 @@
 ﻿using IntelligentCarManagement.Api.Services;
-using IntelligentCarManagement.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

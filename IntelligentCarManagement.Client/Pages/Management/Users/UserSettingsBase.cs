@@ -1,6 +1,6 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
-using IntelligentCarManagement.Models.NotMapped_Models;
+using Models;
+using Models.View_Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using System;
@@ -16,7 +16,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
     {
         [Parameter]
         public string Id { get; set; }
-        public User User { get; set; } = new();
+        public UserBase User { get; set; } = new();
         public ResetPasswordModel ResetPasswordModel { get; set; } = new();
         [Inject]
         public IUsersService UsersService { get; set; }
@@ -29,7 +29,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
             var httpResponse = await UsersService.GetUserAsync(int.Parse(Id));
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            User = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            User = JsonSerializer.Deserialize<UserBase>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             ResetPasswordModel.Email = User.Email;
 
@@ -37,13 +37,13 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
         }
         protected override void OnParametersSet()
         {
-            if (User.Driver is null)
-            {
-                User.Driver = new Driver
-                {
-                    UserId = User.Id
-                };
-            }
+            //if (Driver is null)
+            //{
+            //    Driver = new Driver
+            //    {
+            //        Id = User.Id
+            //    };
+            //}
         }
 
         protected async Task LoadFile(InputFileChangeEventArgs e)
@@ -55,7 +55,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
             await resizedImage.OpenReadStream().ReadAsync(buffer);
             var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
-            User.Avatar = imageData;
+           // User.Avatar = imageData;
         }
 
         private async Task AssignCheckBoxRoles()

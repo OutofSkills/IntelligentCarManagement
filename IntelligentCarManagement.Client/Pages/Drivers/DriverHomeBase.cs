@@ -1,5 +1,5 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
@@ -13,7 +13,7 @@ namespace IntelligentCarManagement.Client.Pages.Drivers
 {
     public class DriverHomeBase: ComponentBase
     {
-        protected User User { get; set; } = new();
+        protected UserBase User { get; set; } = new();
 
         [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
 
@@ -29,7 +29,7 @@ namespace IntelligentCarManagement.Client.Pages.Drivers
             var httpResponse = await UsersService.GetUserAsync(loggedUserId);
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            User = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            User = JsonSerializer.Deserialize<UserBase>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         private async Task<int> GetLoggedUserId()

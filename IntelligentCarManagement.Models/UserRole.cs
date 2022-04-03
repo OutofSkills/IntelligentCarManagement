@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class UserRole
     {
@@ -12,7 +12,7 @@ namespace IntelligentCarManagement.Models
         public int RoleId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public virtual User User { get; set; }
+        public virtual UserBase User { get; set; }
         [ForeignKey(nameof(RoleId))]
         public virtual Role Role { get; set; }
     }

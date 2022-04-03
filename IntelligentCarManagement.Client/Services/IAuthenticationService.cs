@@ -1,5 +1,4 @@
-﻿using IntelligentCarManagement.Models;
-using IntelligentCarManagement.Models.NotMapped_Models;
+﻿using Models.View_Models;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Services
@@ -8,7 +7,7 @@ namespace IntelligentCarManagement.Client.Services
     {
         Task<string> Register(RegisterModel model);
         Task<bool> ChangePasswordAsync(ResetPasswordModel model);
-        Task<User> Login(LoginModel userForAtuthetication);
+        Task Login(LoginModel userForAtuthetication);
         Task Logout();
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class Role: IdentityRole<int>
     {

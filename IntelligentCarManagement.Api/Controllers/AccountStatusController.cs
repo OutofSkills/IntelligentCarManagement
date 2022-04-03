@@ -1,10 +1,10 @@
 ﻿using IntelligentCarManagement.Api.Helpers;
 using IntelligentCarManagement.Api.Services;
-using IntelligentCarManagement.Models;
-using IntelligentCarManagement.Models.NotMapped_Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Models.View_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

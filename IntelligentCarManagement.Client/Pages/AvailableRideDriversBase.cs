@@ -1,5 +1,5 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
+using Models;
 using Majorsoft.Blazor.Components.Common.JsInterop.Scroll;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

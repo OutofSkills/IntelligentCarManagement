@@ -1,7 +1,5 @@
 ﻿<h4 class="mb-1">Driver</h4>
 
-@using IntelligentCarManagement.Client.Services
-
 @if (Driver is null)
 {
     <div class="d-flex justify-content-center">
@@ -61,11 +59,11 @@ else
             <h4 class="mb-4">About</h4>
             <div class="form-group">
                 <div class="row g-3">
-                    <div class="col-md-4">
+                    @*<div class="col-md-4">
                         <label class="form-label">Experience</label>
                         <InputNumber type="text" class="form-control" @bind-Value="Driver.Experience" placeholder="Years of experience."></InputNumber>
                         <ValidationMessage For="@(() => Driver.Experience)" />
-                    </div>
+                    </div>*@
                     <div class="col-md-4">
                         <label class="form-label">Accidents</label>
                         <InputNumber type="text" class="form-control" @bind-Value="Driver.Accidents" placeholder="Number of accidents" disabled></InputNumber>

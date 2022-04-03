@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
-    public class Driver
+    public class Driver: UserBase
     {
-        public int Id { get; set; }
+        public override int Id { get; set; }
 
         public string LicencePhoto { get; set; }
 
@@ -14,19 +15,16 @@ namespace IntelligentCarManagement.Models
 
         public int DeservedClients { get; set; } = 0;
 
-        public int Experience { get; set; } = 0;
-
         public float Rating { get; set; } = 0.0f;
-
-        public string About { get; set; }
 
         public bool IsAvailable { get; set; }
 
         public int DriverStatusId { get; set; }
-        public int UserId { get; set; }
+        public int CarId { get; set; }
 
+        [ForeignKey(nameof(CarId))]
         public virtual Car Car { get; set; }
-        public virtual User User { get; set; }
+        [ForeignKey(nameof(DriverStatusId))]
         public virtual DriverStatus Status { get; set; }
     }
 }

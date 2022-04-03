@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class AccountStatus
     {
@@ -10,6 +10,6 @@ namespace IntelligentCarManagement.Models
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual IEnumerable<User> Users { get; set; }
+        public virtual IEnumerable<UserBase> Users { get; set; }
     }
 }

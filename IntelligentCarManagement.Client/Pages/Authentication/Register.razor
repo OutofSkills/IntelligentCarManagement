@@ -105,16 +105,16 @@
     {
         registerError = false;
 
-        var result = await AuthService.Login(new LoginModel { Email = model.Email, Password = model.Password, Grant_Type = "password" });
+        await AuthService.Login(new LoginModel { Email = model.Email, Password = model.Password });
 
-        if (result is not null)
-        {
-            NavManager.NavigateTo("/");
-        }
-        else
-        {
-            Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
-        }
+        //if (result is not null)
+        //{
+        //    NavManager.NavigateTo("/");
+        //}
+        //else
+        //{
+        //    Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
+        //}
 
     }
 }

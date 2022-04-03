@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IntelligentCarManagement.Models;
+using Models;
 using IntelligentCarManagement.Client.Services;
 using MudBlazor;
 using IntelligentCarManagement.Client.Shared;

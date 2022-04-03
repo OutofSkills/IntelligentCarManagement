@@ -1,5 +1,5 @@
 ﻿using Blazored.LocalStorage;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -11,7 +11,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using IntelligentCarManagement.Authentication;
 using System.Net.Http.Headers;
-using IntelligentCarManagement.Models.NotMapped_Models;
+using Models.View_Models;
 
 namespace IntelligentCarManagement.Client.Services
 {
@@ -28,7 +28,7 @@ namespace IntelligentCarManagement.Client.Services
             this.localStorage = localStorage;
         }
 
-        public async Task<User> Login(LoginModel userForAtuthetication)
+        public async Task Login(LoginModel userForAtuthetication)
         {
             var data = new FormUrlEncodedContent(new[]
             {
@@ -37,23 +37,23 @@ namespace IntelligentCarManagement.Client.Services
                 new KeyValuePair<string, string>("password", userForAtuthetication.Password)
             });
 
-            var authResult = await httpClient.PostAsync("http://localhost:41427/token/create", data);
+            var authResult = await httpClient.PostAsync("http://localhost:41427/api/token", data);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)
             {
-                return null;
+                return;
             }
 
-            var result = JsonSerializer.Deserialize<User>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<string>(authContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            await localStorage.SetItemAsync("authToken", result.Access_Token);
+            await localStorage.SetItemAsync("authToken", result);
 
-            ((AuthStateProvider)authStateProvider).NotifyUserAuthentication(result.Access_Token);
+            ((AuthStateProvider)authStateProvider).NotifyUserAuthentication(result);
 
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.Access_Token);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result);
 
-            return result;
+            return;
         }
 
         public async Task Logout()

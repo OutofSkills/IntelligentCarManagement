@@ -1,5 +1,5 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;

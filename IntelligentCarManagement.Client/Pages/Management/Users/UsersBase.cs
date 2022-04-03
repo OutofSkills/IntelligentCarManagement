@@ -1,5 +1,5 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
         [Inject]
         public IUsersService UsersService { get; set; }
 
-        public IEnumerable<User> Users { get; set; }
+        public IEnumerable<UserBase> Users { get; set; }
 
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; } = 1;
@@ -38,7 +38,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
 
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            Users = JsonSerializer.Deserialize<IEnumerable<User>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
+            Users = JsonSerializer.Deserialize<IEnumerable<UserBase>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true});
         }
 
         public async Task UserRemoved()

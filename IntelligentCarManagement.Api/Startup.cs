@@ -1,7 +1,6 @@
 using IntelligentCarManagement.Api.Services;
 using IntelligentCarManagement.DataAccess;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
-using IntelligentCarManagement.Models;
 using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Models;
+using Api.Services.Middleware;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace IntelligentCarManagement.Api
                     });
             });
 
-            services.AddIdentity<User, Role>(options =>
+            services.AddIdentity<UserBase, Role>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password = new PasswordOptions
@@ -114,6 +115,10 @@ namespace IntelligentCarManagement.Api
             }
 
             app.UseRouting();
+
+            app.UseHttpsRedirection();
+
+            app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseCors("AllowOrigin");
 

@@ -1,6 +1,6 @@
 ﻿using IntelligentCarManagement.Client.Services;
-using IntelligentCarManagement.Models;
-using IntelligentCarManagement.Models.NotMapped_Models;
+using Models;
+using Models.View_Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
@@ -19,7 +19,7 @@ namespace IntelligentCarManagement.Client.Pages
 
         [Inject] public IUsersService UsersService { get; set; }
 
-        protected User User { get; set; } = new();
+        protected UserBase User { get; set; } = new();
 
         public ResetPasswordModel ResetPasswordModel { get; set; } = new();
 
@@ -30,21 +30,21 @@ namespace IntelligentCarManagement.Client.Pages
             var httpResponse = await UsersService.GetUserAsync(loggedUserId);
             var responseString = await httpResponse.Content.ReadAsStringAsync();
 
-            User = JsonSerializer.Deserialize<User>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            User = JsonSerializer.Deserialize<UserBase>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             ResetPasswordModel.Email = User.Email;
         }
 
         protected async Task LoadFile(InputFileChangeEventArgs e)
         {
-            var format = "iamge/png";
-            var resizedImage = await e.File.RequestImageFileAsync(format, 300, 300);
-            var buffer = new byte[resizedImage.Size];
+            //var format = "iamge/png";
+            //var resizedImage = await e.File.RequestImageFileAsync(format, 300, 300);
+            //var buffer = new byte[resizedImage.Size];
 
-            await resizedImage.OpenReadStream().ReadAsync(buffer);
-            var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+            //await resizedImage.OpenReadStream().ReadAsync(buffer);
+            //var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
-            User.Avatar = imageData;
+            //User.Avatar = imageData;
         }
 
         private async Task<int> GetLoggedUserId()

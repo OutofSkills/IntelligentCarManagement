@@ -1,6 +1,6 @@
 ﻿using IntelligentCarManagement.Client.Services;
 using IntelligentCarManagement.Client.Shared;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;
@@ -20,7 +20,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
 
         [Parameter] public EventCallback OnUserAccountRemoved { get; set; }
 
-        [Parameter] public User User { get; set; }
+        [Parameter] public UserBase User { get; set; }
 
         protected async Task OpenDeleteDialogAsync()
         {

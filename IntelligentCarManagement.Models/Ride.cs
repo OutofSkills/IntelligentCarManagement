@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class Ride
     {
@@ -25,6 +25,6 @@ namespace IntelligentCarManagement.Models
         public virtual Driver Driver { get; set; }
 
         [ForeignKey(nameof(ClientId))]
-        public virtual User User { get; set; }
+        public virtual UserBase User { get; set; }
     }
 }

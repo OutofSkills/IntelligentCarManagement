@@ -36,14 +36,14 @@ else
                     <div class="container-fluid">
                         <div class="row mt-2">
                             <h4>
-                                @Driver.User.UserName
+                                @Driver.UserName
                             </h4>
                         </div>
-                        <div class="row mt-1">
+                        @*<div class="row mt-1">
                             <h5 style="color:deepskyblue">
                                 @Driver.Experience years of Experience
                             </h5>
-                        </div>
+                        </div>*@
                         <div class="row mt-3">
                             <h6 style=" font-size: 12px; color: #818182;">
                                 RATING: @Driver.Rating/5
@@ -64,7 +64,7 @@ else
                             <div class="tab-content" id="myTabContent">
                                 <DriverDetailsAboutTab Driver="@Driver"></DriverDetailsAboutTab>
                                 <DriverDetailsCarTab Car="@Driver.Car"></DriverDetailsCarTab>
-                                <DriverDetailsContactTab Email="@Driver.User.Email" Phone="@Driver.User.PhoneNumber"></DriverDetailsContactTab>
+                                <DriverDetailsContactTab Email="@Driver.Email" Phone="@Driver.PhoneNumber"></DriverDetailsContactTab>
                             </div>
                         </div>
                     </div>

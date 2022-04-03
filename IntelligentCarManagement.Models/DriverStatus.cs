@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class DriverStatus
     {

@@ -1,4 +1,4 @@
-﻿@using IntelligentCarManagement.Models;
+﻿@using Models;
 <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab">
     <div class="container">
         <div class="row mt-3">
@@ -6,7 +6,7 @@
                 First Name
             </div>
             <div class="col">
-                @Driver.User.FirstName
+                @Driver.FirstName
             </div>
         </div>
         <div class="row mt-3">
@@ -14,7 +14,7 @@
                 Last Name
             </div>
             <div class="col">
-                @Driver.User.LastName
+                @Driver.LastName
             </div>
         </div>
         <div class="row mt-3">
@@ -22,7 +22,7 @@
                 Age
             </div>
             <div class="col">
-                @Driver.User.Age
+                @Driver.Age
             </div>
         </div>
         <div class="row mt-3">
@@ -30,7 +30,7 @@
                 City
             </div>
             <div class="col">
-                @Driver.User.Address.County, @Driver.User.Address.City
+                @Driver.Address.County, @Driver.Address.City
             </div>
         </div>
         <div class="row mt-3">
@@ -38,7 +38,7 @@
                 Street
             </div>
             <div class="col">
-                @Driver.User.Address.Street
+                @Driver.Address.Street
             </div>
         </div>
     </div>

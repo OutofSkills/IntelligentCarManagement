@@ -1,6 +1,6 @@
 ﻿using IntelligentCarManagement.Client.Services;
 using IntelligentCarManagement.Client.Shared;
-using IntelligentCarManagement.Models;
+using Models;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System;

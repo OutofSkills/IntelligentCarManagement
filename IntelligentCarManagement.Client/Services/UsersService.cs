@@ -1,4 +1,4 @@
-﻿using IntelligentCarManagement.Models;
+﻿using Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -20,7 +20,7 @@ namespace IntelligentCarManagement.Client.Services
             this.httpClient = httpClient;
         }
 
-        public bool ChangeAccountStatus(User user, string status)
+        public bool ChangeAccountStatus(UserBase user, string status)
         {
             // Fetch the wanted status
             // Set it to the user instance
@@ -36,13 +36,13 @@ namespace IntelligentCarManagement.Client.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> Edit(User user)
+        public async Task<bool> Edit(UserBase user)
         {
             var response = await httpClient.PutAsJsonAsync("/api/Users/edit", user);
 
             return response.IsSuccessStatusCode;
         }
-        public async Task<bool> UpdateUserRoles(User user)
+        public async Task<bool> UpdateUserRoles(UserBase user)
         {
             var response = await httpClient.PostAsJsonAsync("/api/Users/edit-roles", user);
 

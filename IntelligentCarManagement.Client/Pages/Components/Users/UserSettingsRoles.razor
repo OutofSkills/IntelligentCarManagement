@@ -1,4 +1,4 @@
-﻿@using IntelligentCarManagement.Client.Services
+﻿
 
 @if (User is null)
 {
@@ -48,7 +48,7 @@ else
 
 @code {
     [Parameter]
-    public User User { get; set; }
+    public UserBase User { get; set; }
     Driver Driver { get; set; } = new();
     [Parameter]
     public IEnumerable<RolesCheckBoxModel> UserRoles { get; set; }

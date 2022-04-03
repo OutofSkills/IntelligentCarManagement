@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace IntelligentCarManagement.Models
+namespace Models
 {
     public class Car
     {
@@ -16,9 +16,7 @@ namespace IntelligentCarManagement.Models
         public string CurrentLocation { get; set; }
         public string Latitude { get; set; }
         public string Longitude{ get; set;}
-        public int? DriverID { get; set; }
 
-        [ForeignKey("DriverID")]
         public virtual Driver Driver { get; set; }
     }
 }
