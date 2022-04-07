@@ -1,7 +1,6 @@
 ﻿using Api.Services.CustomExceptions;
 using Api.Services.Interfaces;
 using AutoMapper;
-using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Identity;
 using Models;
@@ -14,22 +13,18 @@ using System.Threading.Tasks;
 
 namespace Api.Services.Implementations
 {
-    public class AccountService : IAccountService
+    public class ClientsAccountService : IClientsAccountService
     {
         private readonly ITokenBuilder tokenService;
-        private readonly IUnitOfWork unitOfWork;
         private readonly UserManager<UserBase> userManager;
-        private readonly RoleManager<Role> roleManager;
 
-        public AccountService(ITokenBuilder tokenService, IUnitOfWork unitOfWork, UserManager<UserBase> userManager, RoleManager<Role> roleManager)
+        public ClientsAccountService(ITokenBuilder tokenService, UserManager<UserBase> userManager)
         {
             this.tokenService = tokenService;
-            this.unitOfWork = unitOfWork;
             this.userManager = userManager;
-            this.roleManager = roleManager;
         }
 
-        public async Task ChangePassword(ResetPasswordModel model)
+        public async Task ChangePassword(ResetPasswordDTO model)
         {
             var user = await userManager.FindByEmailAsync(model.Email);
             if (user is null)
@@ -47,20 +42,21 @@ namespace Api.Services.Implementations
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
 
-            return await tokenService.GenerateToken(model.Email);
+            string token = await tokenService.GenerateToken(model.Email);
+            return token;
         }
 
-        public async Task Register(RegisterModel model)
+        public async Task Register(ClientRegisterModel model)
         {
-            UserBase newUser = new();
+            Client newUser = new();
 
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<RegisterModel, UserBase>();
+                cfg.CreateMap<ClientRegisterModel, UserBase>();
             });
 
             IMapper iMapper = config.CreateMapper();
-            newUser = iMapper.Map<RegisterModel, UserBase>(model);
+            newUser = iMapper.Map<ClientRegisterModel, Client>(model);
 
             var isEmailValid = await userManager.FindByEmailAsync(model.Email);
             if (isEmailValid is not null)
@@ -84,7 +80,7 @@ namespace Api.Services.Implementations
                 return;
 
             var result = await userManager.DeleteAsync(user);
-            if(result.Succeeded is false)
+            if (result.Succeeded is false)
             {
                 throw new Exception("Couldn't delete the user with given id.");
             }

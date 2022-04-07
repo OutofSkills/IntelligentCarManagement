@@ -28,7 +28,7 @@
                                 </MudButton>
                             </div>
                             <div class="col-md-6">
-                                @if (model.LicencePhoto is not null)
+                                @if (model.ImageCv is not null)
                                 {
                                     <MudItem Icon="@Icons.Filled.AttachFile">
                                         File attached successfully.
@@ -167,6 +167,6 @@
         await resizedImage.OpenReadStream().ReadAsync(buffer);
         var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
-        model.LicencePhoto = imageData;
+        model.ImageCv = imageData;
     }
 }

@@ -63,7 +63,7 @@ namespace IntelligentCarManagement.Client.Services
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<string> Register(RegisterModel model)
+        public async Task<string> Register(ClientRegisterModel model)
         {
             var registerResult = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/register", model);
 
@@ -75,7 +75,7 @@ namespace IntelligentCarManagement.Client.Services
             return "Success";
         }
 
-        public async Task<bool> ChangePasswordAsync(ResetPasswordModel resetPasswordModel)
+        public async Task<bool> ChangePasswordAsync(ResetPasswordDTO resetPasswordModel)
         {
             var result = await httpClient.PostAsJsonAsync("http://localhost:41427/api/Users/change-password", resetPasswordModel);
 

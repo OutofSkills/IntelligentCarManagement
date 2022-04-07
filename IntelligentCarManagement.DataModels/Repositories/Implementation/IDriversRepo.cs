@@ -8,6 +8,6 @@ namespace IntelligentCarManagement.DataAccess.Repositories
 {
     public interface IDriversRepo: IRepo<Driver>
     {
-        Driver GetCarDriver(int carID);
+        Driver GetByEmail(String email);
     }
 }

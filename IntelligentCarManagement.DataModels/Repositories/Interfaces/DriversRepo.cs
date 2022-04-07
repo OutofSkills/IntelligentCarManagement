@@ -11,9 +11,9 @@ namespace IntelligentCarManagement.DataAccess.Repositories
     {
         public DriversRepo(CarMngContext context) : base(context) { }
 
-        public Driver GetCarDriver(int carID)
+        public Driver GetByEmail(String email)
         {
-            return _context.Drivers.Where(d => d.Car.Id == carID).FirstOrDefault();
+            return _context.Drivers.Where(d => d.Email == email).FirstOrDefault();
         }
     }
 }

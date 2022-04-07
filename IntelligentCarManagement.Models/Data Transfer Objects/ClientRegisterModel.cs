@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models.Generics;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models.View_Models
 {
-    public class RegisterModel
+    public class ClientRegisterModel : IRegisterModel
     {
         public byte[] Image { get; set; }
 
@@ -23,6 +24,9 @@ namespace Models.View_Models
         [DataType(DataType.EmailAddress)]
 
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "UserName is required."), MinLength(3)]
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Phone number is required.")]
         [MinLength(9)]

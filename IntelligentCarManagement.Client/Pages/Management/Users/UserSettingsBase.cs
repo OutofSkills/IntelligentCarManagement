@@ -17,7 +17,7 @@ namespace IntelligentCarManagement.Client.Pages.Management.Users
         [Parameter]
         public string Id { get; set; }
         public UserBase User { get; set; } = new();
-        public ResetPasswordModel ResetPasswordModel { get; set; } = new();
+        public ResetPasswordDTO ResetPasswordModel { get; set; } = new();
         [Inject]
         public IUsersService UsersService { get; set; }
         [Inject]

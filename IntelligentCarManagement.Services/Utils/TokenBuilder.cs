@@ -34,14 +34,14 @@ namespace IntelligentCarManagement.Services
             return result;
         }
 
-        public async Task<dynamic> GenerateToken(string username)
+        public async Task<string> GenerateToken(string username)
         {
             var user = await _userManager.FindByEmailAsync(username);
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, username),
+                new Claim("id", user.Id.ToString()),
+                new Claim("email", username),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
@@ -49,18 +49,12 @@ namespace IntelligentCarManagement.Services
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim("role", role));
             }
 
             var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretSecurityKey.DontTouchIt")), SecurityAlgorithms.HmacSha256)), new JwtPayload(claims));
 
-            var output = new
-            {
-                Access_Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Username = username
-            };
-
-            return output;
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

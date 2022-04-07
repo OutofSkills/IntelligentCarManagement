@@ -109,7 +109,8 @@ namespace IntelligentCarManagement.Api
             services.AddScoped<IDriverStatusService, DriverStatusService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IRidesService, RidesService>();
-            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IClientsAccountService, ClientsAccountService>();
+            services.AddScoped<IDriversAccountService, DriversAccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

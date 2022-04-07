@@ -1,5 +1,9 @@
-﻿using IntelligentCarManagement.DataAccess.UnitsOfWork;
+﻿using Api.Services.CustomExceptions;
+using AutoMapper;
+using IntelligentCarManagement.DataAccess.UnitsOfWork;
+using Microsoft.AspNetCore.Identity;
 using Models;
+using Models.Data_Transfer_Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,51 +14,89 @@ namespace IntelligentCarManagement.Services
     public class DriverService : IDriverService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly UserManager<UserBase> userManager;
 
         public DriverService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
 
-        public void AddDriver(Driver driver)
+        public DriverDTO Add(DriverDTO driver)
         {
-            var driverStatus = unitOfWork.DriverStatusesRepo.GetByName("Waiting-Confirmation".ToUpper());
-            driver.Status = driverStatus;
-
-            unitOfWork.DriversRepo.Insert(driver);
-            unitOfWork.SaveChanges();
+            throw new NotImplementedException();
         }
 
-        public Driver GetCarDriver(int carID)
+        public async Task<DriverDTO> GetAsync(int id)
         {
-            return unitOfWork.DriversRepo.GetCarDriver(carID);
+            var driver = await unitOfWork.DriversRepo.GetById(id);
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Driver, DriverDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            return iMapper.Map<Driver, DriverDTO>(driver); 
         }
 
-        public async Task<Driver> GetDriver(int id)
+        public DriverDTO Get(String email)
         {
-            return await unitOfWork.DriversRepo.GetById(id);
+            var driver = unitOfWork.DriversRepo.GetByEmail(email);
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Driver, DriverDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            return iMapper.Map<Driver, DriverDTO>(driver);
         }
 
-        public async Task<IEnumerable<Driver>> GetDrivers()
+        public async Task<IEnumerable<DriverDTO>> GetAllAsync()
         {
-            return await unitOfWork.DriversRepo.GetAll();
+            var drivers = await unitOfWork.DriversRepo.GetAll();
+
+            var result = new List<DriverDTO>();
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Driver, DriverDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            foreach (var driver in drivers)
+            {
+                result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+            }
+
+            return result;
         }
 
-        public void UpdateDriver(Driver driver)
+        public async Task<DriverDTO> UpdateAsync(int id, DriverDTO driverDTO)
         {
+            Driver driver = await unitOfWork.DriversRepo.GetById(id);
+            if (driver == null)
+                throw new UserNotFoundException("No driver found with the given id.");
+
+            // Map the driver model to the driver DTO
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddGlobalIgnore("id");
+                cfg.CreateMap<DriverDTO, Driver>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            driver = iMapper.Map(driverDTO, driver);
+
             unitOfWork.DriversRepo.Update(driver);
             unitOfWork.SaveChanges();
-        }
 
-        public async Task ChangeDriverStatusAsync(int driverId, string statusName)
-        {
-            var driver = await unitOfWork.DriversRepo.GetById(driverId);
-            var status = unitOfWork.DriverStatusesRepo.GetByName(statusName);
-
-            driver.Status = status;
-
-            unitOfWork.DriversRepo.Update(driver);
-            unitOfWork.SaveChanges();
+            return driverDTO;
         }
     }
 }

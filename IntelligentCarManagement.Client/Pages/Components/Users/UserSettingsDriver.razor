@@ -32,13 +32,13 @@ else
                 <label class="form-label gy-2">License Photo</label>
                 <div class="row g-2">
                     <div class="col-md-4">
-                        @if (Driver.LicencePhoto is null)
+                        @if (Driver.ImageCv is null)
                         {
                             <img src="/images/no-image-available.jpg" alt="" class="img-fluid" style="max-height:100px;max-width:150px" />
                         }
                         else
                         {
-                            <img src="@Driver.LicencePhoto" alt="" class="img-fluid" style="max-height:100px;max-width:150px" />
+                            <img src="@Driver.ImageCv" alt="" class="img-fluid" style="max-height:100px;max-width:150px" />
                         }
                     </div>
 
@@ -47,7 +47,7 @@ else
                             Upload Photo
                             <InputFile class="account-settings-fileinput" OnChange="@LoadFile"></InputFile>
                         </label> &nbsp;
-                        <ValidationMessage For="@(() => Driver.LicencePhoto)" />
+                        <ValidationMessage For="@(() => Driver.ImageCv)" />
                     </div>
 
                 </div>
@@ -131,6 +131,6 @@ else
         await resizedImage.OpenReadStream().ReadAsync(buffer);
         var imageData = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
-        Driver.LicencePhoto = imageData;
+        Driver.ImageCv = imageData;
     }
 }

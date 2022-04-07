@@ -31,7 +31,7 @@ namespace IntelligentCarManagement.Api.Controllers
         [Route("get-users")]
         public async Task<IActionResult> GetUsersAsync([FromQuery]Pagination pagination)
         {
-            var collection = await usersService.GetAllUsersAsync();
+            var collection = await usersService.GetAllAsync();
 
             HttpContext.InsertPaginationParameterInResponse(collection, pagination.NumberOfRecords);
 
@@ -39,65 +39,27 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("get-user")]
-        public async Task<IActionResult> GetUserAsync([FromQuery] int userId)
+        [Route("byEmail")]
+        public async Task<UserBaseDTO> GetUserAsync([FromQuery] string email)
         {
-            var user = await usersService.GetUserAsync(userId);
+            var user = await usersService.GetAsync(email);
 
-            return Ok(user);
-        }
-
-        [HttpPut]
-        [Route("edit")]
-        public IActionResult UpdateUser([FromBody]UserBase user)
-        {
-            try
-            {
-                usersService.EditUser(user);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Edit user error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
-        }
-
-        [HttpPost]
-        [Route("edit-roles")]
-        public async Task<IActionResult> UpdateUserRolesAsync([FromBody] UserBase user)
-        {
-            try
-            {
-                await usersService.UpdateUserRoles(user);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Edit user error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            return user;
         }
 
         [HttpGet]
-        [Route("get-user-roles")]
-        public async Task<IActionResult> GetUserRolesAsync([FromQuery] int userId)
+        [Route("byId")]
+        public async Task<UserBaseDTO> GetUserAsync([FromQuery] int userId)
         {
-            return Ok(await usersService.GetUserRolesAsync(userId));
+            var user = await usersService.GetAsync(userId);
+
+            return user;
+        }
+
+        [HttpPut]
+        public async Task<UserBaseDTO> UpdatAsync([FromQuery] int id, [FromBody] UserBaseDTO user)
+        {
+            return await usersService.EditAsync(id, user);
         }
     }
 }

@@ -7,9 +7,7 @@ namespace Models
 {
     public class Driver: UserBase
     {
-        public override int Id { get; set; }
-
-        public string LicencePhoto { get; set; }
+        public string ImageCv { get; set; }
 
         public int Accidents { get; set; } = 0;
 
@@ -19,8 +17,8 @@ namespace Models
 
         public bool IsAvailable { get; set; }
 
-        public int DriverStatusId { get; set; }
-        public int CarId { get; set; }
+        public int? DriverStatusId { get; set; }
+        public int? CarId { get; set; }
 
         [ForeignKey(nameof(CarId))]
         public virtual Car Car { get; set; }

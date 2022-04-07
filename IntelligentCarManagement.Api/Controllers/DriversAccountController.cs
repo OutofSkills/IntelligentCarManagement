@@ -3,6 +3,7 @@ using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Models.Data_Transfer_Objects;
 using Models.View_Models;
 using System;
 using System.Collections.Generic;
@@ -14,29 +15,36 @@ namespace IntelligentCarManagement.Api.Controllers
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : Controller
+    public class DriversAccountController : Controller
     {
-        private readonly IAccountService accountService;
+        private readonly IDriversAccountService accountService;
 
-        public AccountController(IAccountService accountService)
+        public DriversAccountController(IDriversAccountService accountService)
         {
             this.accountService = accountService;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<string> Login([FromBody] LoginModel loginModel)
+        public async Task<LoginResponse> Login([FromBody] LoginModel loginModel)
         {
             var token = await accountService.Login(loginModel);
 
-            return token;
+            return new LoginResponse() { Token = token};
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task Register([FromBody] RegisterModel model)
+        public async Task Register([FromBody] DriverRegisterModel model)
         {
-            await accountService.Register(model);
+            try
+            {
+                await accountService.Register(model);
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
 
         [HttpDelete]
@@ -48,7 +56,7 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPost]
         [Route("password")]
-        public async Task ChangePasswordAsync([FromBody] ResetPasswordModel resetPasswordModel)
+        public async Task ChangePasswordAsync([FromBody] ResetPasswordDTO resetPasswordModel)
         {
            await accountService.ChangePassword(resetPasswordModel);
         }

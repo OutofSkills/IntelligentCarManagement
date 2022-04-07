@@ -21,7 +21,7 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected UserBase User { get; set; } = new();
 
-        public ResetPasswordModel ResetPasswordModel { get; set; } = new();
+        public ResetPasswordDTO ResetPasswordModel { get; set; } = new();
 
         protected async override Task OnInitializedAsync()
         {

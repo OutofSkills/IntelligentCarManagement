@@ -8,13 +8,11 @@ namespace IntelligentCarManagement.Services
 {
     public interface IUsersService
     {
-        Task<IEnumerable<UserBase>> GetAllUsersAsync();
-        Task<UserBase> GetUserAsync(int id);
-        Task RemoveUserAsync(int userId);
-        Task UpdateUserRoles(UserBase user);
-        void EditUser(UserBase user);
-        Task RegisterUser(RegisterModel model);
-        Task ChangePasswordAsync(ResetPasswordModel model);
-        Task<IEnumerable<string>> GetUserRolesAsync(int userId);
+        Task<IEnumerable<UserBaseDTO>> GetAllAsync();
+        Task<UserBaseDTO> GetAsync(int id);
+        Task<UserBaseDTO> GetAsync(string email);
+        Task RemoveAsync(int userId);
+        //Task UpdateRoles(int userId, string[] roles);
+        Task<UserBaseDTO> EditAsync(int id, UserBaseDTO model);
     }
 }

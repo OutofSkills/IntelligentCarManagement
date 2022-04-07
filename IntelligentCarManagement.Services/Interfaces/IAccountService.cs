@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Generics;
 using Models.View_Models;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Api.Services.Interfaces
 {
-    public interface IAccountService
+    public interface IAccountService<T> where T : IRegisterModel
     {
         public Task<string> Login(LoginModel model);
         public Task Remove(int id);
-        public Task Register(RegisterModel model);
-        public Task ChangePassword(ResetPasswordModel model);
+        public Task Register(T model);
+        public Task ChangePassword(ResetPasswordDTO model);
     }
 }

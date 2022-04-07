@@ -13,11 +13,11 @@ namespace IntelligentCarManagement.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Car>().ToTable("Car");
-            modelBuilder.Entity<Client>().ToTable("Client");
-            modelBuilder.Entity<Driver>().ToTable("Driver");
-            modelBuilder.Entity<DriverStatus>().ToTable("DriverStatus");
-            modelBuilder.Entity<UserAddress>().ToTable("Address");
+            modelBuilder.Entity<Car>().ToTable("Cars");
+            modelBuilder.Entity<Client>().ToTable("Clients");
+            modelBuilder.Entity<Driver>().ToTable("Drivers");
+            modelBuilder.Entity<DriverStatus>().ToTable("DriverStatuses");
+            modelBuilder.Entity<UserAddress>().ToTable("Addresses");
 
             modelBuilder.Entity<UserRole>()
             .HasKey(ur => new { ur.UserId, ur.RoleId });
@@ -37,6 +37,7 @@ namespace IntelligentCarManagement.DataAccess
         }
 
         public DbSet<Car> Cars { get; set; }
+        public override DbSet<UserBase> Users { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }

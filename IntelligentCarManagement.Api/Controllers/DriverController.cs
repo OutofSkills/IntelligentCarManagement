@@ -13,6 +13,7 @@ using System.Net.Http;
 using System.Net;
 using Models.View_Models;
 using Models;
+using Models.Data_Transfer_Objects;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -29,97 +30,38 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("get-drivers")]
-        public async Task<IActionResult> GetDriversAsync([FromQuery] Pagination pagination)
+        [Route("byEmail")]
+        public DriverDTO GetDriverAsync([FromQuery] string email)
         {
-            var collection = await driverService.GetDrivers();
+            var user = driverService.Get(email);
 
-            HttpContext.InsertPaginationParameterInResponse(collection, pagination.NumberOfRecords);
-
-            return Ok(collection.Paginate(pagination).ToList());
+            return user;
         }
 
         [HttpGet]
-        [Route("get-all-drivers")]
-        public async Task<IActionResult> GetDriversAsync()
+        [Route("byId")]
+        public async Task<DriverDTO> GetDriverAsync([FromQuery] int driverId)
         {
-            return Ok(await driverService.GetDrivers());
+            var user = await driverService.GetAsync(driverId);
+
+            return user;
         }
 
         [HttpGet]
-        [Route("update-request")]
-        public async Task<IActionResult> UpdateDriverStatusAsync([FromQuery]int id, string status)
+        public async Task<IEnumerable<DriverDTO>> GetAsync()
         {
-            try
-            {
-                await driverService.ChangeDriverStatusAsync(id, status);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Update driver status error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            return await driverService.GetAllAsync();
         }
-
-        [HttpGet]
-        [Route("getDriver/{carId}")]
-        public IActionResult GetDriver(int carId)
+        [HttpPut]
+        public async Task<DriverDTO> UpdatAsync([FromQuery] int id, [FromBody] DriverDTO driver)
         {
-            return Ok(driverService.GetCarDriver(carId));
+            return await driverService.UpdateAsync(id, driver);
         }
 
         [HttpPost]
-        [Route("add-driver")]
-        public IActionResult AddDriver(Driver driver)
+        public DriverDTO AddDriver(DriverDTO driver)
         {
-            try
-            {
-                driverService.AddDriver(driver);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Insert driver status error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
-        }
-
-        [HttpPut]
-        [Route("update-driver")]
-        public IActionResult UpdateDriver(Driver driver)
-        {
-            try
-            {
-                driverService.UpdateDriver(driver);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Update driver error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            return driverService.Add(driver);
         }
     }
 }

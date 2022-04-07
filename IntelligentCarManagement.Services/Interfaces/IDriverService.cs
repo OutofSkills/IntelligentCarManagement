@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Data_Transfer_Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,10 @@ namespace IntelligentCarManagement.Services
 {
     public interface IDriverService
     {
-        Task<Driver> GetDriver(int id);
-        Driver GetCarDriver(int carID);
-        void AddDriver(Driver driver);
-        void UpdateDriver(Driver driver);
-        Task<IEnumerable<Driver>> GetDrivers();
-        Task ChangeDriverStatusAsync(int driverId, string statusName);
+        Task<DriverDTO> GetAsync(int id);
+        DriverDTO Get(String email);
+        DriverDTO Add(DriverDTO driver);
+        Task<DriverDTO> UpdateAsync(int id, DriverDTO dto);
+        Task<IEnumerable<DriverDTO>> GetAllAsync();
     }
 }
