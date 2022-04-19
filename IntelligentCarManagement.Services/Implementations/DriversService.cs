@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Services
 {
-    public class DriverService : IDriverService
+    public class DriversService : IDriversService
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly UserManager<UserBase> userManager;
 
-        public DriverService(IUnitOfWork unitOfWork)
+        public DriversService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }

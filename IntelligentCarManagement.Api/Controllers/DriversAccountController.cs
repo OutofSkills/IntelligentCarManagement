@@ -56,9 +56,9 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPost]
         [Route("password")]
-        public async Task ChangePasswordAsync([FromBody] ResetPasswordDTO resetPasswordModel)
+        public async Task<ResetPasswordDTO> ChangePasswordAsync([FromBody] ResetPasswordDTO resetPasswordModel)
         {
-           await accountService.ChangePassword(resetPasswordModel);
+           return await accountService.ChangePassword(resetPasswordModel);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         /// </summary>
         ICarsRepo CarsRepo { get; }
         IDriversRepo DriversRepo { get; }
-        IUsersRepo UsersRepo { get; }
+        IClientsRepo ClientsRepo { get; }
         IRolesRepo RolesRepo { get; }
         IAccountStatusesRepo StatusesRepo{ get;}
         IDriverStatusRepo DriverStatusesRepo { get; }

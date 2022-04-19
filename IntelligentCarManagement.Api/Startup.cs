@@ -101,8 +101,8 @@ namespace IntelligentCarManagement.Api
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICarService, CarService>();
-            services.AddScoped<IDriverService, DriverService>();
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IDriversService, DriversService>();
+            services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<ITokenBuilder, TokenBuilder>();
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<IAccountStatusService, AccountStatusService>();

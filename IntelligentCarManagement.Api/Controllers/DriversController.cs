@@ -20,18 +20,18 @@ namespace IntelligentCarManagement.Api.Controllers
     [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
-    public class DriverController : ControllerBase
+    public class DriversController : ControllerBase
     {
-        private readonly IDriverService driverService;
+        private readonly IDriversService driverService;
 
-        public DriverController(IDriverService driverService)
+        public DriversController(IDriversService driverService)
         {
             this.driverService = driverService;
         }
 
         [HttpGet]
         [Route("byEmail")]
-        public DriverDTO GetDriverAsync([FromQuery] string email)
+        public DriverDTO GetAsync([FromQuery] string email)
         {
             var user = driverService.Get(email);
 

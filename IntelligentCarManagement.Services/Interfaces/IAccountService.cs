@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Api.Services.Utils;
+using Models;
 using Models.Generics;
 using Models.View_Models;
 using System;
@@ -14,6 +15,6 @@ namespace Api.Services.Interfaces
         public Task<string> Login(LoginModel model);
         public Task Remove(int id);
         public Task Register(T model);
-        public Task ChangePassword(ResetPasswordDTO model);
+        public Task<ResetPasswordDTO> ChangePassword(ResetPasswordDTO model);
     }
 }

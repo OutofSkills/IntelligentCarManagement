@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Services
 {
-    public interface IDriverService
+    public interface IDriversService
     {
         Task<DriverDTO> GetAsync(int id);
         DriverDTO Get(String email);

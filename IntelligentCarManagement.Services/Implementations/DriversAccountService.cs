@@ -1,5 +1,6 @@
 ﻿using Api.Services.CustomExceptions;
 using Api.Services.Interfaces;
+using Api.Services.Utils;
 using AutoMapper;
 using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Identity;
@@ -17,28 +18,30 @@ namespace Api.Services.Implementations
     public class DriversAccountService : IDriversAccountService
     {
         private readonly ITokenBuilder tokenService;
-        private readonly UserManager<UserBase> userManager;
+        private readonly UserManager<UserBase> _userManager;
 
         public DriversAccountService(ITokenBuilder tokenService, UserManager<UserBase> userManager)
         {
             this.tokenService = tokenService;
-            this.userManager = userManager;
+            this._userManager = userManager;
         }
 
-        public async Task ChangePassword(ResetPasswordDTO model)
+        public async Task<ResetPasswordDTO> ChangePassword(ResetPasswordDTO model)
         {
-            var user = await userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user is null)
                 throw new UserNotFoundException("Couldn't find the account related to the given email.");
 
-            var result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.Password);
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.Password);
 
             if (!result.Succeeded) { throw new Exception("Couldn't change the password."); }
+
+            return model;
         }
 
         public async Task<string> Login(LoginModel model)
         {
-            if (!await tokenService.IsValidUsernameAndPassword(model.Email, model.Password))
+            if (!await IsValidUsernameAndPassword(model.Email, model.Password, RoleName.DRIVER))
             {
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
@@ -59,7 +62,7 @@ namespace Api.Services.Implementations
             IMapper iMapper = config.CreateMapper();
             newDriver = iMapper.Map<DriverRegisterModel, Driver>(model);
 
-            var isEmailValid = await userManager.FindByEmailAsync(model.Email);
+            var isEmailValid = await _userManager.FindByEmailAsync(model.Email);
             if (isEmailValid is not null)
             {
                 throw new Exception("A user with this email already exists.");
@@ -68,7 +71,7 @@ namespace Api.Services.Implementations
             try
             {
                 // Creating the new user
-                IdentityResult result = await userManager.CreateAsync(newDriver, model.Password);
+                IdentityResult result = await _userManager.CreateAsync(newDriver, model.Password);
                 if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
             }
             catch(Exception ex)
@@ -77,21 +80,36 @@ namespace Api.Services.Implementations
             }
 
             // Assigning the user to a default role
-            var roleName = "DRIVER";
-            await userManager.AddToRoleAsync(newDriver, roleName);
+            await _userManager.AddToRoleAsync(newDriver, RoleName.DRIVER.ToString());
         }
 
         public async Task Remove(int id)
         {
-            var user = await userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id.ToString());
             if (user is null)
                 return;
 
-            var result = await userManager.DeleteAsync(user);
+            var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded is false)
             {
                 throw new Exception("Couldn't delete the user with given id.");
             }
+        }
+
+        private async Task<bool> IsValidUsernameAndPassword(string username, string password, RoleName role)
+        {
+            UserBase user = await _userManager.FindByEmailAsync(username);
+
+            // If the user does not exist, it doesn't have the required role or the password is wrong, then return false
+            if (user is null)
+                return false;
+
+            if (!await _userManager.IsInRoleAsync(user, role.ToString()))
+                return false;
+
+            var result = await _userManager.CheckPasswordAsync(user, password);
+
+            return result;
         }
     }
 }

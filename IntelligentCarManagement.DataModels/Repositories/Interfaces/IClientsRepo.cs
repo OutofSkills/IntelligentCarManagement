@@ -6,7 +6,8 @@ using System.Text;
 
 namespace IntelligentCarManagement.DataAccess.Repositories
 {
-    public interface IUsersRepo: IRepo<UserBase>
+    public interface IClientsRepo: IRepo<Client>
     {
+        public Client GetByEmail(String email);
     }
 }

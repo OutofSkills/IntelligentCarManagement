@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Api.Services.Utils;
 
 namespace IntelligentCarManagement.Services
 {
@@ -24,14 +25,6 @@ namespace IntelligentCarManagement.Services
             _repository = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
-        }
-
-        public async Task<bool> IsValidUsernameAndPassword(string username, string password)
-        {
-            UserBase user = await _userManager.FindByEmailAsync(username);
-            var result = await _userManager.CheckPasswordAsync(user, password);
-
-            return result;
         }
 
         public async Task<string> GenerateToken(string username)
