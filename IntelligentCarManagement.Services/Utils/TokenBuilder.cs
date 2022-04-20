@@ -11,43 +11,119 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Api.Services.Utils;
+using Microsoft.Extensions.Options;
+using Models.Helpers;
+using Api.Services.CustomExceptions;
 
 namespace IntelligentCarManagement.Services
 {
     public class TokenBuilder : ITokenBuilder
     {
-        private readonly IUnitOfWork _repository;
         private readonly UserManager<UserBase> _userManager;
-        private readonly SignInManager<UserBase> _signInManager;
+        private readonly ApiSettings apiSettings;
+        private const double EXPIRY_DURATION_HOURS = 24;
 
-        public TokenBuilder(IUnitOfWork unitOfWork, UserManager<UserBase> userManager, SignInManager<UserBase> signInManager)
+        public TokenBuilder(UserManager<UserBase> userManager, IOptions<ApiSettings> options)
         {
-            _repository = unitOfWork;
             _userManager = userManager;
-            _signInManager = signInManager;
+            this.apiSettings = options.Value;
         }
 
-        public async Task<string> GenerateToken(string username)
+
+        public async Task<string> BuildAsync(string email)
         {
-            var user = await _userManager.FindByEmailAsync(username);
+            var signInCredentials = GetSigningCredentials();
+            var claims = await GetClaims(email);
+
+            var tokenOptions = new JwtSecurityToken(
+                issuer: apiSettings.ValidIssuer,
+                audience: apiSettings.ValidAudience,
+                claims: claims,
+                expires: DateTime.Now.AddHours(EXPIRY_DURATION_HOURS),
+                signingCredentials: signInCredentials
+                );
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+
+            return token;
+        }
+
+        public bool Validate(string token)
+        {
+            var secretKey = Encoding.UTF8.GetBytes(apiSettings.SecretKey);
+            var mySecurityKey = new SymmetricSecurityKey(secretKey);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            try
+            {
+                tokenHandler.ValidateToken(token,
+                new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = apiSettings.ValidIssuer,
+                    ValidAudience = apiSettings.ValidAudience,
+                    IssuerSigningKey = mySecurityKey,
+                }, out SecurityToken validatedToken);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private SigningCredentials GetSigningCredentials()
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(apiSettings.SecretKey));
+
+            return new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+        }
+
+        private async Task<List<Claim>> GetClaims(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user is null)
+                throw new UserNotFoundException("Invalid credentials.");
 
             var claims = new List<Claim>()
             {
                 new Claim("id", user.Id.ToString()),
-                new Claim("email", username),
+                new Claim("email", email),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-            foreach (var role in userRoles)
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
             {
                 claims.Add(new Claim("role", role));
             }
 
-            var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretSecurityKey.DontTouchIt")), SecurityAlgorithms.HmacSha256)), new JwtPayload(claims));
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return claims;
         }
+
+        //public async Task<string> GenerateToken(string username)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(username);
+
+        //    var claims = new List<Claim>()
+        //    {
+        //        new Claim("id", user.Id.ToString()),
+        //        new Claim("email", username),
+        //        new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
+        //        new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
+        //    };
+
+        //    var userRoles = await _userManager.GetRolesAsync(user);
+        //    foreach (var role in userRoles)
+        //    {
+        //        claims.Add(new Claim("role", role));
+        //    }
+
+        //    var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretSecurityKey.DontTouchIt")), SecurityAlgorithms.HmacSha256)), new JwtPayload(claims));
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
     }
 }

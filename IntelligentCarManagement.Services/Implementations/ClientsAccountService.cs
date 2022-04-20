@@ -45,7 +45,7 @@ namespace Api.Services.Implementations
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
 
-            string token = await tokenService.GenerateToken(model.Email);
+            string token = await tokenService.BuildAsync(model.Email);
             return token;
         }
 

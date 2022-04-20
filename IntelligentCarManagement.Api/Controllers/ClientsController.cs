@@ -1,5 +1,7 @@
-﻿using IntelligentCarManagement.Api.Helpers;
+﻿using Api.Services.Utils;
+using IntelligentCarManagement.Api.Helpers;
 using IntelligentCarManagement.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,7 @@ using System.Threading.Tasks;
 namespace IntelligentCarManagement.Api.Controllers
 {
     [EnableCors]
+    [Authorize(Roles = nameof(RoleName.ADMIN) + "," + nameof(RoleName.CLIENT))]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase

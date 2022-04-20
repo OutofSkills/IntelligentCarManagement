@@ -5,6 +5,6 @@ namespace IntelligentCarManagement.Services
 {
     public interface ITokenBuilder
     {
-        Task<string> GenerateToken(string username);
+        Task<string> BuildAsync(string username);
     }
 }

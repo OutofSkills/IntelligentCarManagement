@@ -22,6 +22,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Api.Services.Interfaces;
 using Api.Services.Implementations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.IO;
+using Models.Helpers;
 
 namespace IntelligentCarManagement.Api
 {
@@ -37,6 +40,12 @@ namespace IntelligentCarManagement.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Build configuration
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetParent(AppContext.BaseDirectory).FullName)
+                .AddJsonFile("appsettings.json", false)
+                .Build();
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "AllowOrigin",
@@ -49,6 +58,13 @@ namespace IntelligentCarManagement.Api
                                             .WithExposedHeaders("*"); ;
                     });
             });
+
+            // Get the secret key from appsettings
+            var appSettingsSection = config.GetSection("ApiSettings");
+            services.Configure<ApiSettings>(appSettingsSection);
+
+            var apiSettings = appSettingsSection.Get<ApiSettings>();
+            var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
 
             services.AddIdentity<UserBase, Role>(options =>
             {
@@ -68,19 +84,21 @@ namespace IntelligentCarManagement.Api
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = "JwtBearer";
-                options.DefaultChallengeScheme = "JwtBearer";
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer("JwtBearer", JwtBearerOptions =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, JwtBearerOptions =>
                 {
+                    JwtBearerOptions.RequireHttpsMetadata = false;
+                    JwtBearerOptions.SaveToken = true;
                     JwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretKey")),
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(5)
+                        ValidateLifetime = true
                     };
                 });
 
@@ -91,10 +109,34 @@ namespace IntelligentCarManagement.Api
                            builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(1), null);
                        }));
 
-            services.AddSwaggerGen(setup =>
+            services.AddSwaggerGen(option =>
             {
-                setup.SwaggerDoc("v1", new OpenApiInfo { Title= "Intelligent Car Management API", Version = "V1" });
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Intelligent Car Management API", Version = "V1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
             });
+
 
             services.AddControllers().AddNewtonsoftJson(options =>
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
@@ -123,15 +165,15 @@ namespace IntelligentCarManagement.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseHttpsRedirection();
 
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 
             app.UseCors("AllowOrigin");
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(
