@@ -14,7 +14,6 @@ namespace IntelligentCarManagement.Services
     public class DriversService : IDriversService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly UserManager<UserBase> userManager;
 
         public DriversService(IUnitOfWork unitOfWork)
         {
@@ -56,7 +55,7 @@ namespace IntelligentCarManagement.Services
             return iMapper.Map<Driver, DriverDTO>(driver);
         }
 
-        public async Task<IEnumerable<DriverDTO>> GetAllAsync()
+        public async Task<IEnumerable<DriverDTO>> GetAllAsync(bool? availability)
         {
             var drivers = await unitOfWork.DriversRepo.GetAll();
 
@@ -70,9 +69,20 @@ namespace IntelligentCarManagement.Services
 
             IMapper iMapper = config.CreateMapper();
 
-            foreach (var driver in drivers)
+            if (availability is not null)
             {
-                result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+                foreach (var driver in drivers)
+                {
+                    if (driver.IsAvailable == availability)
+                        result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+                }
+            }
+            else
+            {
+                foreach (var driver in drivers)
+                {
+                    result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+                }
             }
 
             return result;
@@ -97,6 +107,18 @@ namespace IntelligentCarManagement.Services
             unitOfWork.SaveChanges();
 
             return driverDTO;
+        }
+
+        public async Task BecomeAvailable(int driverId, bool availability)
+        {
+            var driver = await unitOfWork.DriversRepo.GetById(driverId);
+
+            if (driver is null)
+                throw new UserNotFoundException("Couldn't find a driver with the provided id.");
+
+            driver.IsAvailable = availability;
+            unitOfWork.DriversRepo.Update(driver);
+            unitOfWork.SaveChanges();
         }
     }
 }

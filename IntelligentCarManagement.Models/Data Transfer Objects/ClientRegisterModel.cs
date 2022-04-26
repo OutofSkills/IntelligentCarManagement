@@ -10,7 +10,7 @@ namespace Models.View_Models
 {
     public class ClientRegisterModel : IRegisterModel
     {
-        public byte[] Image { get; set; }
+        public byte[] Avatar { get; set; }
 
         [Required]
         [MinLength(3)]

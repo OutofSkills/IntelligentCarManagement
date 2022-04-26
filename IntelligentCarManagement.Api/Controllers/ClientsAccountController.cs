@@ -34,16 +34,11 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task Register([FromBody] ClientRegisterModel model)
+        public async Task<ClientRegisterModel> Register([FromBody] ClientRegisterModel model)
         {
-            try
-            {
-                await accountService.Register(model);
-            }
-            catch (Exception ex)
-            {
+            await accountService.Register(model);
 
-            }
+            return model;
         }
 
         [HttpDelete]

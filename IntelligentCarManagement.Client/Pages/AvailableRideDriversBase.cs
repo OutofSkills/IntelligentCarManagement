@@ -23,11 +23,11 @@ namespace IntelligentCarManagement.Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Ride = await RidesService.FindRideAsync(int.Parse(Id));
+            //Ride = await RidesService.FindRideAsync(int.Parse(Id));
 
-            var pickUpLatLng = Ride.PickUpCoordinates.Split(';');
-            var destinationLatLng = Ride.DestinationCoordinates.Split(';');
-            await JSRuntime.InvokeVoidAsync("initMarkers", pickUpLatLng, destinationLatLng); // 0 - latitude; 1 - longitude
+            //var pickUpLatLng = Ride.PickUpCoordinates.Split(';');
+            //var destinationLatLng = Ride.DestinationCoordinates.Split(';');
+            //await JSRuntime.InvokeVoidAsync("initMarkers", pickUpLatLng, destinationLatLng); // 0 - latitude; 1 - longitude
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

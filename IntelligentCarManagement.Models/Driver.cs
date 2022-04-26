@@ -18,6 +18,8 @@ namespace Models
         public float Rating { get; set; } = 0.0f;
 
         public bool IsAvailable { get; set; }
+        public string CurrentLat { get; set; }
+        public string CurrentLong { get; set; }
 
         public int? DriverStatusId { get; set; }
         public int? CarId { get; set; }

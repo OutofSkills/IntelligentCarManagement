@@ -48,9 +48,9 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<DriverDTO>> GetAsync()
+        public async Task<IEnumerable<DriverDTO>> GetAsync([FromQuery] bool? availability)
         {
-            return await driverService.GetAllAsync();
+            return await driverService.GetAllAsync(availability);
         }
         [HttpPut]
         public async Task<DriverDTO> UpdatAsync([FromQuery] int id, [FromBody] DriverDTO driver)
@@ -59,9 +59,16 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpPost]
-        public DriverDTO AddDriver(DriverDTO driver)
+        public DriverDTO Add(DriverDTO driver)
         {
             return driverService.Add(driver);
+        }
+
+        [HttpPost]
+        [Route("availability")]
+        public async Task MakeAvailable([FromQuery] int id, [FromQuery] bool isAvailable)
+        {
+            await driverService.BecomeAvailable(id, isAvailable);
         }
     }
 }

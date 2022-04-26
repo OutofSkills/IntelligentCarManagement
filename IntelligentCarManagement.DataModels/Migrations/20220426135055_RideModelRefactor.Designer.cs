@@ -4,6 +4,7 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20220426135055_RideModelRefactor")]
+    partial class RideModelRefactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -461,12 +463,6 @@ namespace Api.DataAccess.Migrations
 
                     b.Property<int?>("CarId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CurrentLat")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentLong")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DeservedClients")
                         .HasColumnType("int");

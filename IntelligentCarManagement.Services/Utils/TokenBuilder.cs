@@ -39,7 +39,6 @@ namespace IntelligentCarManagement.Services
                 issuer: apiSettings.ValidIssuer,
                 audience: apiSettings.ValidAudience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(EXPIRY_DURATION_HOURS),
                 signingCredentials: signInCredentials
                 );
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
@@ -102,28 +101,5 @@ namespace IntelligentCarManagement.Services
 
             return claims;
         }
-
-        //public async Task<string> GenerateToken(string username)
-        //{
-        //    var user = await _userManager.FindByEmailAsync(username);
-
-        //    var claims = new List<Claim>()
-        //    {
-        //        new Claim("id", user.Id.ToString()),
-        //        new Claim("email", username),
-        //        new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
-        //        new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
-        //    };
-
-        //    var userRoles = await _userManager.GetRolesAsync(user);
-        //    foreach (var role in userRoles)
-        //    {
-        //        claims.Add(new Claim("role", role));
-        //    }
-
-        //    var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySecretSecurityKey.DontTouchIt")), SecurityAlgorithms.HmacSha256)), new JwtPayload(claims));
-
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
     }
 }

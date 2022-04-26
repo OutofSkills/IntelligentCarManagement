@@ -13,7 +13,7 @@
 
                         <div class="container">
                             <EditForm Model="Ride" OnValidSubmit="HandleSubmit">
-                                <InputText id="pickUpCoordinates" @bind-Value="Ride.PickUpCoordinates" hidden />
+                               @* <InputText id="pickUpCoordinates" @bind-Value="Ride.PickUpCoordinates" hidden />
                                 <InputText id="destinationCoordinates" @bind-Value="Ride.DestinationCoordinates" hidden />
 
                                 <div class="row">
@@ -32,7 +32,7 @@
                                                       OnAdornmentClick="@(e => ClearInput("Destination"))" ValueChanged="@((string v) => OnDestinationInputChange(v))"
                                                       @onfocus="AutoCompleteDestination"  Required="true" RequiredError="We need to know the destination of your ride request." />
                                     </div>
-                                </div>
+                                </div>*@
 
                                 <div class="row mt-5">
                                     

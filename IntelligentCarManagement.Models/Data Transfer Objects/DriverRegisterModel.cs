@@ -11,7 +11,7 @@ namespace Models.Data_Transfer_Objects
 {
     public class DriverRegisterModel: IRegisterModel
     {
-        public byte[] Image { get; set; }
+        public byte[] Avatar { get; set; }
 
         [Required]
         [MinLength(3)]

@@ -9,7 +9,7 @@ namespace Models.Generics
 {
     public interface IRegisterModel
     {
-        public byte[] Image { get; set; }
+        public byte[] Avatar { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

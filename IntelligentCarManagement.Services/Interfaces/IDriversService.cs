@@ -13,6 +13,7 @@ namespace IntelligentCarManagement.Services
         DriverDTO Get(String email);
         DriverDTO Add(DriverDTO driver);
         Task<DriverDTO> UpdateAsync(int id, DriverDTO dto);
-        Task<IEnumerable<DriverDTO>> GetAllAsync();
+        Task<IEnumerable<DriverDTO>> GetAllAsync(bool? availability);
+        Task BecomeAvailable(int driverId, bool availability);
     }
 }
