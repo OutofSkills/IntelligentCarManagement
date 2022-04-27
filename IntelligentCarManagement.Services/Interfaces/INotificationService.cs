@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Data_Transfer_Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,9 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface INotificationService
     {
-        Task<IEnumerable<Notification>> GetUserNotificationsAsync(int userId);
-        void AddNewNotification(Notification notification);
+        Task<IEnumerable<Notification>> GetNotificationsAsync(int userId);
+        void SaveNotification(Notification notification);
         Task RemoveNotificationAsync(int id);
+        Task<NotificationResponse> SendNotification(NotificationDTO notification);
     }
 }

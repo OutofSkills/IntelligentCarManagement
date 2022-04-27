@@ -64,11 +64,13 @@ namespace IntelligentCarManagement.Api.Controllers
             return driverService.Add(driver);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("availability")]
-        public async Task MakeAvailable([FromQuery] int id, [FromQuery] bool isAvailable)
+        public async Task<bool> MakeAvailable([FromQuery] int id, [FromQuery] bool isAvailable)
         {
             await driverService.BecomeAvailable(id, isAvailable);
+
+            return isAvailable;
         }
     }
 }

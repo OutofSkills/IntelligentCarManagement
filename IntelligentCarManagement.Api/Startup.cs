@@ -25,17 +25,26 @@ using Api.Services.Implementations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.IO;
 using Models.Helpers;
+using CorePush.Google;
+using CorePush.Apple;
+using Models.Tools;
+using Microsoft.Extensions.Hosting.Internal;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using System.Diagnostics;
 
 namespace IntelligentCarManagement.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment HostingEnvironment { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -60,10 +69,22 @@ namespace IntelligentCarManagement.Api
             });
 
             // Get the secret key from appsettings
-            var appSettingsSection = config.GetSection("ApiSettings");
-            services.Configure<ApiSettings>(appSettingsSection);
+            var apiSettingsSection = config.GetSection("ApiSettings");
+            services.Configure<ApiSettings>(apiSettingsSection);
 
-            var apiSettings = appSettingsSection.Get<ApiSettings>();
+            // Configure FIREBASE ADMIN
+            var pathToKey = Path.Combine(Directory.GetCurrentDirectory(), "firebase-key.json");
+
+            if (HostingEnvironment.IsEnvironment("local"))
+                pathToKey = Path.Combine(Directory.GetCurrentDirectory(), "firebase-key.json");
+
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile(pathToKey)
+            });
+
+
+            var apiSettings = apiSettingsSection.Get<ApiSettings>();
             var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);
 
             services.AddIdentity<UserBase, Role>(options =>
@@ -153,6 +174,9 @@ namespace IntelligentCarManagement.Api
             services.AddScoped<IRidesService, RidesService>();
             services.AddScoped<IClientsAccountService, ClientsAccountService>();
             services.AddScoped<IDriversAccountService, DriversAccountService>();
+            services.AddTransient<INotificationService, NotificationService>();
+            services.AddHttpClient<FcmSender>();
+            services.AddHttpClient<ApnSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

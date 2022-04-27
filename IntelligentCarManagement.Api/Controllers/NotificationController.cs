@@ -1,6 +1,7 @@
 ﻿using IntelligentCarManagement.Api.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Models.Data_Transfer_Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace IntelligentCarManagement.Api.Controllers
         [Route("user-notifications")]
         public async Task<IActionResult> GetUserNotificationsAsync([FromQuery] int userId)
         {
-            var notifications = await notificationService.GetUserNotificationsAsync(userId);
+            var notifications = await notificationService.GetNotificationsAsync(userId);
 
             return Ok(notifications);
         }
@@ -52,6 +53,14 @@ namespace IntelligentCarManagement.Api.Controllers
             }
 
             return Ok();
+        }
+
+        [Route("send")]
+        [HttpPost]
+        public async Task<IActionResult> SendNotification(NotificationDTO notification)
+        {
+            var result = await notificationService.SendNotification(notification);
+            return Ok(result);
         }
     }
 }

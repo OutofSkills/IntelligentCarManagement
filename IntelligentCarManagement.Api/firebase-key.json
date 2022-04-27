@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "wordpresscarrental",
+  "private_key_id": "400475ae421d6d2b8917202c1779283be9d9b7d0",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDgCcrYjJUWhy8H\nVRpOqz3RkQORucjYcR7uL4+/4hhlJzwvBlf6D04dV88yglb6fDJPW6H4GayQQEtu\ngEBHz043YSGzveBvUcpg1nEx+VzkZuNnRt3u2gs5BAT2IxJt9usNdAbgcTDW6ZHx\nhaL9+hShggfivH88L03+6DpBxbPtdXq5J0ms45izZeApFwXDimhu0OYS15wddxRA\npeyUkCRprfXF/wj4NQMiWQg2+gFcCM9T9ZCKZiLy18dTt03ibt4YhmbC8M5jZjcK\nPiFNiw6I5X0xN4+q+x/sp4ylBeGvmNKdahaHzNVPhrGfOhT+PN1Ux96sSnKaCavO\ne8oqWZxpAgMBAAECggEAArN0aSibZcGTsXW3FnqaQhTgCnljtCk0hwkL+rqTpAyO\nRGpsm4ydPl2Kwg6TjaY0HKCYEvg2DEXU1MGpEvSOwWcODGglSjXWx/9t2bYOBsGS\ny5yCxua91zqvu0sMutSpXJNh3BBoZVQ8qog0edlkGoF7JqKHzbhIR6nnE61584N3\n12T5zPE1HJHfMtuaR4iRgb8XGz9t90Q3IJmIS9qJp9NC9+MWVPjf+aED6S9wBJ3S\nbnGNwL0yqp6d8eeUsBjd8ZndhZyloRf8nt2Bnvm4ROBTp/vRE+LGBJ4+R504ZgCd\ndl6sQvf312AovfjGc8LnDPVzKEoX9bqHsjIq1roHbQKBgQD+zMYkBqR2S9/VSJi+\nLDbxR9twqEEpBNlVRptWkSV2IOcD/ViX3tyFc9CU+iWiaJ/xLK+kB6pwGhVcoNOW\nl+9GvXzHbn14IAXinRn6mZaxKP3fouSA29JXvjQrrVoGMyYEaSjfLErJnek7xfui\nBnxdoglA8IgFNPqFuTZcDZXfvwKBgQDhF+1qAUoY3UlrqXoPIlZniK/YYWC9Ud7Q\nv7kBo1AgnMsUVQjL34ikCgN4Gs3cZS/vdKSmUp3LdU5ZGwNGyRzUFLfls0sVCsy/\ngQInMeHRNhhU6gtuz6O4Ef9hzkCt+zO51StgFQ1t75ufR2HO61xexEI7iVA5iiAA\n4BIVAmIN1wKBgFPakFrK1NUZo1BN0/bCFlLRkyZAOTGGpv+pfPXATtPRgDWP6tgQ\nQAKrWrmsmTYZuIlma2dQHodGDkGtq/Sji9t8ANShSCmAYG9zxFj0suMa2nH+6bR+\no3q83e6B3l6r9pb9BLZtnS89CMTjIyzvdX5bFTCJ+Dm+dbQMgBdLYUeBAoGBAKRk\nzUg2WN9//jdbN4IGGgTTl1n5BKZAPPNIkt3XYJXw7YCT+jCruSfVCGOXb/IfFLtV\n/Upb3FLUAbyiNepkx2E9IHHqWFOt54uVtPTbQYmCcJLTvDXaAEBXJKVR9Xsbk9ON\nFHi/52b7MDVL9OsiifvManMA/k6HyofZHlupueNRAoGBAMQR45RFqpRNaacXa7aE\na3SOS6rj5jPWSlMy/yOIOkv2L2jG70vl3Brwk113qt8CAjQCm+5f9hdVff/rtQH2\n0yybuOGobgJb7uEPA7UdlIp7HMEK9OKrMaclAasYIFQEZGNUmwubeGpv5oRhF+nF\ncncSQPszd6UeZlkKBPu5yV5c\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-vvigg@wordpresscarrental.iam.gserviceaccount.com",
+  "client_id": "100542027347472621590",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-vvigg%40wordpresscarrental.iam.gserviceaccount.com"
+}
