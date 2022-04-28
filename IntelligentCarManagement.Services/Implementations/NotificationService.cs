@@ -54,7 +54,6 @@ namespace IntelligentCarManagement.Api.Services
             try
             {
                 var message = CreateNotification(notificationDTO.Title, notificationDTO.Body, notificationDTO.DeviceId);
-                var data = new Dictionary<string, string>();
                 var result = await messaging.SendAsync(message);
                
                 response.IsSuccess = true;
@@ -79,6 +78,10 @@ namespace IntelligentCarManagement.Api.Services
                 {
                     Body = notificationBody,
                     Title = title
+                },
+                Android = new AndroidConfig() 
+                { 
+                    Priority = Priority.High
                 }
             };
         }
