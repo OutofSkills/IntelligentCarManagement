@@ -10,9 +10,9 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface INotificationService
     {
-        Task<IEnumerable<Notification>> GetNotificationsAsync(int userId);
-        void SaveNotification(Notification notification);
-        Task RemoveNotificationAsync(int id);
-        Task<NotificationResponse> SendNotification(NotificationDTO notification);
+        Task<IEnumerable<NotificationResponse>> GetAsync(int userId);
+        void Save(NotificationDTO notification);
+        Task RemoveAsync(int id);
+        Task<NotificationResponse> SendAsync(int userId, NotificationDTO notification);
     }
 }

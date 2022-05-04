@@ -24,21 +24,19 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("user-notifications")]
         public async Task<IActionResult> GetUserNotificationsAsync([FromQuery] int userId)
         {
-            var notifications = await notificationService.GetNotificationsAsync(userId);
+            var notifications = await notificationService.GetAsync(userId);
 
             return Ok(notifications);
         }
 
         [HttpDelete]
-        [Route("remove-notification")]
         public async Task<IActionResult>RemoveNotificationAsync([FromQuery] int id)
         {
             try
             {
-                await notificationService.RemoveNotificationAsync(id);
+                await notificationService.RemoveAsync(id);
             }
             catch (Exception e)
             {
@@ -55,11 +53,11 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok();
         }
 
-        [Route("send")]
+        [Route("send/{userId}")]
         [HttpPost]
-        public async Task<IActionResult> SendNotification(NotificationDTO notification)
+        public async Task<IActionResult> SendNotification(NotificationDTO notification, int userId)
         {
-            var result = await notificationService.SendNotification(notification);
+            var result = await notificationService.SendAsync(userId, notification);
             return Ok(result);
         }
     }

@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using IntelligentCarManagement.Api.DataAccess.Repositories;
+using Api.DataAccess.Repositories.Interfaces;
+using Api.DataAccess.Repositories.Implementation;
 
 namespace IntelligentCarManagement.DataAccess.UnitsOfWork
 {
@@ -13,6 +15,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         public ICarsRepo CarsRepo { get; private set; }
         public IDriversRepo DriversRepo { get; private set; }
         public IClientsRepo ClientsRepo { get; private set; }
+        public IUsersRepo UsersRepo { get; private set; }
         public IRolesRepo RolesRepo { get; private set; }
         public IAccountStatusesRepo StatusesRepo { get; private set; }
         public IDriverStatusRepo DriverStatusesRepo { get; private set; }
@@ -36,6 +39,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
             CarsRepo = new CarsRepo(_context);
             DriversRepo = new DriversRepo(_context);
             ClientsRepo = new ClientsRepo(_context);
+            UsersRepo = new UsersRepo(_context);
             RolesRepo = new RolesRepo(_context);
             StatusesRepo = new AccountStatusesRepo(_context);
             DriverStatusesRepo = new DriverStatusRepo(_context);

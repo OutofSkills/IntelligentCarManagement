@@ -39,6 +39,8 @@ namespace Models
         [RegularExpression("^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$")]
         public override string UserName { get; set; }
 
+        public string NotificationsToken { get; set; }
+
         public int? AddressId { get; set; }
 
         public int StatusId { get; set; }

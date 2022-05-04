@@ -1,4 +1,6 @@
-﻿using CorePush.Google;
+﻿using Api.Services.CustomExceptions;
+using AutoMapper;
+using CorePush.Google;
 using FirebaseAdmin;
 using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
@@ -31,29 +33,56 @@ namespace IntelligentCarManagement.Api.Services
             messaging = FirebaseMessaging.GetMessaging(FirebaseApp.DefaultInstance);
         }
 
-        public void SaveNotification(Models.Notification notification)
+        public void Save(NotificationDTO notificationDTO)
         {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<NotificationDTO, Models.Notification>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            var notification = iMapper.Map<NotificationDTO, Models.Notification>(notificationDTO);
+
+
             unitOfWork.NotificationsRepo.Insert(notification);
             unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<Models.Notification>> GetNotificationsAsync(int userId)
+        public async Task<IEnumerable<NotificationResponse>> GetAsync(int userId)
         {
-            return await unitOfWork.NotificationsRepo.GetUserNotificationsAsync(userId);
+            var notifications = await unitOfWork.NotificationsRepo.GetAll();
+
+            var result = new List<NotificationDTO>();
+
+            // Map the notification model to the notification DTO
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Models.Notification, NotificationDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            foreach (var notification in notifications)
+            {
+                result.Add(iMapper.Map<Models.Notification, NotificationDTO>(notification));
+            }
+
+            return (IEnumerable<NotificationResponse>)result;
         }
 
-        public async Task RemoveNotificationAsync(int id)
+        public async Task RemoveAsync(int id)
         {
             await unitOfWork.NotificationsRepo.Delete(id);
             unitOfWork.SaveChanges();
         }
 
-        public async Task<NotificationResponse> SendNotification(NotificationDTO notificationDTO)
+        public async Task<NotificationResponse> SendAsync(int userId, NotificationDTO notificationDTO)
         {
-            NotificationResponse response = new NotificationResponse();
+            // Get the user's firebase token
+            var firebaseToken = await GetUserFirebaseToken(userId);
+
+            NotificationResponse response = new();
             try
             {
-                var message = CreateNotification(notificationDTO.Title, notificationDTO.Body, notificationDTO.DeviceId);
+                var message = CreateNotification(notificationDTO.Title, notificationDTO.Body, firebaseToken);
                 var result = await messaging.SendAsync(message);
                
                 response.IsSuccess = true;
@@ -67,6 +96,18 @@ namespace IntelligentCarManagement.Api.Services
                 response.Message = "Something went wrong";
                 return response;
             }
+        }
+
+        private async Task<string> GetUserFirebaseToken(int userId)
+        {
+            var user = await unitOfWork.UsersRepo.GetById(userId);
+            if (user is null)
+                throw new UserNotFoundException("User not found");
+
+            if (String.IsNullOrEmpty(user.NotificationsToken))
+                throw new Exception("This user doesn't have a firebase token yet.");
+
+            return user.NotificationsToken;
         }
 
         private Message CreateNotification(string title, string notificationBody, string token)

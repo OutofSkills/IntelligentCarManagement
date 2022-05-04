@@ -42,5 +42,7 @@ namespace Models.View_Models
         [DataType(DataType.Password)]
         [Compare(nameof(Password), ErrorMessage = "The password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string NotificationsToken { get; set; }
     }
 }

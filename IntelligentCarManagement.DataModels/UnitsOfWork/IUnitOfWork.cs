@@ -1,4 +1,5 @@
-﻿using IntelligentCarManagement.Api.DataAccess.Repositories;
+﻿using Api.DataAccess.Repositories.Interfaces;
+using IntelligentCarManagement.Api.DataAccess.Repositories;
 using IntelligentCarManagement.DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         ICarsRepo CarsRepo { get; }
         IDriversRepo DriversRepo { get; }
         IClientsRepo ClientsRepo { get; }
+        IUsersRepo UsersRepo { get; }
         IRolesRepo RolesRepo { get; }
         IAccountStatusesRepo StatusesRepo{ get;}
         IDriverStatusRepo DriverStatusesRepo { get; }
