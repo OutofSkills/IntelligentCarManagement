@@ -10,7 +10,7 @@ using IntelligentCarManagement.Services;
 using IntelligentCarManagement.Api.Helpers;
 using System.Net.Http;
 using System.Net;
-using Models.View_Models;
+using Models.DTOs;
 using Models;
 
 namespace IntelligentCarManagement.Api.Controllers

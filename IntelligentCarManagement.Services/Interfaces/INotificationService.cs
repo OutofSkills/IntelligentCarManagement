@@ -1,5 +1,5 @@
 ﻿using Models;
-using Models.Data_Transfer_Objects;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,6 @@ namespace IntelligentCarManagement.Api.Services
         void Save(NotificationDTO notification);
         Task RemoveAsync(int id);
         Task<NotificationResponse> SendAsync(int userId, NotificationDTO notification);
+        Task UpdateFirebaseToken(int userId, string token);
     }
 }

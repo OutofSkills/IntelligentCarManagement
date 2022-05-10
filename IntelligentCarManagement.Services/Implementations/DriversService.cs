@@ -3,7 +3,7 @@ using AutoMapper;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Models.Data_Transfer_Objects;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

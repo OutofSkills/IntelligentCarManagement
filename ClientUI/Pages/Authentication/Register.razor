@@ -1,0 +1,120 @@
+﻿@page "/register"
+
+@layout LoginLayout
+
+@inject IAuthenticationService AuthService
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h4" GutterBottom="true">Sign Up</MudText>
+<MudText>Already have an account? <MudLink Href="/login">Sign In</MudLink></MudText>
+
+<EditForm Model="model" OnValidSubmit="HandleRegister">
+    <MudTextField @bind-Value="model.PhoneNumber" Label="Phone Number" Variant="Variant.Outlined" For="@(() => model.PhoneNumber)" Class="my-4"></MudTextField>
+
+    <MudElement Class="d-flex my-4">
+        <MudTextField @bind-Value="model.FirstName" Label="First Name" Variant="Variant.Outlined" For="@(() => model.FirstName)" Class="mr-1"></MudTextField>
+        <MudTextField @bind-Value="model.LastName" Label="Last Name" Variant="Variant.Outlined" For="@(() => model.LastName)" Class="ml-1"></MudTextField>
+    </MudElement>
+
+    <MudTextField @bind-Value="model.Email" Label="E-mail" Variant="Variant.Outlined" For="@(() => model.Email)"></MudTextField>
+
+    <MudTextField @bind-Value="@model.Password" Label="Password" For="@(() => model.Password)" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" Class="mt-4" />
+    <MudTextField @bind-Value="@model.ConfirmPassword" Label="Confirm Password" For="@(() => model.ConfirmPassword)" Variant="Variant.Outlined" InputType="@ConfirmPasswordInput" Adornment="Adornment.End" AdornmentIcon="@ConfirmPasswordInputIcon" OnAdornmentClick="ToggleConfirmPasswordVisibility" Class="mt-4" />
+
+    <MudCheckBox @bind-Checked="@AgreeToTerms" Label="I agree to the terms and privacy" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+
+    <MudButton Disabled="@(processRegister || !AgreeToTerms)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+        @if (processRegister)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Register</MudText>
+        }
+    </MudButton>
+</EditForm>
+
+@code {
+    private ClientRegisterModel model = new();
+
+    private bool processRegister;
+
+    private bool registerError;
+    public bool AgreeToTerms;
+
+    public bool PasswordVisibility, ConfirmPasswordVisibility;
+    public InputType PasswordInput = InputType.Password;
+    public InputType ConfirmPasswordInput = InputType.Password;
+    public string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    public string ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+    void ToggleConfirmPasswordVisibility()
+    {
+        @if (ConfirmPasswordVisibility)
+        {
+            ConfirmPasswordVisibility = false;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            ConfirmPasswordInput = InputType.Password;
+        }
+        else
+        {
+            ConfirmPasswordVisibility = true;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.Visibility;
+            ConfirmPasswordInput = InputType.Text;
+        }
+    }
+
+    private async Task HandleRegister()
+    {
+        //var resultMessage = "";
+
+        //processRegister = true;
+
+        //resultMessage = await AuthService.Register(model);
+        //processRegister = false;
+
+        //if (resultMessage.ToLower() == "success")
+        //{
+        //    await ExecuteLogin();
+        //}
+        //else
+        //{
+        //    Snackbar.Add("There was an error when trying to register. ", Severity.Error);
+        //}
+    }
+
+    private async Task ExecuteLogin()
+    {
+        registerError = false;
+
+        //await AuthService.Login(new LoginModel { Email = model.Email, Password = model.Password });
+
+        //if (result is not null)
+        //{
+        //    NavManager.NavigateTo("/");
+        //}
+        //else
+        //{
+        //    Snackbar.Add("There was an error when trying to log in. ", Severity.Error);
+        //}
+
+    }
+}

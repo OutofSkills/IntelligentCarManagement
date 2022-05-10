@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,34 +17,32 @@ namespace IntelligentCarManagement.Api.Controllers
     public class RideController : ControllerBase
     {
         private readonly IRidesService ridesService;
+        private readonly INotificationService notificationService;
 
-        public RideController(IRidesService ridesService)
+        public RideController(IRidesService ridesService, INotificationService notificationService )
         {
             this.ridesService = ridesService;
+            this.notificationService = notificationService;
         }
 
         [HttpPost]
-        [Route("shedule-ride")]
-        public IActionResult SheduleNewRide([FromBody] Ride ride)
+        public async Task<RideRequestResponse> RequestRide([FromBody] Ride ride)
         {
-            int rideId;
-            try
-            {
-                rideId = ridesService.AddRide(ride);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Shedule ride error"
+            var response = await ridesService.RequestAsync(ride);
+    
+            if (!response.Success)
+                return response;
 
+            var notificationResponse = await notificationService.SendAsync(ride.DriverId, new NotificationDTO { Title = "New available ride", Body = $"User with id {ride.ClientId} requested a new ride."});
+            
+            if (notificationResponse.IsSuccess)
+                return new RideRequestResponse() 
+                { 
+                    Success = false,
+                    Message = "Couldn't notify our driver about the incoming request. Please contact him via one of his contacts" 
                 };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok(rideId.ToString());
+            
+            return response;
         }
 
         [HttpGet]
@@ -53,7 +52,7 @@ namespace IntelligentCarManagement.Api.Controllers
             Ride ride;
             try
             {
-                ride = await ridesService.GetRideAsync(id);
+                ride = await ridesService.GetAsync(id);
             }
             catch (Exception e)
             {

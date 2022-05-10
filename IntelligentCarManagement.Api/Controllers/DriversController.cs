@@ -11,9 +11,9 @@ using IntelligentCarManagement.Api.Services;
 using Microsoft.AspNetCore.Cors;
 using System.Net.Http;
 using System.Net;
-using Models.View_Models;
+using Models.DTOs;
 using Models;
-using Models.Data_Transfer_Objects;
+using Models.DTOs;
 
 namespace IntelligentCarManagement.Api.Controllers
 {

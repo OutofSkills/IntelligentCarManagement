@@ -15,7 +15,6 @@ namespace Models
         public string PickUpPlaceAddress { get; set; }
         public string PickUpPlaceLat { get; set; }
         public string PickUpPlaceLong { get; set; }
-        public string PickUpCoordinates { get; set; }
         public string DestinationPlaceName { get; set; }
         public string DestinationPlaceAddress { get; set; }
         public string DestinationPlaceLat { get; set; }
@@ -23,8 +22,8 @@ namespace Models
         public double Distance { get; set; }
         public double AverageTime { get; set; }
         public DateTime PickUpTime { get; set; }
-        public int? DriverId { get; set; }
-        public int? ClientId { get; set; }
+        public int DriverId { get; set; }
+        public int ClientId { get; set; }
 
         [ForeignKey(nameof(DriverId))]
         public virtual Driver Driver { get; set; }

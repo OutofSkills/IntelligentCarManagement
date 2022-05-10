@@ -3,7 +3,7 @@ using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Models.View_Models;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +27,9 @@ namespace IntelligentCarManagement.Api.Controllers
         [Route("login")]
         public async Task<LoginResponse> Login([FromBody] LoginModel loginModel)
         {
-            var token = await accountService.Login(loginModel);
+            var loginResponse = await accountService.Login(loginModel);
 
-            return new LoginResponse() { Token = token};
+            return loginResponse;
         }
 
         [HttpPost]

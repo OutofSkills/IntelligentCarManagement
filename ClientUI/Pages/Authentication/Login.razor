@@ -1,0 +1,86 @@
+﻿@page "/login"
+
+@layout LoginLayout
+
+@inject IAuthenticationService AuthService
+@inject NavigationManager NavManager
+@inject ISnackbar Snackbar
+
+<MudText Typo="Typo.h4" GutterBottom="true">Sign In</MudText>
+
+<MudText>Don't have an account? <MudLink Href="Y/register">Sign Up</MudLink></MudText>
+
+<EditForm Model="@model" OnValidSubmit="ExecuteLogin">
+
+    <MudTextField @bind-Value="model.Email" Label="E-mail" For="@(() => model.Email)" Variant="Variant.Outlined" Class="my-6"></MudTextField>
+
+    <MudTextField @bind-Value="@model.Password" Label="Password" For="@(() => model.Password)" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+
+    <div Class="d-flex justify-space-between align-center">
+        <MudCheckBox T="bool" Label="Remember me?" Color="Color.Primary" Class="ml-n1 my-3"></MudCheckBox>
+        <MudLink Href="/forgot-password">Forgot password?</MudLink>
+    </div>
+
+    <MudButton Disabled="@(processLogin)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+        @if (processLogin)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Sign In</MudText>
+        }
+    </MudButton>
+
+</EditForm>
+
+@code {
+    LoginModel model = new();
+
+    bool processLogin;
+    bool authError;
+
+    bool PasswordVisibility;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    private async Task ExecuteLogin()
+    {
+        authError = false;
+
+        var authTask = AuthService.Login(model.Email, model.Password);
+        processLogin = true;
+        var result = await authTask;
+
+        
+        processLogin = false;
+
+        if (result.IsSuccess)
+        {
+            NavManager.NavigateTo("/admin");
+        }
+        else
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+            authError = true;
+        }
+
+    }
+}

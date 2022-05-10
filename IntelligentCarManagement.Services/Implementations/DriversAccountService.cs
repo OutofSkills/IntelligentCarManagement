@@ -5,8 +5,8 @@ using AutoMapper;
 using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Models.Data_Transfer_Objects;
-using Models.View_Models;
+using Models.DTOs;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,15 +39,18 @@ namespace Api.Services.Implementations
             return model;
         }
 
-        public async Task<string> Login(LoginModel model)
+        public async Task<LoginResponse> Login(LoginModel model)
         {
             if (!await IsValidUsernameAndPassword(model.Email, model.Password, RoleName.DRIVER))
             {
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
 
-            string token = await tokenService.BuildAsync(model.Email);
-            return token;
+            var driver = await _userManager.FindByEmailAsync(model.Email);
+
+            string jwtToken = await tokenService.BuildAsync(model.Email);
+            string firebaseToken = driver.NotificationsToken;
+            return new LoginResponse() { FirebaseToken = firebaseToken, JwtToken = jwtToken };
         }
 
         public async Task Register(DriverRegisterModel model)

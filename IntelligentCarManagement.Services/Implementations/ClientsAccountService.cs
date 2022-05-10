@@ -5,7 +5,7 @@ using AutoMapper;
 using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Identity;
 using Models;
-using Models.View_Models;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,15 +38,17 @@ namespace Api.Services.Implementations
             return model;
         }
 
-        public async Task<string> Login(LoginModel model)
+        public async Task<LoginResponse> Login(LoginModel model)
         {
             if (!await IsValidUsernameAndPassword(model.Email, model.Password, RoleName.CLIENT))
             {
                 throw new InvalidCredentialsException("Invalid credentials.");
             }
+            var client = await _userManager.FindByEmailAsync(model.Email);
 
-            string token = await tokenService.BuildAsync(model.Email);
-            return token;
+            string jwtToken = await tokenService.BuildAsync(model.Email);
+            string firebaseToken = client.NotificationsToken;
+            return new LoginResponse() { FirebaseToken = firebaseToken, JwtToken = jwtToken};
         }
 
         public async Task Register(ClientRegisterModel model)
@@ -93,10 +95,10 @@ namespace Api.Services.Implementations
             UserBase user = await _userManager.FindByEmailAsync(username);
 
             // If the user does not exist, it doesn't have the required role or the password is wrong, then return false
-            if(user is null) 
+            if (user is null)
                 return false;
 
-            if (!await _userManager.IsInRoleAsync(user, role.ToString())) 
+            if (!await _userManager.IsInRoleAsync(user, role.ToString()))
                 return false;
 
             var result = await _userManager.CheckPasswordAsync(user, password);

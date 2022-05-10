@@ -1,4 +1,4 @@
-﻿using Models.View_Models;
+﻿using Models.DTOs;
 using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Client.Services

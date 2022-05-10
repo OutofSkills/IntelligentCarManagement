@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Models.View_Models;
+using Models.DTOs;
 using Api.Services.CustomExceptions;
-using Models.Data_Transfer_Objects;
+using Models.DTOs;
 
 namespace IntelligentCarManagement.Services
 {

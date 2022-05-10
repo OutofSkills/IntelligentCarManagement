@@ -1,4 +1,4 @@
-﻿using Models.View_Models;
+﻿using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Api.Services.Interfaces
 {
-    public interface IClientsAccountService: IAccountService<ClientRegisterModel>
+    public interface IClientsAccountService: ISignUp<ClientRegisterModel>, ISignIn, IChangePassword, IRemovable
     {
     }
 }

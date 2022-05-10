@@ -1,0 +1,104 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="0">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+
+         <AuthorizeView>
+            <Authorized>
+                    <MudMenu Direction="Direction.Bottom" OffsetY="true" OffsetX="true" Dense="true">
+                        <ActivatorContent>
+                            @if (user.Avatar is null)
+                            {
+                                <MudAvatar Class="text-light" Style="border-color:white" Variant="Variant.Outlined" Size="Size.Small">
+                                    @(context.User.FindFirst("email").Value.ToUpper().Substring(0, 1))
+                                </MudAvatar>
+                            }
+                            else
+                            {
+                                <MudAvatar Image=@string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(user.Avatar)) />
+                            }
+                        </ActivatorContent>
+                        <ChildContent>
+                            @if (user.Avatar is null)
+                            {
+                                <CardPerson Class="mt-n2" Name=@(context.User.FindFirst("email").Value)
+                                            Role=@(context.User.FindFirst(ClaimTypes.Role).Value)
+                                            Image=@(context.User.FindFirst("email").Value.ToUpper().Substring(0, 1)) />
+                            }
+                            else
+                            {
+                                <CardPerson Class="mt-n2" Name=@(context.User.FindFirst("email").Value)
+                                            Role=@(context.User.FindFirst(ClaimTypes.Role).Value)
+                                            Image=@string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(user.Avatar)) />
+                            }
+
+                            <MudDivider Class="mb-2" />
+                            <MudListItem Text="Account" Icon="@Icons.Material.Outlined.Person" Href="/settings" />
+                            <MudListItem Text="Logout" Icon="@Icons.Material.Outlined.Login" Href="/logout" />
+                        </ChildContent>
+                    </MudMenu>
+            </Authorized>
+            <NotAuthorized>
+                <MudIconButton Color="Color.Inherit" Title="Register" Link="/register">
+                    <i class="fas fa-user-plus" title="Register" aria-hidden="true"></i>
+                </MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Title="Login" Link="/login" />
+            </NotAuthorized>
+        </AuthorizeView>
+        
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Intelligent Car Management</MudText>
+        </MudDrawerHeader>
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-2">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    UserBaseDTO user = new();
+
+    [Inject] public IAdminService AdminService { get; set; }
+
+    [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
+
+    bool _drawerOpen = false;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var id = await GetLoggedUserId();
+        if(id > 0)
+        {
+           user =  await AdminService.Get(id);
+        }
+    }
+
+    private async Task<int> GetLoggedUserId()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        if (authState.User.Identity.IsAuthenticated)
+        {
+            var userId = authState.User.FindFirst("id").Value;
+
+            return int.Parse(userId);
+        }
+
+        return -1;
+    }
+}

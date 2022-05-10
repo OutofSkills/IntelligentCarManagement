@@ -1,4 +1,4 @@
-﻿using Models.Data_Transfer_Objects;
+﻿using Models.DTOs;
 using Models.Generics;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Api.Services.Interfaces
 {
-    public interface IDriversAccountService: IAccountService<DriverRegisterModel>
+    public interface IDriversAccountService: ISignUp<DriverRegisterModel>, ISignIn, IRemovable, IChangePassword
     {
         
     }

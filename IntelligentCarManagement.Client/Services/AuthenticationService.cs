@@ -11,7 +11,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using IntelligentCarManagement.Authentication;
 using System.Net.Http.Headers;
-using Models.View_Models;
+using Models.DTOs;
 
 namespace IntelligentCarManagement.Client.Services
 {

@@ -232,7 +232,7 @@ namespace Api.DataAccess.Migrations
                     b.Property<double>("AverageTime")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("DestinationPlaceAddress")
@@ -250,11 +250,8 @@ namespace Api.DataAccess.Migrations
                     b.Property<double>("Distance")
                         .HasColumnType("float");
 
-                    b.Property<int?>("DriverId")
+                    b.Property<int>("DriverId")
                         .HasColumnType("int");
-
-                    b.Property<string>("PickUpCoordinates")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PickUpPlaceAddress")
                         .HasColumnType("nvarchar(max)");
@@ -561,11 +558,15 @@ namespace Api.DataAccess.Migrations
                 {
                     b.HasOne("Models.UserBase", "User")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Driver", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Driver");
 

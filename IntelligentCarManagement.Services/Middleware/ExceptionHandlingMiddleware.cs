@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Models.View_Models;
+using Models.DTOs;
 using Newtonsoft.Json;
 using Api.Services.CustomExceptions;
 using System;

@@ -1,5 +1,5 @@
 ﻿using Models.Generics;
-using Models.View_Models;
+using Models.DTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Data_Transfer_Objects
+namespace Models.DTOs
 {
     public class DriverRegisterModel: IRegisterModel
     {

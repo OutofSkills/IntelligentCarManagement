@@ -60,7 +60,7 @@ namespace IntelligentCarManagement.Api
                 options.AddPolicy(name: "AllowOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost:44304", "http://localhost:41427")
+                        builder.WithOrigins("https://localhost:44304", "https://localhost:44398")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod()
                                             .AllowCredentials()
@@ -166,6 +166,7 @@ namespace IntelligentCarManagement.Api
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<IDriversService, DriversService>();
             services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IAdminsService, AdminsService>();
             services.AddScoped<ITokenBuilder, TokenBuilder>();
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<IAccountStatusService, AccountStatusService>();
@@ -174,6 +175,7 @@ namespace IntelligentCarManagement.Api
             services.AddScoped<IRidesService, RidesService>();
             services.AddScoped<IClientsAccountService, ClientsAccountService>();
             services.AddScoped<IDriversAccountService, DriversAccountService>();
+            services.AddScoped<IAdminAccountService, AdminAccountService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();

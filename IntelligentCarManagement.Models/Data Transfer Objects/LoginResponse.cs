@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.View_Models
+namespace Models.DTOs
 {
     public class LoginResponse
     {
-        public string Token { get; set; }
+        public string JwtToken { get; set; }
+        public string FirebaseToken { get; set; }
     }
 }

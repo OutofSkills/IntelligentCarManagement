@@ -27,7 +27,7 @@ namespace IntelligentCarManagement.Authentication
 
         private static void ExtractRolesFromJWT(List<Claim> claims, Dictionary<string, object> keyValuePairs)
         {
-            keyValuePairs.TryGetValue(ClaimTypes.Role, out object roles);
+            keyValuePairs.TryGetValue("role", out object roles);
 
             if (roles is not null)
             {
@@ -45,7 +45,7 @@ namespace IntelligentCarManagement.Authentication
                     claims.Add(new Claim(ClaimTypes.Role, parsedRoles[0]));
                 }
 
-                keyValuePairs.Remove(ClaimTypes.Role);
+                keyValuePairs.Remove("role");
             }
         }
 

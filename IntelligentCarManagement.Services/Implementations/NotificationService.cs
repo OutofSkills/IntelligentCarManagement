@@ -7,7 +7,7 @@ using Google.Apis.Auth.OAuth2;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.Extensions.Options;
 using Models;
-using Models.Data_Transfer_Objects;
+using Models.DTOs;
 using Models.Others;
 using Models.Tools;
 using System;
@@ -125,6 +125,18 @@ namespace IntelligentCarManagement.Api.Services
                     Priority = Priority.High
                 }
             };
+        }
+
+        public async Task UpdateFirebaseToken(int userId, string token)
+        {
+            var user = await unitOfWork.UsersRepo.GetById(userId);
+            if (user is null)
+                throw new UserNotFoundException("User not found");
+
+            user.NotificationsToken = token;
+
+            unitOfWork.UsersRepo.Update(user);
+            unitOfWork.SaveChanges();
         }
     }
 }
