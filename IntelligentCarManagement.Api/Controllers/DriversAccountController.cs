@@ -35,16 +35,16 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task Register([FromBody] DriverRegisterModel model)
+        public async Task Register([FromBody] DriverApplicationDTO model)
         {
-            try
-            {
-                await accountService.Register(model);
-            }
-            catch (Exception ex)
-            {
+            //try
+            //{
+            //    await accountService.Register(model);
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
         }
 
         [HttpDelete]

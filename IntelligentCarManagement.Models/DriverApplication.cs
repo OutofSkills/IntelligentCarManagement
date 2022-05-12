@@ -1,16 +1,16 @@
-﻿using Models.Generics;
-using Models.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.DTOs
+namespace Models
 {
-    public class DriverRegisterModel: IRegisterModel
+    public class DriverApplication
     {
+        [Key]
+        public int Id { get; set; }
         public byte[] Avatar { get; set; }
 
         [Required]
@@ -33,17 +33,11 @@ namespace Models.DTOs
         [MinLength(9)]
         public string PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Password is required.")]
-        [MinLength(4)]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
+        public byte[] CV { get; set; }
         [Required]
-        [MinLength(4)]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "The password do not match.")]
-        public string ConfirmPassword { get; set; }
+        public bool OwnsACar { get; set; }
+        public string ContactMethod { get; set; }
 
-        public byte[] ImageCv { get; set; }
+        public virtual UserAddress Address { get; set; } = new UserAddress();
     }
 }

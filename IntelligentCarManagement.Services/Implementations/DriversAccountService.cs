@@ -53,38 +53,38 @@ namespace Api.Services.Implementations
             return new LoginResponse() { FirebaseToken = firebaseToken, JwtToken = jwtToken };
         }
 
-        public async Task Register(DriverRegisterModel model)
-        {
-            Driver newDriver = new();
+        //public async Task Register(DriverRegisterModel model)
+        //{
+        //    Driver newDriver = new();
 
-            // Map view model to user model
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<DriverRegisterModel, Driver>();
-            });
+        //    // Map view model to user model
+        //    var config = new MapperConfiguration(cfg => {
+        //        cfg.CreateMap<DriverRegisterModel, Driver>();
+        //    });
 
-            IMapper iMapper = config.CreateMapper();
-            newDriver = iMapper.Map<DriverRegisterModel, Driver>(model);
+        //    IMapper iMapper = config.CreateMapper();
+        //    newDriver = iMapper.Map<DriverRegisterModel, Driver>(model);
 
-            var isEmailValid = await _userManager.FindByEmailAsync(model.Email);
-            if (isEmailValid is not null)
-            {
-                throw new Exception("A user with this email already exists.");
-            }
+        //    var isEmailValid = await _userManager.FindByEmailAsync(model.Email);
+        //    if (isEmailValid is not null)
+        //    {
+        //        throw new Exception("A user with this email already exists.");
+        //    }
 
-            try
-            {
-                // Creating the new user
-                IdentityResult result = await _userManager.CreateAsync(newDriver, model.Password);
-                if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
-            }
-            catch(Exception ex)
-            {
-                throw new ServerException("Server error, please try again.");
-            }
+        //    try
+        //    {
+        //        // Creating the new user
+        //        IdentityResult result = await _userManager.CreateAsync(newDriver, model.Password);
+        //        if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        throw new ServerException("Server error, please try again.");
+        //    }
 
-            // Assigning the user to a default role
-            await _userManager.AddToRoleAsync(newDriver, RoleName.DRIVER.ToString());
-        }
+        //    // Assigning the user to a default role
+        //    await _userManager.AddToRoleAsync(newDriver, RoleName.DRIVER.ToString());
+        //}
 
         public async Task Remove(int id)
         {

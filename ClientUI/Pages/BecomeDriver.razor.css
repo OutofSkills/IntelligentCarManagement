@@ -16,10 +16,10 @@ body, div, form, input, select, textarea, label, p {
 h1 {
     position: absolute;
     margin: 0;
-    font-size: 40px;
+    font-size: 36px;
     color: #fff;
     z-index: 2;
-    line-height: 83px;
+    line-height: 80px;
 }
 
 textarea {
@@ -35,7 +35,7 @@ textarea {
     padding: 20px;
 }
 
-form {
+.form-outer {
     width: 100%;
     padding: 20px;
     border-radius: 6px;
@@ -133,7 +133,7 @@ input[type="date"]::-webkit-inner-spin-button {
     z-index: 1;
 }
 
-input[type=radio], input[type=checkbox] {
+input[type=radio] {
     display: none;
 }
 
@@ -199,13 +199,22 @@ button {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: #669999;
     font-size: 16px;
-    color: #fff;
-    cursor: pointer;
 }
 
-    button:hover {
+    button:enabled {
+        background: #669999;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: initial
+    }
+
+    button:enabled:hover {
         background: #a3c2c2;
     }
 
@@ -216,16 +225,16 @@ button {
         justify-content: space-between;
     }
 
-        .name-item input, .name-item div {
-            width: calc(50% - 20px);
-        }
+    .name-item input, .name-item div {
+        width: calc(50% - 20px);
+    }
 
-            .name-item div input {
-                width: 97%;
-            }
+    .name-item div input {
+        width: 97%;
+    }
 
-            .name-item div label {
-                display: block;
-                padding-bottom: 5px;
-            }
+    .name-item div label {
+        display: block;
+        padding-bottom: 5px;
+    }
 }

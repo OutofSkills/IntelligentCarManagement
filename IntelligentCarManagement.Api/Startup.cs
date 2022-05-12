@@ -176,6 +176,7 @@ namespace IntelligentCarManagement.Api
             services.AddScoped<IClientsAccountService, ClientsAccountService>();
             services.AddScoped<IDriversAccountService, DriversAccountService>();
             services.AddScoped<IAdminAccountService, AdminAccountService>();
+            services.AddScoped<IDriverApplicationsService, DriverApplicationsService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();

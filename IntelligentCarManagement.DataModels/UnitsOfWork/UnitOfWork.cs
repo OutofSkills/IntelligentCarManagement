@@ -22,6 +22,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         public INotificationsRepo NotificationsRepo { get; private set; }
         public IAddressRepo AdressRepo { get; private set; }
         public IRidesRepo RidesRepo { get; private set; }
+        public IDriverApplicationsRepo ApplicationsRepo { get; private set; }
 
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
             DriverStatusesRepo = new DriverStatusRepo(_context);
             NotificationsRepo = new NotificationsRepo(_context);
             RidesRepo = new RidesRepo(_context);
+            ApplicationsRepo = new DriverApplicationsRepo(_context);
         }
 
         /// <summary>

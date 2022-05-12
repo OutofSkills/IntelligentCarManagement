@@ -2,99 +2,186 @@
 
 @layout EmptyLayout
 
+@using Meziantou.Framework;
+@using System.Globalization
+
 <MudContainer MaxWidth="MaxWidth.Medium">
 
       <div class="testbox">
-      <form action="/">
-        <div class="banner">
-          <h1>New Driver Registration</h1>
-        </div>
-        <EditForm Model="model">
-            <div class="colums">
-              <div class="item">
-                <label for="fname"> First Name<span>*</span></label>
-                <input id="fname" type="text" name="fname" required/>
-              </div>
-              <div class="item">
-                <label for="lname"> Last Name<span>*</span></label>
-                <input id="lname" type="text" name="lname" required/>
-              </div>
-              <div class="item">
-                <label for="address1">Address 1<span>*</span></label>
-                <input id="address1" type="text"   name="address1" required/>
-              </div>
-              <div class="item">
-                <label for="address2">Address 2<span>*</span></label>
-                <input id="address2" type="text"   name="address2" required/>
-              </div>
-              <div class="item">
-                <label for="state">State<span>*</span></label>
-                <input id="state" type="text"   name="state" required/>
-              </div>
-              <div class="item">
-                <label for="zip">Zip/Postal Code<span>*</span></label>
-                <input id="zip" type="text" name="zip" required/>
-              </div>
-              <div class="item">
-                <label for="city">City<span>*</span></label>
-                <input id="city" type="text"   name="city" required/>
-              </div>
-              <div class="item">
-                <label for="eaddress">Email Address<span>*</span></label>
-                <input id="eaddress" type="text"   name="eaddress" required/>
-              </div>
-              <div class="item">
-                <label for="phone">Phone<span>*</span></label>
-                <input id="phone" type="tel"   name="phone" required/>
-              </div>
-            </div>
-        </EditForm>
-        <div class="question">
-          <label>Membership Type</label>
-          <div class="question-answer">
-            <div>
-              <input type="radio" value="none" id="radio_1" name="type"/>
-              <label for="radio_1" class="radio"><span>Standard</span></label>
-            </div>
-            <div>
-              <input  type="radio" value="none" id="radio_2" name="type"/>
-              <label for="radio_2" class="radio"><span>Premium</span></label>
-            </div>
-            <div>
-              <input  type="radio" value="none" id="radio_3" name="type"/>
-              <label for="radio_3" class="radio"><span>Ultimate</span></label>
-            </div>
+          <div class="form-outer">
+              <EditForm Model="model" OnValidSubmit="HandleSubmit">
+                <div class="banner">
+                    <h1>New Driver Registration</h1>
+                </div>
+                <div class="colums">
+                    <div class="item">
+                        <label for="fname"> First Name<span>*</span></label>
+                        <input id="fname" @bind-value="@model.FirstName" type="text" name="fname" required/>
+                    </div>
+                    <div class="item">
+                        <label for="lname"> Last Name<span>*</span></label>
+                        <input id="lname" @bind-value="@model.LastName" type="text" name="lname" required/>
+                    </div>
+                    <div class="item">
+                        <label for="address1">Address 1<span>*</span></label>
+                        <input id="address1" @bind-value="@model.Address.Address1" type="text"   name="address1" required/>
+                    </div>
+                    <div class="item">
+                        <label for="address2">Address 2<span>*</span></label>
+                        <input id="address2" @bind-value="@model.Address.Address2" type="text"   name="address2" required/>
+                    </div>
+                    <div class="item">
+                        <label for="country">Country<span>*</span></label>
+                        <input id="country" type="text" @bind-value="@model.Address.Country"  name="country" required/>
+                    </div>
+                    <div class="item">
+                        <label for="zip">Zip/Postal Code<span>*</span></label>
+                        <input id="zip" type="text" @bind-value="@model.Address.ZipCode" name="zip" required/>
+                    </div>
+                     <div class="item">
+                        <label for="county">County<span>*</span></label>
+                        <input id="county" type="text" @bind-value="@model.Address.County"  name="county" required/>
+                    </div>
+                    <div class="item">
+                        <label for="city">City<span>*</span></label>
+                        <input id="city" type="text" @bind-value="@model.Address.City"  name="city" required/>
+                    </div>
+                    <div class="item">
+                        <label for="eaddress">Email Address<span>*</span></label>
+                        <input id="eaddress" @bind-value="@model.Email" type="text" name="eaddress" required/>
+                    </div>
+                    <div class="item">
+                        <label for="username">Username<span>*</span></label>
+                        <input id="username" @bind-value="@model.UserName" type="text" name="username" required/>
+                    </div>
+                    <div class="item">
+                        <label for="phone">Phone<span>*</span></label>
+                        <input id="phone" @bind-value="@model.PhoneNumber" type="tel" name="phone" required/>
+                    </div>
+                    <div class="item" style="display:flex;flex-direction:column">
+                        <label for="cv">CV<span>*</span></label>
+                        <InputFile id="cv" OnChange="e => LoadCv(e)" accept=".pdf" name="cv" required />
+                    </div>
+                    <div class="item" style="display:flex;flex-direction:column">
+                        <label for="avatar">Avatar<span>*</span></label>
+                        <InputFile id="avatar" OnChange="e => LoadAvatar(e)" accept=".jpg, .jpeg, png" name="avatar" required />
+                        @if (model.Avatar is not null)
+                        {
+                            <img class="mt-4" src=@string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(model.Avatar)) style="max-width:500px; height:auto" />
+                        }
+                    </div>
+                </div>
+                <div class="question">
+                    <label>Do you have a car?</label>
+                    <div class="question-answer">
+                    <div>
+                        <input type="radio" @onchange="@(() => { model.OwnsACar = true; })" id="radio_1" name="type"/>
+                        <label for="radio_1" class="radio"><span>Yes, I have</span></label>
+                    </div>
+                    <div>
+                        <input  type="radio" @onchange="@(() => { model.OwnsACar = false; })" id="radio_2" name="type"/>
+                        <label for="radio_2" class="radio"><span>No, I do not</span></label>
+                    </div>
+                    </div>
+                </div>
+                <div class="question">
+                    <label>Preferred way to contact </label>
+                    <div class="question-answer">
+                    <div>
+                        <input type="radio" @onchange="@(() => { model.ContactMethod = "Phone"; })" id="radio_4" name="contact"/>
+                        <label for="radio_4" class="radio"><span>Phone</span></label>
+                    </div>
+                    <div>
+                        <input  type="radio" @onchange="@(() => { model.ContactMethod = "Email"; })" id="radio_5" name="contact"/>
+                        <label for="radio_5" class="radio"><span>Email</span></label>
+                    </div>
+                    <div>
+                        <input  type="radio" @onchange="@(() => { model.ContactMethod = "Any"; })" id="radio_6" name="contact"/>
+                        <label for="radio_6" class="radio"><span>Any</span></label>
+                    </div>
+                    </div>
+                </div>
+                <h2>Terms and Conditions</h2>
+                <div class="d-flex flex-inline" style="width:auto">
+                    <input class="mt-2" @bind-value="@agreedWithTerms" type="checkbox" name="checkbox1" style="width:auto">
+                    <label for="checkbox1" class="ml-4 mt-1"><span>I agree with the statement below.</span></label>
+                </div>
+                <label style="color:black">You consent to receive communications from us electronically. We will communicate with you by e-mail or phone. You agree that all agreements, notices, disclosures and other communications that we provide to you electronically satisfy any legal requirement that such communications be in writing.</label>
+                <div class="btn-block">
+                    <button type="submit" disabled="@(!agreedWithTerms)">Submit</button>
+                </div>
+              </EditForm>
           </div>
-        </div>
-        <div class="question">
-          <label>Preferred way to contact </label>
-          <div class="question-answer">
-            <div>
-              <input type="radio" value="none" id="radio_4" name="contact"/>
-              <label for="radio_4" class="radio"><span>Phone</span></label>
-            </div>
-            <div>
-              <input  type="radio" value="none" id="radio_5" name="contact"/>
-              <label for="radio_5" class="radio"><span>Email</span></label>
-            </div>
-            <div>
-              <input  type="radio" value="none" id="radio_6" name="contact"/>
-              <label for="radio_6" class="radio"><span>Any</span></label>
-            </div>
-          </div>
-        </div>
-        <h2>Terms and Conditions</h2>
-        <input type="checkbox" name="checkbox1">
-        <label>You consent to receive communications from us electronically. We will communicate with you by e-mail or phone. You agree that all agreements, notices, disclosures and other communications that we provide to you electronically satisfy any legal requirement that such communications be in writing.</label>
-        <div class="btn-block">
-          <button type="submit" href="/">Submit</button>
-        </div>
-      </form>
-    </div>
+     </div>
 
 </MudContainer>
   
 
 @code {
-    DriverRegisterModel model = new();
+    DriverApplicationDTO model = new();
+
+    [Inject] public IDriverService DriverService{ get; set; }
+
+    [Inject] public ISnackbar Snackbar{ get; set; }
+
+    private bool agreedWithTerms = false;
+
+    private bool processingRequest = false;
+
+    private async Task LoadAvatar(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        model.Avatar = await GetBytesFromFile(file);
+    }
+
+    private async Task LoadCv(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+
+        // Upload file
+        try
+        {
+            model.CV = await GetBytesFromFile(file);
+        }
+        catch(IOException ex)
+        {
+            //TODO: handle exception
+        }
+    }
+
+    public static async Task<byte[]> GetBytesFromFile(IBrowserFile file)
+    {
+        var bytes = new byte[file.Size];
+
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+        await using var fs = new FileStream(path, FileMode.Create);
+        await file.OpenReadStream(file.Size).CopyToAsync(fs);
+
+        fs.Position = 0;
+
+        await fs.ReadAsync(bytes);            
+
+        fs.Close();
+        File.Delete(path);
+
+        return bytes;
+    }
+
+    private async Task HandleSubmit()
+    {
+        processingRequest = true;
+        var response = await DriverService.SubmitDriverApplication(model);
+        processingRequest = false;
+
+        if(response.IsSuccess)
+        {
+            Snackbar.Add(response.Message, Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(response.Message, Severity.Error);
+        }
+    }
 }
