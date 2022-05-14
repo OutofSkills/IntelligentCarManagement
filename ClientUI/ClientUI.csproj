@@ -21,6 +21,8 @@
 		<PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="6.0.5" />
 		<PackageReference Include="MudBlazor" Version="6.0.10" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Syncfusion.Blazor" Version="20.1.0.55" />
+		<PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.55" />
 	</ItemGroup>
 
 	<ItemGroup>

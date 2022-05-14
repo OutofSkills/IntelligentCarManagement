@@ -12,6 +12,7 @@ namespace Models.DTOs
 {
     public class DriverApplicationDTO
     {
+        public int Id { get; set; }
         public byte[] Avatar { get; set; }
 
         [Required]
@@ -40,5 +41,7 @@ namespace Models.DTOs
         public string ContactMethod { get; set; }
 
         public AddressDto Address { get; set; } = new AddressDto();
+
+        public ApplicationStatus Status { get; set; }
     }
 }

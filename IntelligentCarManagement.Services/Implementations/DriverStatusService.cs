@@ -17,12 +17,12 @@ namespace IntelligentCarManagement.Api.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<DriverStatus> GetStatusByIdAsync(string id)
+        public async Task<ApplicationStatus> GetStatusByIdAsync(string id)
         {
             return await unitOfWork.DriverStatusesRepo.GetById(id);
         }
 
-        public DriverStatus GetStatusByName(string name)
+        public ApplicationStatus GetStatusByName(string name)
         {
             return unitOfWork.DriverStatusesRepo.GetByName(name);
         }

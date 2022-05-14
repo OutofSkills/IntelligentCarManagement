@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,12 @@ namespace Models
         public bool OwnsACar { get; set; }
         public string ContactMethod { get; set; }
 
+        public int AddressId { get; set; }
+        public int StatusId { get; set; } = 1;
+
+        [ForeignKey(nameof(AddressId))]
         public virtual UserAddress Address { get; set; } = new UserAddress();
+        [ForeignKey(nameof(StatusId))]
+        public virtual ApplicationStatus Status { get; set; }
     }
 }

@@ -14,7 +14,29 @@ namespace ClientUI.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<RequestResponse> SubmitDriverApplication(DriverApplicationDTO model)
+        public async Task<IEnumerable<DriverApplicationDTO>> GetApplicationsAsync()
+        {
+            var response = await httpClient.GetAsync("http://localhost:41427/api/DriverApplications");
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<DriverApplicationDTO>>(content, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
+
+        public async Task<DriverApplicationDTO> GetApplicationAsync(int id)
+        {
+            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/id?id={id}");
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = System.Text.Json.JsonSerializer.Deserialize<DriverApplicationDTO>(content, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
+
+        public async Task<RequestResponse> SubmitApplication(DriverApplicationDTO model)
         {
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");

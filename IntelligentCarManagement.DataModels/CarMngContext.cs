@@ -16,7 +16,7 @@ namespace IntelligentCarManagement.DataAccess
             modelBuilder.Entity<Car>().ToTable("Cars");
             modelBuilder.Entity<Client>().ToTable("Clients");
             modelBuilder.Entity<Driver>().ToTable("Drivers");
-            modelBuilder.Entity<DriverStatus>().ToTable("DriverStatuses");
+            modelBuilder.Entity<ApplicationStatus>().ToTable("ApplicationStatuses");
             modelBuilder.Entity<UserAddress>().ToTable("Addresses");
 
             modelBuilder.Entity<UserRole>()
@@ -41,7 +41,7 @@ namespace IntelligentCarManagement.DataAccess
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
-        public DbSet<DriverStatus> DriverStatuses { get; set; }
+        public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Ride> Rides { get; set; }
         public DbSet<DriverApplication> DriverApplications { get; set; } 

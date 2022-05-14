@@ -59,13 +59,32 @@ namespace Api.Services.Implementations
                 var item = iMapper.Map<DriverApplication, DriverApplicationDTO>(application);
 
                 // Decompress the files
-                item.Avatar = FileCompressor.Compress(item.Avatar);
-                item.CV = FileCompressor.Compress(item.CV);
+                item.Avatar = FileCompressor.Decompress(item.Avatar);
+                item.CV = FileCompressor.Decompress(item.CV);
 
                 result.Add(item);
             }
             
             return result;
+        }
+
+        public async Task<DriverApplicationDTO> GetAsync(int id)
+        {
+            var application = await unitOfWork.ApplicationsRepo.GetById(id);
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<DriverApplication, DriverApplicationDTO>();
+                cfg.CreateMap<UserAddress, AddressDto>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            var item = iMapper.Map<DriverApplication, DriverApplicationDTO>(application);
+
+            // Decompress the files
+            item.Avatar = FileCompressor.Decompress(item.Avatar);
+            item.CV = FileCompressor.Decompress(item.CV);
+
+            return item;
         }
     }
 }

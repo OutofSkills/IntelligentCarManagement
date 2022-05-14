@@ -1,0 +1,181 @@
+﻿@page "/admin/driver-application/{Id}"
+@using Syncfusion.Blazor.PdfViewer
+
+<title>Driver Application</title>
+
+@if (application is null)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="4" md="3">
+            <MudCard Elevation="2">
+                <MudCardContent>
+                    <div class="d-flex justify-center mb-4">
+                        <MudSkeleton SkeletonType="SkeletonType.Circle" Style="height:100px; width:100px;" />
+                    </div>
+                    <MudSkeleton Class="mx-auto" SkeletonType="SkeletonType.Text" Width="100px"/>
+                    <MudSkeleton Class="mx-auto" SkeletonType="SkeletonType.Text" Width="100px"/>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="8" md="9">
+            <MudCard >
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                        <MudDivider/>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                       <MudGrid>
+                           <MudItem lg="3">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                              <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                            <MudItem lg="3">
+                              <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                           <MudItem lg="3">
+                               <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+                           </MudItem>
+                           <MudItem lg="8">
+                                <MudSkeleton SkeletonType="SkeletonType.Text" Width="150px" />
+                           </MudItem>
+                       </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <div class="mt-4">
+         <MudSkeleton SkeletonType="SkeletonType.Text" Width="100px" />
+         <MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="100%" Height="800px" />
+    </div>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" sm="4" md="3">
+            <MudCard Elevation="2">
+                <MudCardContent>
+                    <div class="d-flex justify-center mb-4">
+                        <MudAvatar Image=@string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(application.Avatar)) Style="height:100px; width:100px;" />
+                    </div>
+                    <div style="text-align: center;">
+                        <MudIcon Icon="@Icons.Material.Outlined.Email" Size="Size.Medium"/> 
+                    </div>
+                    <MudText Align="Align.Center" Typo="Typo.body1">@application.Email</MudText>
+                    <div style="text-align: center;">
+                        <MudIcon Icon="@Icons.Material.Outlined.Phone" Size="Size.Medium" Style="text-align:center"/> 
+                    </div>
+                    <MudText Align="Align.Center" Typo="Typo.body2">@application.PhoneNumber</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="8" md="9">
+            <MudCard >
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">About</MudText>
+                        <MudDivider/>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Title="Accept appliction" Icon="@Icons.Material.Filled.Verified" Color="Color.Success" OnClick="HandleAcceptAsync"/>
+                        <MudIconButton Title="Reject application" Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="HandleRejectAsync"/>
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                       <MudGrid>
+                           <MudItem lg="3">
+                               <MudText><b>Full Name</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.FirstName @application.LastName</MudText>
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudText><b>Country</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.Address.County, @application.Address.Country</MudText>
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudText><b>City</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.Address.City</MudText>
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudText><b>Address 1</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.Address.Address1</MudText>
+                           </MudItem>
+                            <MudItem lg="3">
+                               <MudText><b>Address 2</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.Address.Address2</MudText>
+                           </MudItem>
+                           <MudItem lg="3">
+                               <MudText><b>Postal Code</b></MudText>
+                           </MudItem>
+                           <MudItem lg="8">
+                               <MudText>@application.Address.ZipCode</MudText>
+                           </MudItem>
+                       </MudGrid>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <div class="mt-4">
+        <MudText Typo="Typo.h6">Curriculum Vitae</MudText>
+        <SfPdfViewer DocumentPath="@string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(application.CV))" ServiceUrl="https://ej2services.syncfusion.com/production/web-services/api/pdfviewer" 
+    Height="800px" Width="100%"></SfPdfViewer>
+    </div>
+}
+@code {
+    [Parameter]
+    public string Id{ get; set; }
+
+    [Inject] public IDriverService DriverService{ get; set; }
+
+    private DriverApplicationDTO application{ get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        application = await DriverService.GetApplicationAsync(int.Parse(Id));
+    }
+
+    private async Task HandleAcceptAsync()
+    {
+        
+    }
+
+    private async Task HandleRejectAsync()
+    {
+        
+    }
+}

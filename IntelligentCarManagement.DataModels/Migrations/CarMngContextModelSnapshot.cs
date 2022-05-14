@@ -144,6 +144,25 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("AccountStatus");
                 });
 
+            modelBuilder.Entity("Models.ApplicationStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationStatuses", (string)null);
+                });
+
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Property<int>("Id")
@@ -183,7 +202,7 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Avatar")
@@ -214,6 +233,9 @@ namespace Api.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -222,26 +244,9 @@ namespace Api.DataAccess.Migrations
 
                     b.HasIndex("AddressId");
 
+                    b.HasIndex("StatusId");
+
                     b.ToTable("DriverApplications");
-                });
-
-            modelBuilder.Entity("Models.DriverStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DriverStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
@@ -530,9 +535,6 @@ namespace Api.DataAccess.Migrations
                     b.Property<int>("DeservedClients")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DriverStatusId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageCv")
                         .HasColumnType("nvarchar(max)");
 
@@ -545,8 +547,6 @@ namespace Api.DataAccess.Migrations
                     b.HasIndex("CarId")
                         .IsUnique()
                         .HasFilter("[CarId] IS NOT NULL");
-
-                    b.HasIndex("DriverStatusId");
 
                     b.ToTable("Drivers", (string)null);
                 });
@@ -606,9 +606,19 @@ namespace Api.DataAccess.Migrations
                 {
                     b.HasOne("Models.UserAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationStatus", "Status")
+                        .WithMany("Applications")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
@@ -692,10 +702,6 @@ namespace Api.DataAccess.Migrations
                         .WithOne("Driver")
                         .HasForeignKey("Models.Driver", "CarId");
 
-                    b.HasOne("Models.DriverStatus", "Status")
-                        .WithMany("Drivers")
-                        .HasForeignKey("DriverStatusId");
-
                     b.HasOne("Models.UserBase", null)
                         .WithOne()
                         .HasForeignKey("Models.Driver", "Id")
@@ -703,8 +709,6 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Models.AccountStatus", b =>
@@ -712,14 +716,14 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Models.ApplicationStatus", b =>
+                {
+                    b.Navigation("Applications");
+                });
+
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Navigation("Driver");
-                });
-
-            modelBuilder.Entity("Models.DriverStatus", b =>
-                {
-                    b.Navigation("Drivers");
                 });
 
             modelBuilder.Entity("Models.UserAddress", b =>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Api.DataAccess.Migrations
 {
-    public partial class Init : Migration
+    public partial class DriverApplicationStatus : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,9 +29,12 @@ namespace Api.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Address1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     County = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,6 +103,7 @@ namespace Api.DataAccess.Migrations
                     Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NotificationsToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     StatusId = table.Column<int>(type: "int", nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -147,6 +151,41 @@ namespace Api.DataAccess.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DriverApplications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CV = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    OwnsACar = table.Column<bool>(type: "bit", nullable: false),
+                    ContactMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AddressId = table.Column<int>(type: "int", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DriverApplications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DriverApplications_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DriverApplications_DriverStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "DriverStatuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -262,7 +301,8 @@ namespace Api.DataAccess.Migrations
                     DeservedClients = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false),
-                    DriverStatusId = table.Column<int>(type: "int", nullable: true),
+                    CurrentLat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CurrentLong = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -277,11 +317,6 @@ namespace Api.DataAccess.Migrations
                         name: "FK_Drivers_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Drivers_DriverStatuses_DriverStatusId",
-                        column: x => x.DriverStatusId,
-                        principalTable: "DriverStatuses",
                         principalColumn: "Id");
                 });
 
@@ -337,13 +372,19 @@ namespace Api.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PickUpLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PickUpCoordinates = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DestinationCoordinates = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PickUpPlaceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PickUpPlaceAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PickUpPlaceLat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PickUpPlaceLong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DestinationPlaceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DestinationPlaceAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DestinationPlaceLat = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DestinationPlaceLong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Distance = table.Column<double>(type: "float", nullable: false),
+                    AverageTime = table.Column<double>(type: "float", nullable: false),
                     PickUpTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DriverId = table.Column<int>(type: "int", nullable: true),
-                    ClientId = table.Column<int>(type: "int", nullable: true)
+                    DriverId = table.Column<int>(type: "int", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,12 +393,14 @@ namespace Api.DataAccess.Migrations
                         name: "FK_Rides_AspNetUsers_ClientId",
                         column: x => x.ClientId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rides_Drivers_DriverId",
                         column: x => x.DriverId,
                         principalTable: "Drivers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -410,16 +453,21 @@ namespace Api.DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DriverApplications_AddressId",
+                table: "DriverApplications",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverApplications_StatusId",
+                table: "DriverApplications",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Drivers_CarId",
                 table: "Drivers",
                 column: "CarId",
                 unique: true,
                 filter: "[CarId] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Drivers_DriverStatusId",
-                table: "Drivers",
-                column: "DriverStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",
@@ -463,6 +511,9 @@ namespace Api.DataAccess.Migrations
                 name: "Clients");
 
             migrationBuilder.DropTable(
+                name: "DriverApplications");
+
+            migrationBuilder.DropTable(
                 name: "Notifications");
 
             migrationBuilder.DropTable(
@@ -470,6 +521,9 @@ namespace Api.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRole");
+
+            migrationBuilder.DropTable(
+                name: "DriverStatuses");
 
             migrationBuilder.DropTable(
                 name: "Drivers");
@@ -482,9 +536,6 @@ namespace Api.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cars");
-
-            migrationBuilder.DropTable(
-                name: "DriverStatuses");
 
             migrationBuilder.DropTable(
                 name: "AccountStatus");

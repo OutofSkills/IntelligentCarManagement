@@ -20,13 +20,9 @@ namespace Models
         public bool IsAvailable { get; set; }
         public string CurrentLat { get; set; }
         public string CurrentLong { get; set; }
-
-        public int? DriverStatusId { get; set; }
         public int? CarId { get; set; }
 
         [ForeignKey(nameof(CarId))]
         public virtual Car Car { get; set; }
-        [ForeignKey(nameof(DriverStatusId))]
-        public virtual DriverStatus Status { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    [Migration("20220426135327_DriverModelCurrentLocation")]
-    partial class DriverModelCurrentLocation
+    [Migration("20220512182513_DriverApplicationStatus")]
+    partial class DriverApplicationStatus
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -146,6 +146,25 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("AccountStatus");
                 });
 
+            modelBuilder.Entity("Models.ApplicationStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DriverStatuses", (string)null);
+                });
+
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Property<int>("Id")
@@ -177,7 +196,7 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("Cars", (string)null);
                 });
 
-            modelBuilder.Entity("Models.DriverStatus", b =>
+            modelBuilder.Entity("Models.DriverApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,15 +204,51 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Description")
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Avatar")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("CV")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ContactMethod")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("OwnsACar")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DriverStatuses", (string)null);
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("DriverApplications");
                 });
 
             modelBuilder.Entity("Models.Notification", b =>
@@ -234,7 +289,7 @@ namespace Api.DataAccess.Migrations
                     b.Property<double>("AverageTime")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<string>("DestinationPlaceAddress")
@@ -252,11 +307,8 @@ namespace Api.DataAccess.Migrations
                     b.Property<double>("Distance")
                         .HasColumnType("float");
 
-                    b.Property<int?>("DriverId")
+                    b.Property<int>("DriverId")
                         .HasColumnType("int");
-
-                    b.Property<string>("PickUpCoordinates")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PickUpPlaceAddress")
                         .HasColumnType("nvarchar(max)");
@@ -323,13 +375,22 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Address1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("County")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Street")
+                    b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -389,6 +450,9 @@ namespace Api.DataAccess.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NotificationsToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -473,9 +537,6 @@ namespace Api.DataAccess.Migrations
                     b.Property<int>("DeservedClients")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DriverStatusId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageCv")
                         .HasColumnType("nvarchar(max)");
 
@@ -488,8 +549,6 @@ namespace Api.DataAccess.Migrations
                     b.HasIndex("CarId")
                         .IsUnique()
                         .HasFilter("[CarId] IS NOT NULL");
-
-                    b.HasIndex("DriverStatusId");
 
                     b.ToTable("Drivers", (string)null);
                 });
@@ -545,6 +604,25 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.DriverApplication", b =>
+                {
+                    b.HasOne("Models.UserAddress", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationStatus", "Status")
+                        .WithMany("Applications")
+                        .HasForeignKey("StatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("Models.Notification", b =>
                 {
                     b.HasOne("Models.UserBase", "User")
@@ -560,11 +638,15 @@ namespace Api.DataAccess.Migrations
                 {
                     b.HasOne("Models.UserBase", "User")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Driver", "Driver")
                         .WithMany()
-                        .HasForeignKey("DriverId");
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Driver");
 
@@ -622,10 +704,6 @@ namespace Api.DataAccess.Migrations
                         .WithOne("Driver")
                         .HasForeignKey("Models.Driver", "CarId");
 
-                    b.HasOne("Models.DriverStatus", "Status")
-                        .WithMany("Drivers")
-                        .HasForeignKey("DriverStatusId");
-
                     b.HasOne("Models.UserBase", null)
                         .WithOne()
                         .HasForeignKey("Models.Driver", "Id")
@@ -633,8 +711,6 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Car");
-
-                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Models.AccountStatus", b =>
@@ -642,14 +718,14 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Models.ApplicationStatus", b =>
+                {
+                    b.Navigation("Applications");
+                });
+
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Navigation("Driver");
-                });
-
-            modelBuilder.Entity("Models.DriverStatus", b =>
-                {
-                    b.Navigation("Drivers");
                 });
 
             modelBuilder.Entity("Models.UserAddress", b =>

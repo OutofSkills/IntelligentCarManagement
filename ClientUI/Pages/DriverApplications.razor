@@ -1,0 +1,152 @@
+﻿@page "/admin/driver-applications"
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Buttons
+
+<MudGrid Class="pb-6">
+    @if(applications is null)
+     {
+         <!--If the products where not loaded yet, display some skeletons-->
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Filled.AppSettingsAlt" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Applications</MudText>
+                    <MudText Typo="Typo.h5">@(applications.Count())</MudText>
+                </div>
+            </MudPaper>
+        
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.NewLabel" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">New Applications</MudText>
+                    <MudText Typo="Typo.h5">@(applications.Where(a => a.Status.Name != "APPROVED").Count())</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Filled.Verified" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Accepted Applications</MudText>
+                    <MudText Typo="Typo.h5">@(applications.Where(a => a.Status.Name == "ACCEPTED").Count())</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+    }
+</MudGrid>
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid DataSource="@applications" AllowPaging="true" AllowSorting="true" Toolbar="@(new List<string>() { "Delete" })" TValue="DriverApplicationDTO">
+                <GridSelectionSettings CheckboxOnly="true" PersistSelection="true"></GridSelectionSettings>
+                <GridEditSettings AllowDeleting="true"></GridEditSettings>
+                <GridEvents OnActionBegin="ActionBeginHandler" OnActionComplete="ActionCompleteHandler" CommandClicked="OnCommandClicked" TValue="DriverApplicationDTO"></GridEvents>
+                <GridColumns>
+                    <GridColumn Type="ColumnType.CheckBox" Width="50"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.Email) HeaderText="Email"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.FirstName) HeaderText="First Name"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.LastName) HeaderText="Last Name" ></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.OwnsACar) HeaderText="Owns a Car"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.PhoneNumber) HeaderText="Phone Number"></GridColumn>
+                    <GridColumn Field=@nameof(DriverApplicationDTO.ContactMethod) HeaderText="Prefered Contact Method"></GridColumn>
+                    <GridColumn HeaderText="View Details" TextAlign="TextAlign.Center" Width="150">
+                        <GridCommandColumns>
+                            <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-description", CssClass="e-flat"})" Title="View"></GridCommandColumn>
+                        </GridCommandColumns>
+                    </GridColumn>
+                </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+
+@action
+
+@code{
+    [Inject] public NavigationManager NavManager{ get; set; }
+
+    [Inject] public IDriverService DriverService{ get; set; }
+
+    private IEnumerable<DriverApplicationDTO> applications;
+
+    private string action{ get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadApplications();
+    }
+
+    private async Task LoadApplications()
+    {
+        applications = await DriverService.GetApplicationsAsync();
+    }
+
+    public void ActionBeginHandler(ActionEventArgs<DriverApplicationDTO> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            if (Args.Action == "Delete")
+            {
+                // adding new record
+            }
+            else
+            {
+                // updating
+            }
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            action = "Deleting";
+        }
+    }
+    public async Task ActionCompleteHandler(ActionEventArgs<DriverApplicationDTO> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            await LoadApplications();
+        }
+    }
+
+    public void OnCommandClicked(CommandClickEventArgs<DriverApplicationDTO> args)
+    {
+        action = "Navigate to";
+        NavManager.NavigateTo($"/admin/driver-application/{args.RowData.Id}");
+    }
+    
+}

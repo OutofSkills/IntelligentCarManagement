@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class DriverStatus
+    public class ApplicationStatus
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public virtual IEnumerable<Driver> Drivers { get; set; }
+        public virtual IEnumerable<DriverApplication> Applications { get; set; }
 
-        public DriverStatus()
+        public ApplicationStatus()
         {
-            Drivers = new HashSet<Driver>();
+            Applications = new HashSet<DriverApplication>();
         }
     }
 }

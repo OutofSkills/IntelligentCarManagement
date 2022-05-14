@@ -69,12 +69,19 @@ namespace Api.Services.Implementations
                 throw new Exception("A user with this email already exists.");
             }
 
-            // Creating the new user
-            IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
-            if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
+            try
+            {
+                // Creating the new user
+                IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+                if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
 
-            // Assigning the user to a default role
-            await _userManager.AddToRoleAsync(newUser, RoleName.CLIENT.ToString());
+                // Assigning the user to a default role
+                await _userManager.AddToRoleAsync(newUser, RoleName.CLIENT.ToString());
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         public async Task Remove(int id)

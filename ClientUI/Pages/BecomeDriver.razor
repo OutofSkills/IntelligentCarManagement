@@ -172,7 +172,7 @@
     private async Task HandleSubmit()
     {
         processingRequest = true;
-        var response = await DriverService.SubmitDriverApplication(model);
+        var response = await DriverService.SubmitApplication(model);
         processingRequest = false;
 
         if(response.IsSuccess)

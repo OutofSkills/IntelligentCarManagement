@@ -9,7 +9,7 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface IDriverStatusService
     {
-        DriverStatus GetStatusByName(string name);
-        Task<DriverStatus> GetStatusByIdAsync(string id);
+        ApplicationStatus GetStatusByName(string name);
+        Task<ApplicationStatus> GetStatusByIdAsync(string id);
     }
 }

@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.DataAccess.Repositories
 {
-    public interface IDriverStatusRepo : IRepo<DriverStatus>
+    public interface IDriverStatusRepo : IRepo<ApplicationStatus>
     {
-        DriverStatus GetByName(string name);
+        ApplicationStatus GetByName(string name);
     }
 }
