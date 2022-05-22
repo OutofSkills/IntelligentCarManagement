@@ -84,7 +84,7 @@ namespace IntelligentCarManagement.Services
         {
             Client client = await unitOfWork.ClientsRepo.GetById(id);
             if (client == null)
-                throw new UserNotFoundException("No client found with the given id.");
+                throw new NotFoundException("No client found with the given id.");
 
             // Map the driver model to the driver DTO
             var config = new MapperConfiguration(cfg => {

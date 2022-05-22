@@ -23,6 +23,7 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         IAddressRepo AdressRepo { get; }
         IRidesRepo RidesRepo { get; }
         IDriverApplicationsRepo ApplicationsRepo { get; }  
+        IApplicationStatusesRepo ApplicationStatusesRepo { get; }
 
         /// <summary>
         /// Saves all pending changes

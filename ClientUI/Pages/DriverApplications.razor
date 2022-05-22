@@ -53,7 +53,7 @@
                 <MudIcon Icon="@Icons.Material.Filled.NewLabel" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">New Applications</MudText>
-                    <MudText Typo="Typo.h5">@(applications.Where(a => a.Status.Name != "APPROVED").Count())</MudText>
+                    <MudText Typo="Typo.h5">@(applications.Where(a => a.ApplicationStatus.Name != "APPROVED").Count())</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -62,7 +62,7 @@
                 <MudIcon Icon="@Icons.Filled.Verified" Color="Color.Success" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
                 <div>
                     <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Accepted Applications</MudText>
-                    <MudText Typo="Typo.h5">@(applications.Where(a => a.Status.Name == "ACCEPTED").Count())</MudText>
+                    <MudText Typo="Typo.h5">@(applications.Where(a => a.ApplicationStatus.Name == "APPROVED").Count())</MudText>
                 </div>
             </MudPaper>
         </MudItem>
@@ -85,6 +85,7 @@
                     <GridColumn Field=@nameof(DriverApplicationDTO.OwnsACar) HeaderText="Owns a Car"></GridColumn>
                     <GridColumn Field=@nameof(DriverApplicationDTO.PhoneNumber) HeaderText="Phone Number"></GridColumn>
                     <GridColumn Field=@nameof(DriverApplicationDTO.ContactMethod) HeaderText="Prefered Contact Method"></GridColumn>
+                    <GridColumn Field=@(nameof(DriverApplicationDTO.ApplicationStatus) + "." + nameof(ApplicationStatus.Name)) HeaderText="Status"></GridColumn>
                     <GridColumn HeaderText="View Details" TextAlign="TextAlign.Center" Width="150">
                         <GridCommandColumns>
                             <GridCommandColumn ButtonOption="@(new CommandButtonOptions() { IconCss="e-icons e-description", CssClass="e-flat"})" Title="View"></GridCommandColumn>

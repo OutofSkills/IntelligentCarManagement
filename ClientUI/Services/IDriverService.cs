@@ -8,5 +8,7 @@ namespace ClientUI.Services
         Task<RequestResponse> SubmitApplication(DriverApplicationDTO model);
         Task<IEnumerable<DriverApplicationDTO>> GetApplicationsAsync();
         Task<DriverApplicationDTO> GetApplicationAsync(int id);
+        Task<RequestResponse> ApproveApplicationAsync(int id);
+        Task<RequestResponse> RejectApplicationAsync(int id);
     }
 }

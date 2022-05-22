@@ -102,7 +102,7 @@ namespace IntelligentCarManagement.Api.Services
         {
             var user = await unitOfWork.UsersRepo.GetById(userId);
             if (user is null)
-                throw new UserNotFoundException("User not found");
+                throw new NotFoundException("User not found");
 
             if (String.IsNullOrEmpty(user.NotificationsToken))
                 throw new Exception("This user doesn't have a firebase token yet.");
@@ -131,7 +131,7 @@ namespace IntelligentCarManagement.Api.Services
         {
             var user = await unitOfWork.UsersRepo.GetById(userId);
             if (user is null)
-                throw new UserNotFoundException("User not found");
+                throw new NotFoundException("User not found");
 
             user.NotificationsToken = token;
 

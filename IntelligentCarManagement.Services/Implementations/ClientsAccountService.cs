@@ -29,7 +29,7 @@ namespace Api.Services.Implementations
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user is null)
-                throw new UserNotFoundException("Couldn't find the account related to the given email.");
+                throw new NotFoundException("Couldn't find the account related to the given email.");
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.Password);
 

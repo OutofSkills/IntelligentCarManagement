@@ -1,7 +1,10 @@
-﻿using Api.Services.Interfaces;
+﻿using Api.Services.CustomExceptions;
+using Api.Services.Interfaces;
 using Api.Services.Utils;
+using Api.Services.Utils.Email_Templates;
 using AutoMapper;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
+using Microsoft.AspNetCore.Hosting;
 using Models;
 using Models.Data_Transfer_Objects;
 using Models.DTOs;
@@ -17,10 +20,16 @@ namespace Api.Services.Implementations
     public class DriverApplicationsService : IDriverApplicationsService
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IDriversAccountService driversAccountService;
+        private readonly IMailService mailService;
+        private readonly IWebHostEnvironment webHostEnvironment;
 
-        public DriverApplicationsService(IUnitOfWork unitOfWork)
+        public DriverApplicationsService(IUnitOfWork unitOfWork, IDriversAccountService driversAccountService, IMailService mailService, IWebHostEnvironment  webHostEnvironment)
         {
             this.unitOfWork = unitOfWork;
+            this.driversAccountService = driversAccountService;
+            this.mailService = mailService;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public void Apply(DriverApplicationDTO model)
@@ -40,6 +49,52 @@ namespace Api.Services.Implementations
 
             unitOfWork.ApplicationsRepo.Insert(application);
             unitOfWork.SaveChanges();
+
+            mailService.SendEmail(
+                new EmailDTO()
+                {
+                    SendTo = model.Email,
+                    Title = "Driver Application",
+                    Action = "driver registration",
+                    Content = ""
+                },
+                new WelcomeTemplate(webHostEnvironment)
+                );
+        }
+
+        public async Task Approve(int id)
+        {
+            var application = await unitOfWork.ApplicationsRepo.GetById(id);
+            if (application == null)
+                throw new NotFoundException("No application with the given id was found.");
+
+            if (application.ApplicationStatus.Name == "APPROVED")
+                throw new Exception("This application was already approved.");
+
+            var approvedStatus = await unitOfWork.ApplicationStatusesRepo.GetById(2);
+            if (approvedStatus == null)
+                throw new NotFoundException("The APPROVED application status was not found.");
+
+            application.ApplicationStatus = approvedStatus;
+            unitOfWork.ApplicationsRepo.Update(application);
+            unitOfWork.SaveChanges();
+
+            // Create a driver account
+            var accountPassword = await driversAccountService.CreateDriver(application);
+
+            mailService.SendEmail(
+               new EmailDTO()
+               {
+                   SendTo = application.Email,
+                   Title = "Application Approval",
+                   Action = "driver registration",
+                   Content = "We are happy to anounce that your application has been approved. <br>" +
+                   "Your in app credentials are: <br>" +
+                   "<b>Email: </b>" + application.Email +
+                   "<b>Password: </b>" + accountPassword
+               },
+               new ApplicationAcceptedTemplate(webHostEnvironment)
+               );
         }
 
         public async Task<IEnumerable<DriverApplicationDTO>> GetAll()

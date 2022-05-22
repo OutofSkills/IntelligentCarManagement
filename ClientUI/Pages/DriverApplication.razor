@@ -162,6 +162,8 @@ else
 
     [Inject] public IDriverService DriverService{ get; set; }
 
+    [Inject] public ISnackbar Snackbar{ get; set; }
+
     private DriverApplicationDTO application{ get; set; }
 
     protected override async Task OnParametersSetAsync()
@@ -171,11 +173,29 @@ else
 
     private async Task HandleAcceptAsync()
     {
-        
+        var result = await DriverService.ApproveApplicationAsync(int.Parse(Id));
+
+        if (result.IsSuccess)
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
+        else
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
     }
 
     private async Task HandleRejectAsync()
     {
-        
+        var result = await DriverService.RejectApplicationAsync(int.Parse(Id));
+
+        if (result.IsSuccess)
+        {
+            Snackbar.Add(result.Message, Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
     }
 }

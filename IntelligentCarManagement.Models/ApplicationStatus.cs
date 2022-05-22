@@ -13,12 +13,5 @@ namespace Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-        public virtual IEnumerable<DriverApplication> Applications { get; set; }
-
-        public ApplicationStatus()
-        {
-            Applications = new HashSet<DriverApplication>();
-        }
     }
 }

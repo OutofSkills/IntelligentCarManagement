@@ -8,7 +8,7 @@ namespace Models
 {
     public class Driver: UserBase
     {
-        public string ImageCv { get; set; }
+        public string CV { get; set; }
 
         public int Accidents { get; set; } = 0;
 

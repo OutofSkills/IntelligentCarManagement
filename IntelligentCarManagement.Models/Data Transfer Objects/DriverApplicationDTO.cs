@@ -42,6 +42,6 @@ namespace Models.DTOs
 
         public AddressDto Address { get; set; } = new AddressDto();
 
-        public ApplicationStatus Status { get; set; }
+        public ApplicationStatus ApplicationStatus { get; set; }
     }
 }

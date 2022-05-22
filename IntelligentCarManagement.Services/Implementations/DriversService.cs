@@ -1,4 +1,5 @@
 ﻿using Api.Services.CustomExceptions;
+using Api.Services.Utils;
 using AutoMapper;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Identity;
@@ -36,8 +37,11 @@ namespace IntelligentCarManagement.Services
             });
 
             IMapper iMapper = config.CreateMapper();
+            var dto = iMapper.Map<Driver, DriverDTO>(driver);
 
-            return iMapper.Map<Driver, DriverDTO>(driver); 
+            dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+
+            return dto;
         }
 
         public DriverDTO Get(String email)
@@ -51,8 +55,11 @@ namespace IntelligentCarManagement.Services
             });
 
             IMapper iMapper = config.CreateMapper();
+            var dto = iMapper.Map<Driver, DriverDTO>(driver);
 
-            return iMapper.Map<Driver, DriverDTO>(driver);
+            dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+
+            return dto;
         }
 
         public async Task<IEnumerable<DriverDTO>> GetAllAsync(bool? availability)
@@ -74,14 +81,20 @@ namespace IntelligentCarManagement.Services
                 foreach (var driver in drivers)
                 {
                     if (driver.IsAvailable == availability)
-                        result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+                    {
+                        var dto = iMapper.Map<Driver, DriverDTO>(driver);
+                        dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+                        result.Add(dto);
+                    }
                 }
             }
             else
             {
                 foreach (var driver in drivers)
                 {
-                    result.Add(iMapper.Map<Driver, DriverDTO>(driver));
+                    var dto = iMapper.Map<Driver, DriverDTO>(driver);
+                    dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+                    result.Add(dto);
                 }
             }
 
@@ -92,7 +105,7 @@ namespace IntelligentCarManagement.Services
         {
             Driver driver = await unitOfWork.DriversRepo.GetById(id);
             if (driver == null)
-                throw new UserNotFoundException("No driver found with the given id.");
+                throw new NotFoundException("No driver found with the given id.");
 
             // Map the driver model to the driver DTO
             var config = new MapperConfiguration(cfg => {
@@ -102,6 +115,9 @@ namespace IntelligentCarManagement.Services
 
             IMapper iMapper = config.CreateMapper();
             driver = iMapper.Map(driverDTO, driver);
+
+            // Compress data
+            driver.Avatar = FileCompressor.Compress(driver.Avatar);
 
             unitOfWork.DriversRepo.Update(driver);
             unitOfWork.SaveChanges();
@@ -114,7 +130,7 @@ namespace IntelligentCarManagement.Services
             var driver = await unitOfWork.DriversRepo.GetById(driverId);
 
             if (driver is null)
-                throw new UserNotFoundException("Couldn't find a driver with the provided id.");
+                throw new NotFoundException("Couldn't find a driver with the provided id.");
 
             driver.IsAvailable = availability;
             unitOfWork.DriversRepo.Update(driver);

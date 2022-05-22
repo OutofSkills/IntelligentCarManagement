@@ -30,7 +30,7 @@ namespace Api.Services.Implementations
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user is null)
-                throw new UserNotFoundException("Couldn't find the account related to the given email.");
+                throw new NotFoundException("Couldn't find the account related to the given email.");
 
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.Password);
 
@@ -53,38 +53,44 @@ namespace Api.Services.Implementations
             return new LoginResponse() { FirebaseToken = firebaseToken, JwtToken = jwtToken };
         }
 
-        //public async Task Register(DriverRegisterModel model)
-        //{
-        //    Driver newDriver = new();
+        public async Task<string> CreateDriver(DriverApplication application)
+        {
+            Driver newDriver = new();
 
-        //    // Map view model to user model
-        //    var config = new MapperConfiguration(cfg => {
-        //        cfg.CreateMap<DriverRegisterModel, Driver>();
-        //    });
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<DriverApplication, Driver>()
+                .ForMember(x => x.Id, opt => opt.Ignore());
+                
+            });
 
-        //    IMapper iMapper = config.CreateMapper();
-        //    newDriver = iMapper.Map<DriverRegisterModel, Driver>(model);
+            IMapper iMapper = config.CreateMapper();
+            newDriver = iMapper.Map<DriverApplication, Driver>(application);
 
-        //    var isEmailValid = await _userManager.FindByEmailAsync(model.Email);
-        //    if (isEmailValid is not null)
-        //    {
-        //        throw new Exception("A user with this email already exists.");
-        //    }
+            var isEmailValid = await _userManager.FindByEmailAsync(application.Email);
+            if (isEmailValid is not null)
+            {
+                throw new Exception("A user with this email already exists.");
+            }
 
-        //    try
-        //    {
-        //        // Creating the new user
-        //        IdentityResult result = await _userManager.CreateAsync(newDriver, model.Password);
-        //        if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        throw new ServerException("Server error, please try again.");
-        //    }
+            var generatedPassword = GeneratePassword();
+            try
+            {
+                // Creating the new user
+                IdentityResult result = await _userManager.CreateAsync(newDriver, generatedPassword);
+                if (result.Succeeded is false) { return null; }
+            }
+            catch (Exception ex)
+            {
+                throw new ServerException("Server error, please try again.");
+            }
 
-        //    // Assigning the user to a default role
-        //    await _userManager.AddToRoleAsync(newDriver, RoleName.DRIVER.ToString());
-        //}
+            // Assigning the user to a default role
+            var roleResult = await _userManager.AddToRoleAsync(newDriver, RoleName.DRIVER.ToString());
+            if(roleResult.Succeeded is false) { return null; }
+
+            return generatedPassword;
+        }
 
         public async Task Remove(int id)
         {
@@ -92,7 +98,9 @@ namespace Api.Services.Implementations
             if (user is null)
                 return;
 
+          
             var result = await _userManager.DeleteAsync(user);
+
             if (result.Succeeded is false)
             {
                 throw new Exception("Couldn't delete the user with given id.");
@@ -113,6 +121,49 @@ namespace Api.Services.Implementations
             var result = await _userManager.CheckPasswordAsync(user, password);
 
             return result;
+        }
+
+        public string GeneratePassword()
+        {
+            var options = _userManager.Options.Password;
+
+            int length = options.RequiredLength;
+
+            //bool nonAlphanumeric = options.RequireNonAlphanumeric;
+            bool nonAlphanumeric = false;
+            bool digit = options.RequireDigit;
+            bool lowercase = options.RequireLowercase;
+            bool uppercase = options.RequireUppercase;
+
+            StringBuilder password = new StringBuilder();
+            Random random = new Random();
+
+            while (password.Length < length)
+            {
+                char c = (char)random.Next(32, 126);
+
+                password.Append(c);
+
+                if (char.IsDigit(c))
+                    digit = false;
+                else if (char.IsLower(c))
+                    lowercase = false;
+                else if (char.IsUpper(c))
+                    uppercase = false;
+                else if (!char.IsLetterOrDigit(c))
+                    nonAlphanumeric = false;
+            }
+
+            if (nonAlphanumeric)
+                password.Append((char)random.Next(33, 48));
+            if (digit)
+                password.Append((char)random.Next(48, 58));
+            if (lowercase)
+                password.Append((char)random.Next(97, 123));
+            if (uppercase)
+                password.Append((char)random.Next(65, 91));
+
+            return password.ToString();
         }
     }
 }

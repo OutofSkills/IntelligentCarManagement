@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Api.Services.CustomExceptions
 {
-    public class UserNotFoundException: Exception
+    public class NotFoundException: Exception
     {
-        public UserNotFoundException(string message) : base(message)
+        public NotFoundException(string message) : base(message)
         { }
     }
 }

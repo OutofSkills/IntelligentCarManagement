@@ -50,5 +50,29 @@ namespace ClientUI.Services
 
             return new RequestResponse() { IsSuccess = true, Message = "Application sent successfully." };
         }
+
+        public async Task<RequestResponse> ApproveApplicationAsync(int id)
+        {
+            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/approve/id?id={id}");
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return new RequestResponse() { IsSuccess = false, Message = "Server error. Please try again later." };
+            }
+
+            return new RequestResponse() { IsSuccess = true, Message = "Application approved successfully." };
+        }
+
+        public async Task<RequestResponse> RejectApplicationAsync(int id)
+        {
+            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/reject/id?{id}");
+
+            if (response.IsSuccessStatusCode == false)
+            {
+                return new RequestResponse() { IsSuccess = false, Message = "Server error. Please try again later." };
+            }
+
+            return new RequestResponse() { IsSuccess = true, Message = "Application rejected successfully." };
+        }
     }
 }

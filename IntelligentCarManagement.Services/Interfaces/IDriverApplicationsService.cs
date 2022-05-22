@@ -12,5 +12,6 @@ namespace Api.Services.Interfaces
         void Apply(DriverApplicationDTO model);
         Task<IEnumerable<DriverApplicationDTO>> GetAll();
         Task<DriverApplicationDTO> GetAsync(int id);
+        Task Approve(int id);
     }
 }

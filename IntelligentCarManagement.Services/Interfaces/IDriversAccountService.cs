@@ -1,4 +1,5 @@
-﻿using Models.DTOs;
+﻿using Models;
+using Models.DTOs;
 using Models.Generics;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace Api.Services.Interfaces
 {
     public interface IDriversAccountService: ISignIn, IRemovable, IChangePassword
     {
-        
+        Task<string> CreateDriver(DriverApplication application);
     }
 }

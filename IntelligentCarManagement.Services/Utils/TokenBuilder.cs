@@ -83,7 +83,7 @@ namespace IntelligentCarManagement.Services
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
-                throw new UserNotFoundException("Invalid credentials.");
+                throw new NotFoundException("Invalid credentials.");
 
             var claims = new List<Claim>()
             {

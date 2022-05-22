@@ -4,6 +4,7 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20220516093505_ApplicationMemberCvRename")]
+    partial class ApplicationMemberCvRename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -205,9 +207,6 @@ namespace Api.DataAccess.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ApplicationStatusId")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Avatar")
                         .HasColumnType("varbinary(max)");
 
@@ -236,6 +235,9 @@ namespace Api.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -244,7 +246,7 @@ namespace Api.DataAccess.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("ApplicationStatusId");
+                    b.HasIndex("StatusId");
 
                     b.ToTable("DriverApplications");
                 });
@@ -610,15 +612,15 @@ namespace Api.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.ApplicationStatus", "ApplicationStatus")
+                    b.HasOne("Models.ApplicationStatus", "Status")
                         .WithMany("Applications")
-                        .HasForeignKey("ApplicationStatusId")
+                        .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Address");
 
-                    b.Navigation("ApplicationStatus");
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Models.Notification", b =>

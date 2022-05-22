@@ -44,7 +44,7 @@ namespace Api.Services.Middleware
                     errorMessageObject.ErrorCode = "401";
                     statusCode = (int)HttpStatusCode.Unauthorized;
                     break;
-                case UserNotFoundException:
+                case NotFoundException:
                     errorMessageObject.ErrorCode = "404";
                     statusCode = (int)HttpStatusCode.NotFound;
                     break;

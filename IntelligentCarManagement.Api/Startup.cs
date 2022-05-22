@@ -32,6 +32,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using System.Diagnostics;
+using Microsoft.Extensions.FileProviders;
 
 namespace IntelligentCarManagement.Api
 {
@@ -180,6 +181,9 @@ namespace IntelligentCarManagement.Api
             services.AddTransient<INotificationService, NotificationService>();
             services.AddHttpClient<FcmSender>();
             services.AddHttpClient<ApnSender>();
+            // SMTP email client
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -189,6 +193,14 @@ namespace IntelligentCarManagement.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseFileServer(new FileServerOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Static Files")),
+                RequestPath = "/StaticFiles",
+                EnableDefaultFiles = true
+            });
 
             app.UseRouting();
 

@@ -38,5 +38,12 @@ namespace Api.Controllers
         {
             return await applicationsService.GetAsync(id);
         }
+
+        [HttpGet]
+        [Route("approve/id")]
+        public async Task ApproveAsync([FromQuery] int id)
+        {
+            await applicationsService.Approve(id);
+        }
     }
 }

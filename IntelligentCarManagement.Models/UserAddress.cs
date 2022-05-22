@@ -13,11 +13,5 @@ namespace Models
         public string County { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
-        public virtual IEnumerable<UserBase> Users{ get; set; }
-
-        public UserAddress()
-        {
-            Users = new HashSet<UserBase>();
-        }
     }
 }
