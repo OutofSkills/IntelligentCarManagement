@@ -23,7 +23,7 @@ namespace Api.Services.Utils
             //Fetching Email Body Text from EmailTemplate File.  
             string rootPath = System.IO.Path.GetDirectoryName(env.ContentRootPath);
 
-            string filePath = Path.Combine(rootPath, "IntelligentCarManagement.Services/Utils/Email Templates/Welcome.html");
+            string filePath = Path.Combine(rootPath, "/IntelligentCarManagement.Api/Static Files/Email Templates/Welcome.html");
             using StreamReader str = new(filePath);
             string mailText = str.ReadToEnd();
 

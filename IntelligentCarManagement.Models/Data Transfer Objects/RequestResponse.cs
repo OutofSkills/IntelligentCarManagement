@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.DTOs
 {
-    public class RideRequestResponse
+    public class RequestResponse
     {
         public bool Success { get; set; }
         public string Message { get; set; }

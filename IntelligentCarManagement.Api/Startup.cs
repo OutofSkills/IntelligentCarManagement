@@ -33,6 +33,8 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using System.Diagnostics;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
+using Serilog.Events;
 
 namespace IntelligentCarManagement.Api
 {
@@ -68,6 +70,15 @@ namespace IntelligentCarManagement.Api
                                             .WithExposedHeaders("*"); ;
                     });
             });
+
+            // API logging
+            var pathToSerilog = config.GetValue<string>("LoggingFilePath");
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.File(pathToSerilog)
+                .CreateLogger();
 
             // Get the secret key from appsettings
             var apiSettingsSection = config.GetSection("ApiSettings");
@@ -193,14 +204,6 @@ namespace IntelligentCarManagement.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseFileServer(new FileServerOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Static Files")),
-                RequestPath = "/StaticFiles",
-                EnableDefaultFiles = true
-            });
 
             app.UseRouting();
 

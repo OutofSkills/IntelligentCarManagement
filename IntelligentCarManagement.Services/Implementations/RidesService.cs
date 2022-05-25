@@ -1,5 +1,8 @@
-﻿using IntelligentCarManagement.DataAccess.UnitsOfWork;
+﻿using Api.Services.Utils;
+using AutoMapper;
+using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -12,13 +15,15 @@ namespace IntelligentCarManagement.Api.Services
     public class RidesService : IRidesService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly INotificationService notificationService;
 
-        public RidesService(IUnitOfWork unitOfWork)
+        public RidesService(IUnitOfWork unitOfWork, INotificationService notificationService)
         {
             this._unitOfWork = unitOfWork;
+            this.notificationService = notificationService;
         }
 
-        public async Task<RideRequestResponse> RequestAsync(Ride ride)
+        public async Task<RequestResponse> RequestAsync(RideDTO ride)
         {
             if (ride is null)
                 throw new Exception("No data provided");
@@ -26,24 +31,52 @@ namespace IntelligentCarManagement.Api.Services
             if (ride.PickUpTime == default)
                 ride.PickUpTime = DateTime.Now;
 
+            // Check if the client exists
+            var client = await _unitOfWork.ClientsRepo.GetById(ride.ClientId);
+            if (client is null)
+                throw new Exception("Client not found");
+
             // Check if the driver is available
             var driver = await _unitOfWork.DriversRepo.GetById(ride.DriverId);
             if (driver is null)
                 throw new Exception("Driver not found");
 
             if (!driver.IsAvailable)
-                return new RideRequestResponse() { Success = false, Message = $"Driver {driver.FirstName} {driver.LastName} is not available." };
+                return new RequestResponse() { Success = false, Message = $"Driver {driver.FirstName} {driver.LastName} is not available." };
 
             /* If the driver exists and is available
              * change his availability to not available 
              */
             driver.IsAvailable = false;
-
             _unitOfWork.DriversRepo.Update(driver);
-            _unitOfWork.RidesRepo.Insert(ride);
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<RideDTO, Ride>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            var newRide = iMapper.Map<RideDTO, Ride>(ride);
+
+            _unitOfWork.RidesRepo.Insert(newRide);
             _unitOfWork.SaveChanges();
 
-            return new RideRequestResponse { Success = true, Message = $"Driver {driver.FirstName} {driver.LastName} was successfully assigned to your request." };
+            // Notify the picked driver
+            return await NotifyDriverAsync(driver, client);
+        }
+
+        private async Task<RequestResponse> NotifyDriverAsync(Driver driver, Client client)
+        {
+            var notificationResponse = await notificationService.SendAsync(driver.Id, new NotificationDTO { Title = "New available ride", Body = $"User {client.UserName} requested a new ride." });
+
+            if (!notificationResponse.IsSuccess)
+                return new RequestResponse()
+                {
+                    Success = false,
+                    Message = "Couldn't notify our driver about the incoming request. Please contact him via one of his contacts"
+                };
+
+            return new RequestResponse { Success = true, Message = $"Driver {driver.FirstName} {driver.LastName} was successfully notified about your request." };
         }
 
         public async Task AssignDriverAsync(int rideId, int driverId)
@@ -68,14 +101,39 @@ namespace IntelligentCarManagement.Api.Services
             _unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<Ride>> GetAllAsync()
+        public async Task<IEnumerable<RideDTO>> GetAllAsync()
         {
-            return await _unitOfWork.RidesRepo.GetAll();
+            var rides = await _unitOfWork.RidesRepo.GetAll();
+
+            var result = new List<RideDTO>();
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Ride, RideDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            foreach (var ride in rides)
+            {
+                result.Add(iMapper.Map<Ride, RideDTO>(ride));
+            }
+
+            return result;
         }
 
-        public async Task<Ride> GetAsync(int id)
+        public async Task<RideDTO> GetAsync(int id)
         {
-            return await _unitOfWork.RidesRepo.GetById(id);
+            var ride =  await _unitOfWork.RidesRepo.GetById(id);
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Ride, RideDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            return iMapper.Map<Ride, RideDTO>(ride);
         }
 
         public async Task RemoveAsync(int id)
@@ -84,9 +142,60 @@ namespace IntelligentCarManagement.Api.Services
             _unitOfWork.SaveChanges();
         }
 
-        public Task<IEnumerable<Ride>> GetAllAsync(int clientId)
+        public async Task<IEnumerable<RideDTO>> GetClientsAllAsync(int clientId)
         {
-            throw new NotImplementedException();
+            var rides = await _unitOfWork.RidesRepo.GetAll();
+            rides = rides.Where(ride => ride.ClientId == clientId);
+
+            var result = new List<RideDTO>();
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Ride, RideDTO>();
+                cfg.CreateMap<Client, ClientDTO>();
+                cfg.CreateMap<Driver, DriverDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            foreach (var ride in rides)
+            {
+                var rideObj = iMapper.Map<Ride, RideDTO>(ride);
+                rideObj.Client.Avatar = FileCompressor.Decompress(rideObj.Client.Avatar);
+                rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
+                result.Add(rideObj);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<RideDTO>> GetDriversAllAsync(int driverId)
+        {
+            var rides = await _unitOfWork.RidesRepo.GetAll();
+            rides = rides.Where(ride => ride.DriverId == driverId);
+
+            var result = new List<RideDTO>();
+
+            // Map the driver model to the driver DTO
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Ride, RideDTO>();
+                cfg.CreateMap<Client, ClientDTO>();
+                cfg.CreateMap<Driver, DriverDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            foreach (var ride in rides)
+            {
+                var rideObj = iMapper.Map<Ride, RideDTO>(ride);
+                rideObj.Client.Avatar = FileCompressor.Decompress(rideObj.Client.Avatar);
+                rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
+                result.Add(rideObj);
+            }
+
+            return result;
         }
     }
 }

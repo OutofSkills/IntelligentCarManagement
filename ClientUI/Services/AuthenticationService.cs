@@ -29,7 +29,7 @@ namespace ClientUI.Services
             this.localStorage = localStorage;
         }
 
-        public async Task<RequestResponse> Login(string email, string password)
+        public async Task<Utils.RequestResponse> Login(string email, string password)
         {
             var loginModel = new LoginModel() { Email = email, Password = password };
             var json = JsonConvert.SerializeObject(loginModel);
@@ -40,7 +40,7 @@ namespace ClientUI.Services
 
             if (authResult.IsSuccessStatusCode == false)
             {
-                return new RequestResponse() { IsSuccess = false, Message = authResult.ReasonPhrase};
+                return new Utils.RequestResponse() { IsSuccess = false, Message = authResult.ReasonPhrase};
             }
 
             var result = System.Text.Json.JsonSerializer.Deserialize<LoginResponse>(authContent, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -51,7 +51,7 @@ namespace ClientUI.Services
 
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", result.JwtToken);
 
-            return new RequestResponse() { IsSuccess = true, Message = "Successfully logged in." }; 
+            return new Utils.RequestResponse() { IsSuccess = true, Message = "Successfully logged in." }; 
         }
 
         public async Task Logout()
@@ -61,7 +61,7 @@ namespace ClientUI.Services
             httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<RequestResponse> Register(ClientRegisterModel model)
+        public async Task<Utils.RequestResponse> Register(ClientRegisterModel model)
         {
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -70,13 +70,13 @@ namespace ClientUI.Services
 
             if(registerResult.IsSuccessStatusCode is false)
             {
-                return new RequestResponse() { IsSuccess = false, Message = registerResult.ReasonPhrase };
+                return new Utils.RequestResponse() { IsSuccess = false, Message = registerResult.ReasonPhrase };
             }
 
-            return new RequestResponse() { IsSuccess = true, Message = "Successfully signed in." };
+            return new Utils.RequestResponse() { IsSuccess = true, Message = "Successfully signed in." };
         }
 
-        public async Task<RequestResponse> ChangePasswordAsync(ResetPasswordDTO resetPasswordModel)
+        public async Task<Utils.RequestResponse> ChangePasswordAsync(ResetPasswordDTO resetPasswordModel)
         {
             var json = JsonConvert.SerializeObject(resetPasswordModel);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -85,10 +85,10 @@ namespace ClientUI.Services
 
             if (result.IsSuccessStatusCode is false)
             {
-                return new RequestResponse() { IsSuccess = false, Message = result.ReasonPhrase };
+                return new Utils.RequestResponse() { IsSuccess = false, Message = result.ReasonPhrase };
             }
 
-            return new RequestResponse() { IsSuccess = true, Message = "Successfully changed password." };
+            return new Utils.RequestResponse() { IsSuccess = true, Message = "Successfully changed password." };
         }
     }
 }

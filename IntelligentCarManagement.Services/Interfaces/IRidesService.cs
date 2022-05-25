@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,12 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface IRidesService
     {
-        Task<IEnumerable<Ride>> GetAllAsync();
-        Task<IEnumerable<Ride>> GetAllAsync(int clientId);
-        Task<Ride> GetAsync(int id);
+        Task<IEnumerable<RideDTO>> GetAllAsync();
+        Task<IEnumerable<RideDTO>> GetClientsAllAsync(int clientId);
+        Task<IEnumerable<RideDTO>> GetDriversAllAsync(int driverId);
+        Task<RideDTO> GetAsync(int id);
         Task RemoveAsync(int id);
-        Task<RideRequestResponse> RequestAsync(Ride ride);
+        Task<RequestResponse> RequestAsync(RideDTO ride);
         void Update(int id, Ride ride);
         Task AssignDriverAsync(int rideId, int driverId);
     }

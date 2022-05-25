@@ -1,16 +1,14 @@
-﻿using System;
+﻿using Models.DTOs;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace Models.Data_Transfer_Objects
 {
-    public class Ride
+    public class RideDTO
     {
-        public int Id { get; set; }
         public string PickUpPlaceName { get; set; }
         public string PickUpPlaceAddress { get; set; }
         public string PickUpPlaceLat { get; set; }
@@ -25,10 +23,7 @@ namespace Models
         public int DriverId { get; set; }
         public int ClientId { get; set; }
 
-        [ForeignKey(nameof(DriverId))]
-        public virtual Driver Driver { get; set; }
-
-        [ForeignKey(nameof(ClientId))]
-        public virtual Client Client { get; set; }
+        public DriverDTO Driver { get; set; }
+        public ClientDTO Client { get; set; }
     }
 }

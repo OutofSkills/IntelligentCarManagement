@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -14,42 +15,45 @@ namespace IntelligentCarManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RideController : ControllerBase
+    public class RidesController : ControllerBase
     {
         private readonly IRidesService ridesService;
-        private readonly INotificationService notificationService;
 
-        public RideController(IRidesService ridesService, INotificationService notificationService )
+        public RidesController(IRidesService ridesService)
         {
             this.ridesService = ridesService;
-            this.notificationService = notificationService;
         }
 
         [HttpPost]
-        public async Task<RideRequestResponse> RequestRide([FromBody] Ride ride)
+        public async Task<RequestResponse> RequestRide([FromBody] RideDTO ride)
         {
             var response = await ridesService.RequestAsync(ride);
-    
-            if (!response.Success)
-                return response;
-
-            var notificationResponse = await notificationService.SendAsync(ride.DriverId, new NotificationDTO { Title = "New available ride", Body = $"User with id {ride.ClientId} requested a new ride."});
-            
-            if (notificationResponse.IsSuccess)
-                return new RideRequestResponse() 
-                { 
-                    Success = false,
-                    Message = "Couldn't notify our driver about the incoming request. Please contact him via one of his contacts" 
-                };
-            
             return response;
+        }
+
+        [HttpGet]
+        [Route("client")]
+        public async Task<IEnumerable<RideDTO>> GetClientRidesAsync([FromQuery] int id)
+        {
+            var rides = await ridesService.GetClientsAllAsync(id);
+       
+            return rides;
+        }
+
+        [HttpGet]
+        [Route("driver")]
+        public async Task<IEnumerable<RideDTO>> GetDriverRidesAsync([FromQuery] int id)
+        {
+            var rides = await ridesService.GetDriversAllAsync(id);
+
+            return rides;
         }
 
         [HttpGet]
         [Route("find-ride")]
         public async Task<IActionResult> FindRideAsync([FromQuery] int id)
         {
-            Ride ride;
+            RideDTO ride;
             try
             {
                 ride = await ridesService.GetAsync(id);

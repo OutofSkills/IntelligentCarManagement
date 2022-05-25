@@ -21,7 +21,7 @@ namespace IntelligentCarManagement.Services
     {
         private readonly UserManager<UserBase> _userManager;
         private readonly ApiSettings apiSettings;
-        private const double EXPIRY_DURATION_HOURS = 24;
+        private const double EXPIRY_DURATION_HOURS = 72;
 
         public TokenBuilder(UserManager<UserBase> userManager, IOptions<ApiSettings> options)
         {

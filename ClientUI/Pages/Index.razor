@@ -1,7 +1,491 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@layout EmptyLayout
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
-<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
+<!-- Nav Menu -->
+<div class="nav-menu fixed-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-dark navbar-expand-lg">
+                    <a class="navbar-brand" href="#"><img src="images/car_logo.png" class="img-fluid" alt="logo" style="max-width:4em"></a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item"> <a class="nav-link active" href="#home">HOME <span class="sr-only">(current)</span></a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="#features">FEATURES</a> </li>
+                            <li class="nav-item"> <a class="nav-link" href="#gallery">GALLERY</a> </li>
+                            @*<li class="nav-item"> <a class="nav-link" href="#pricing">PRICING</a> </li>*@
+                            <li class="nav-item"> <a class="nav-link" href="#contact">CONTACT</a> </li>
+                            <li class="nav-item"><a href="#" class="btn btn-outline-light my-3 my-sm-0 ml-lg-3">Download</a></li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<header class="bg-gradient" id="home">
+    <div class="container mt-5">
+        <h1>Intelligent Car Management</h1>
+        <p class="tagline">Are you tired of aggressive and rude taxi drivers. Here is our solution to choose what suits you. </p>
+    </div>
+    <div class="img-holder mt-3"><img src="images/iphonex.png" alt="phone" class="img-fluid"></div>
+</header>
+
+@*<div class="client-logos my-5">
+    <div class="container text-center">
+        <img src="images/client-logos.png" alt="client logos" class="img-fluid">
+    </div>
+</div>*@
+
+<div class="section light-bg" id="features">
+
+
+    <div class="container">
+
+        <div class="section-title">
+            <small>HIGHLIGHTS</small>
+            <h3>Features you'll love</h3>
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 col-lg-4">
+                <div class="card features">
+                    <div class="card-body">
+                        <div class="media">
+                            <span class="ti-face-smile gradient-fill ti-3x mr-3"></span>
+                            <div class="media-body">
+                                <h4 class="card-title">Simple</h4>
+                                <p class="card-text">Select a route, choose a driver, make yourself confortable and then rate your experience. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card features">
+                    <div class="card-body">
+                        <div class="media">
+                            <span class="ti-thought gradient-fill ti-3x mr-3"></span>
+                            <div class="media-body">
+                                <h4 class="card-title">Smart</h4>
+                                <p class="card-text">Our algorithms will recommend you the best drivers depending on your preferences. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card features">
+                    <div class="card-body">
+                        <div class="media">
+                            <span class="ti-lock gradient-fill ti-3x mr-3"></span>
+                            <div class="media-body">
+                                <h4 class="card-title">Secure</h4>
+                                <p class="card-text">You can control every detail that our app is using up to permanently removing your account. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- // end .section -->
+<div class="section">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-6">
+                <div class="box-icon"><span class="ti-mobile gradient-fill ti-3x"></span></div>
+                <h2>Discover our App</h2>
+                <p class="mb-4">Get a ride in minutes. Or become a driver and earn money on your schedule. We are finding you better ways to move, work, and succeed. </p>
+                <a href="#" class="btn btn-primary">Read more</a>
+            </div>
+        </div>
+        <div class="perspective-phone">
+            <img src="images/perspective.png" alt="perspective phone" class="img-fluid">
+        </div>
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+<div class="section light-bg">
+    <div class="container">
+        <div class="section-title">
+            <small>FEATURES</small>
+            <h3>Do more with our app</h3>
+        </div>
+
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#driving">Driving</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#sheduling">Scheduling</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#riding">Riding</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#support">Support</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="driving">
+                <div class="d-flex flex-column flex-lg-row">
+                    <img src="images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                    <div>
+                        <h2>Become a driver</h2>
+                        <p class="lead">The more you drive, the more money you can make. </p>
+                        <p> 
+                            Just tell us which city you'd like to drive in and the type of license you have. We'll email you with your next steps.
+                        </p>
+                        <p> You can sign up even if you don't have a car that meets the vehicle requirements in Romania right now. 
+                            Registering through a fleet could give you access to a car if needed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="sheduling">
+                <div class="d-flex flex-column flex-lg-row">
+                    <div>
+                        <h2>Scheduling rides when you want</h2>
+                        <p class="lead">Are you a well organized person ? </p>
+                        <p>
+                            No need to worry about being late anymore. With this feature you can shedule a ride hours or even days before, so you can safely plan your activities.
+                        </p>
+                        <p> A driver will be assigned and notified about your request.
+                        </p>
+                    </div>
+                    <img src="images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                </div>
+            </div>
+            <div class="tab-pane fade" id="riding">
+                <div class="d-flex flex-column flex-lg-row">
+                    <img src="images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                    <div>
+                        <h2>Ride requests</h2>
+                        <p class="lead">Simple and affordable rides </p>
+                        <p>
+                            The smartest way to move around in cities. Forget expensive taxi rides or slow public transport.
+                        </p>
+                        <p> 
+                            With our smart alghoritms you can choose one of the most suitable drivers for you.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="support">
+                <div class="d-flex flex-column flex-lg-row">
+                    <div>
+                        <h2>Instant support from our specialists</h2>
+                        <p class="lead"> Access it from our app 24/7 </p>
+                        <p>
+                            Our best professionals are always ready to give you a hand of help. Any technical problem or question will be solved within 24h.
+                        </p>
+                        <p> 
+                           Supporting you is our first priority.
+                        </p>
+                    </div>
+                    <img src="images/graphic.png" alt="graphic" class="img-fluid rounded align-self-start mr-lg-5 mb-5 mb-lg-0">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<!-- // end .section -->
+
+<div class="section">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="images/dualphone.png" alt="dual phone" class="img-fluid">
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <div>
+                    <div class="box-icon"><span class="ti-money gradient-fill ti-3x"></span></div>
+                    <h2>Let the app lead the way</h2>
+                    <p class="mb-4">
+                        Just tap and go. You get turn-by-turn directions, suggestions to help you make more money, and 24/7 support.
+                    </p>
+                    <a href="#" class="btn btn-primary">Read more</a></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+<div class="section light-bg">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 d-flex align-items-center">
+                <ul class="list-unstyled ui-steps">
+                    <li class="media">
+                        <div class="circle-icon mr-4">1</div>
+                        <div class="media-body">
+                            <h5>Create an Account</h5>
+                            <p>Choose yourself a good nickname and a strong password. Confirm your identity and enjoy. </p>
+                        </div>
+                    </li>
+                    <li class="media my-4">
+                        <div class="circle-icon mr-4">2</div>
+                        <div class="media-body">
+                            <h5>Request a ride</h5>
+                            <p>Choose a pick-up location, a destination and a driver that you want. We will find the best and shortest route for you.</p>
+                        </div>
+                    </li>
+                    <li class="media">
+                        <div class="circle-icon mr-4">3</div>
+                        <div class="media-body">
+                            <h5>Rate your experience</h5>
+                            <p>Your feedback is important for us. Make sure to rate your experience. </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <img src="images/iphonex.png" alt="iphone" class="img-fluid">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+<div class="section">
+    <div class="container">
+        <div class="section-title">
+            <small>TESTIMONIALS</small>
+            <h3>What our Users Says</h3>
+        </div>
+
+        <div class="testimonials owl-carousel">
+            <div class="testimonials-single">
+                <img src="images/client.png" alt="client" class="client-img">
+                <blockquote class="blockquote">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</blockquote>
+                <h5 class="mt-4 mb-2">Bogdan Ionut</h5>
+                <p class="text-primary">Moldova</p>
+            </div>
+            <div class="testimonials-single">
+                <img src="images/client.png" alt="client" class="client-img">
+                <blockquote class="blockquote">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</blockquote>
+                <h5 class="mt-4 mb-2">Andrew Garfield</h5>
+                <p class="text-primary">USA</p>
+            </div>
+            <div class="testimonials-single">
+                <img src="images/client.png" alt="client" class="client-img">
+                <blockquote class="blockquote">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</blockquote>
+                <h5 class="mt-4 mb-2">Crystal Gordon</h5>
+                <p class="text-primary">Romania</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+<div class="section light-bg" id="gallery">
+    <div class="container">
+        <div class="section-title">
+            <small>GALLERY</small>
+            <h3>App Screenshots</h3>
+        </div>
+
+        <div class="img-gallery owl-carousel owl-theme">
+            <img class="owl-item" src="images/screen1.jpg" alt="image">
+            <img class="owl-item" src="images/screen2.jpg" alt="image">
+            <img class="owl-item" src="images/screen3.jpg" alt="image">
+            <img class="owl-item" src="images/screen1.jpg" alt="image">
+        </div>
+
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+
+@*<div class="section" id="pricing">
+    <div class="container">
+        <div class="section-title">
+            <small>PRICING</small>
+            <h3>Upgrade to Pro</h3>
+        </div>
+
+        <div class="card-deck">
+            <div class="card pricing">
+                <div class="card-head">
+                    <small class="text-primary">PERSONAL</small>
+                    <span class="price">$14<sub>/m</sub></span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <div class="list-group-item">10 Projects</div>
+                    <div class="list-group-item">5 GB Storage</div>
+                    <div class="list-group-item">Basic Support</div>
+                    <div class="list-group-item"><del>Collaboration</del></div>
+                    <div class="list-group-item"><del>Reports and analytics</del></div>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                </div>
+            </div>
+            <div class="card pricing popular">
+                <div class="card-head">
+                    <small class="text-primary">FOR TEAMS</small>
+                    <span class="price">$29<sub>/m</sub></span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <div class="list-group-item">Unlimited Projects</div>
+                    <div class="list-group-item">100 GB Storage</div>
+                    <div class="list-group-item">Priority Support</div>
+                    <div class="list-group-item">Collaboration</div>
+                    <div class="list-group-item">Reports and analytics</div>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                </div>
+            </div>
+            <div class="card pricing">
+                <div class="card-head">
+                    <small class="text-primary">ENTERPRISE</small>
+                    <span class="price">$249<sub>/m</sub></span>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <div class="list-group-item">Unlimited Projects</div>
+                    <div class="list-group-item">Unlimited Storage</div>
+                    <div class="list-group-item">Collaboration</div>
+                    <div class="list-group-item">Reports and analytics</div>
+                    <div class="list-group-item">Web hooks</div>
+                </ul>
+                <div class="card-body">
+                    <a href="#" class="btn btn-primary btn-lg btn-block">Choose this Plan</a>
+                </div>
+            </div>
+        </div>
+        <!-- // end .pricing -->
+
+
+    </div>
+
+</div>
+<!-- // end .section -->*@
+
+
+<div class="section pt-0">
+    <div class="container">
+        <div class="section-title">
+            <small>FAQ</small>
+            <h3>Frequently Asked Questions</h3>
+        </div>
+
+        <div class="row pt-4">
+            <div class="col-md-6">
+                <h4 class="mb-3">How much I can earn?</h4>
+                <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+                <h4 class="mb-3">What payment methods do you accept?</h4>
+                <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+
+            </div>
+            <div class="col-md-6">
+                <h4 class="mb-3">Is the app available in Romania?</h4>
+                <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+                <h4 class="mb-3">Do I have to make a contract like a driver?</h4>
+                <p class="light-font mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum, urna eu pellentesque pretium, nisi nisi fermentum enim, et sagittis dolor nulla vel sapien. Vestibulum sit amet mattis ante. </p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- // end .section -->
+
+
+
+<div class="section bg-gradient">
+    <div class="container">
+        <div class="call-to-action">
+
+            <div class="box-icon"><span class="ti-mobile gradient-fill ti-3x"></span></div>
+            <h2>Download Anywhere</h2>
+            <p class="tagline">Available for all major mobile and desktop platforms. Rapidiously visualize optimal ROI rather than enterprise-wide methods of empowerment. </p>
+            <div class="my-4">
+
+              @*<a href="#" class="btn btn-light"><img src="images/appleicon.png" alt="icon"> App Store</a>*@
+                <a href="#" class="btn btn-light"><img src="images/playicon.png" alt="icon"> Google play</a>
+            </div>
+            <p class="text-primary"><small><i>*Works on Android Kitkat and above. </i></small></p>
+        </div>
+    </div>
+
+</div>
+<!-- // end .section -->
+
+<div class="light-bg py-5" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left">
+                <p class="mb-2"> <span class="ti-location-pin mr-2"></span> str. Decebal, Craiova, Romania</p>
+                <div class=" d-block d-sm-inline-block">
+                    <p class="mb-2">
+                        <span class="ti-email mr-2"></span> <a class="mr-4" href="mailto:cojocaru1ivan@gmail.com">support@intelligentcarmanagement.com</a>
+                    </p>
+                </div>
+                <div class="d-block d-sm-inline-block">
+                    <p class="mb-0">
+                        <span class="ti-headphone-alt mr-2"></span> <a href="tel:0767777777">+40 767-777-777</a>
+                    </p>
+                </div>
+
+            </div>
+            <div class="col-lg-6">
+                <div class="social-icons">
+                    <a href="#"><span class="ti-facebook"></span></a>
+                    <a href="#"><span class="ti-twitter-alt"></span></a>
+                    <a href="#"><span class="ti-instagram"></span></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<!-- // end .section -->
+<footer class="my-5 text-center">
+    <p class="mb-2"><small>COPYRIGHT © 2022. ALL RIGHTS RESERVED. <a href="">Intelligent Car Management</a></small></p>
+
+    <small>
+        <a href="#" class="m-2">PRESS</a>
+        <a href="#" class="m-2">TERMS</a>
+        <a href="#" class="m-2">PRIVACY</a>
+    </small>
+</footer>
+@code{
+    [Inject]
+    protected IJSRuntime JsRuntime { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+   {
+       if (firstRender)
+           JsRuntime.InvokeVoidAsync("onIndexRendered");
+   }
+}

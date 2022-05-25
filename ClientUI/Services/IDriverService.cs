@@ -5,10 +5,10 @@ namespace ClientUI.Services
 {
     public interface IDriverService
     {
-        Task<RequestResponse> SubmitApplication(DriverApplicationDTO model);
+        Task<Utils.RequestResponse> SubmitApplication(DriverApplicationDTO model);
         Task<IEnumerable<DriverApplicationDTO>> GetApplicationsAsync();
         Task<DriverApplicationDTO> GetApplicationAsync(int id);
-        Task<RequestResponse> ApproveApplicationAsync(int id);
-        Task<RequestResponse> RejectApplicationAsync(int id);
+        Task<Utils.RequestResponse> ApproveApplicationAsync(int id);
+        Task<Utils.RequestResponse> RejectApplicationAsync(int id);
     }
 }

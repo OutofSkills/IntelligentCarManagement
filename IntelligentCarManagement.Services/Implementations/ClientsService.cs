@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Models.DTOs;
 using Api.Services.CustomExceptions;
 using Models.DTOs;
+using Api.Services.Utils;
 
 namespace IntelligentCarManagement.Services
 {
@@ -31,6 +32,8 @@ namespace IntelligentCarManagement.Services
         public async Task<ClientDTO> GetAsync(int id)
         {
             var client = await unitOfWork.ClientsRepo.GetById(id);
+            // Compress user avatar
+            client.Avatar = FileCompressor.Decompress(client.Avatar);
 
             // Map the driver model to the driver DTO
             // Map view model to user model
@@ -46,6 +49,8 @@ namespace IntelligentCarManagement.Services
         public ClientDTO Get(String email)
         {
             var client = unitOfWork.ClientsRepo.GetByEmail(email);
+            // Compress user avatar
+            client.Avatar = FileCompressor.Decompress(client.Avatar);
 
             // Map the driver model to the driver DTO
             // Map view model to user model
@@ -74,7 +79,10 @@ namespace IntelligentCarManagement.Services
 
             foreach (var client in clients)
             {
-                result.Add(iMapper.Map<Client, ClientDTO>(client));
+                var clientObj = iMapper.Map<Client, ClientDTO>(client);
+                // Compress user avatar
+                clientObj.Avatar = FileCompressor.Decompress(clientObj.Avatar);
+                result.Add(clientObj);
             }
 
             return result;
@@ -94,6 +102,9 @@ namespace IntelligentCarManagement.Services
 
             IMapper iMapper = config.CreateMapper();
             client = iMapper.Map(clientDTO, client);
+
+            // Compress user avatar
+            client.Avatar = FileCompressor.Compress(client.Avatar);
 
             unitOfWork.ClientsRepo.Update(client);
             unitOfWork.SaveChanges();

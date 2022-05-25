@@ -6,9 +6,9 @@ namespace ClientUI.Services
 {
     public interface IAuthenticationService
     {
-        Task<RequestResponse> Register(ClientRegisterModel model);
-        Task<RequestResponse> ChangePasswordAsync(ResetPasswordDTO model);
-        Task<RequestResponse> Login(string email, string password);
+        Task<Utils.RequestResponse> Register(ClientRegisterModel model);
+        Task<Utils.RequestResponse> ChangePasswordAsync(ResetPasswordDTO model);
+        Task<Utils.RequestResponse> Login(string email, string password);
         Task Logout();
     }
 }
