@@ -20,9 +20,9 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public void Send(EmailDTO dTO, [FromServices] IWebHostEnvironment env)
+        public void Send(EmailDTO dTO, [FromServices] IWebHostEnvironment environment)
         {
-            emailService.SendEmail(dTO, new WelcomeTemplate(env));
+            emailService.SendEmail(dTO, new WelcomeTemplate(environment));
         }
     }
 }

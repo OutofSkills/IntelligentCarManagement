@@ -63,7 +63,7 @@ namespace IntelligentCarManagement.Api
                 options.AddPolicy(name: "AllowOrigin",
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost:44304", "https://localhost:44398")
+                        builder.WithOrigins("https://intelligentcarmanagement.azurewebsites.net", "https://localhost:44398", "http://intelligentcarmanagement.azurewebsites.net")
                                             .AllowAnyHeader()
                                             .AllowAnyMethod()
                                             .AllowCredentials()
@@ -212,6 +212,8 @@ namespace IntelligentCarManagement.Api
             app.UseAuthorization();
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
 
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
 

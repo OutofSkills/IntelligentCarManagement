@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
+using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

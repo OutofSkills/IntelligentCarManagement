@@ -11,19 +11,18 @@ namespace Api.Services.Utils.Email_Templates
 {
     public class ApplicationAcceptedTemplate: IEmailTemplate
     {
-        private readonly IWebHostEnvironment env;
+        private readonly IWebHostEnvironment environment;
 
-        public ApplicationAcceptedTemplate(IWebHostEnvironment env)
+        public ApplicationAcceptedTemplate(IWebHostEnvironment environment)
         {
-            this.env = env;
+            this.environment = environment;
         }
 
         public string GenerateTemplate(EmailDTO email)
         {
-            //Fetching Email Body Text from EmailTemplate File.  
-            string rootPath = System.IO.Path.GetDirectoryName(env.ContentRootPath);
+            var root = environment.ContentRootPath;
 
-            string filePath = Path.Combine(rootPath, "/IntelligentCarManagement.Api/Static Files/Email Templates/ApplicationAccepted.html");
+            string filePath = Path.Combine(root, "wwwroot\\StaticFiles\\ApplicationAccepted.html");
             using StreamReader str = new(filePath);
             string mailText = str.ReadToEnd();
 

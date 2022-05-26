@@ -35,7 +35,7 @@ namespace ClientUI.Services
             var json = JsonConvert.SerializeObject(loginModel);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var authResult = await httpClient.PostAsync("http://localhost:41427/api/AdminAccount/login", stringContent);
+            var authResult = await httpClient.PostAsync("https://intellicarsapi.azurewebsites.net/api/AdminAccount/login", stringContent);
             var authContent = await authResult.Content.ReadAsStringAsync();
 
             if (authResult.IsSuccessStatusCode == false)
@@ -66,7 +66,7 @@ namespace ClientUI.Services
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var registerResult = await httpClient.PostAsync("http://localhost:41427/api/AdminAccount", stringContent);
+            var registerResult = await httpClient.PostAsync("https://intellicarsapi.azurewebsites.net/api/AdminAccount", stringContent);
 
             if(registerResult.IsSuccessStatusCode is false)
             {
@@ -81,7 +81,7 @@ namespace ClientUI.Services
             var json = JsonConvert.SerializeObject(resetPasswordModel);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var result = await httpClient.PostAsync("http://localhost:41427/api/AdminAccount/change-password", stringContent);
+            var result = await httpClient.PostAsync("https://intellicarsapi.azurewebsites.net/api/AdminAccount/change-password", stringContent);
 
             if (result.IsSuccessStatusCode is false)
             {

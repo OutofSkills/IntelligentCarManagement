@@ -22,14 +22,14 @@ namespace Api.Services.Implementations
         private readonly IUnitOfWork unitOfWork;
         private readonly IDriversAccountService driversAccountService;
         private readonly IMailService mailService;
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly IWebHostEnvironment environment;
 
-        public DriverApplicationsService(IUnitOfWork unitOfWork, IDriversAccountService driversAccountService, IMailService mailService, IWebHostEnvironment  webHostEnvironment)
+        public DriverApplicationsService(IUnitOfWork unitOfWork, IDriversAccountService driversAccountService, IMailService mailService, IWebHostEnvironment environment)
         {
             this.unitOfWork = unitOfWork;
             this.driversAccountService = driversAccountService;
             this.mailService = mailService;
-            this.webHostEnvironment = webHostEnvironment;
+            this.environment = environment;
         }
 
         public void Apply(DriverApplicationDTO model)
@@ -58,7 +58,7 @@ namespace Api.Services.Implementations
                     Action = "driver registration",
                     Content = ""
                 },
-                new WelcomeTemplate(webHostEnvironment)
+                new WelcomeTemplate(environment)
                 );
         }
 
@@ -93,7 +93,7 @@ namespace Api.Services.Implementations
                    "<b>Email: </b>" + application.Email +
                    "<b>Password: </b>" + accountPassword
                },
-               new ApplicationAcceptedTemplate(webHostEnvironment)
+               new ApplicationAcceptedTemplate(environment)
                );
         }
 

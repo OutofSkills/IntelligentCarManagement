@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api.Services", "Intelligent
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client.Authentication", "IntelligentCarManagement.Authentication\Client.Authentication.csproj", "{BC027925-871F-442A-8BD5-566B0A86E746}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientUI", "ClientUI\ClientUI.csproj", "{FA114847-F5DA-4C6C-B570-F312FC9591C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientUI", "ClientUI\ClientUI.csproj", "{43A9A9D8-A2D4-40A9-B4AF-B8458EAD5127}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{BC027925-871F-442A-8BD5-566B0A86E746}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC027925-871F-442A-8BD5-566B0A86E746}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC027925-871F-442A-8BD5-566B0A86E746}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA114847-F5DA-4C6C-B570-F312FC9591C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA114847-F5DA-4C6C-B570-F312FC9591C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA114847-F5DA-4C6C-B570-F312FC9591C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA114847-F5DA-4C6C-B570-F312FC9591C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43A9A9D8-A2D4-40A9-B4AF-B8458EAD5127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43A9A9D8-A2D4-40A9-B4AF-B8458EAD5127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43A9A9D8-A2D4-40A9-B4AF-B8458EAD5127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43A9A9D8-A2D4-40A9-B4AF-B8458EAD5127}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

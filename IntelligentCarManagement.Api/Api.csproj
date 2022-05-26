@@ -35,5 +35,11 @@
     <ProjectReference Include="..\IntelligentCarManagement.Services\Api.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\StaticFiles\ApplicationAccepted.html" />
+    <None Include="wwwroot\StaticFiles\logo.png" />
+    <None Include="wwwroot\StaticFiles\Welcome.html" />
+  </ItemGroup>
+
 
 </Project>

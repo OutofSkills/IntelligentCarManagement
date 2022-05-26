@@ -14,7 +14,7 @@ namespace ClientUI.Services
 
         public async Task<UserBaseDTO> Get(int id)
         {
-            var result = await _httpClient.GetAsync($"http://localhost:41427/api/AdminAccount?id={id}");
+            var result = await _httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/AdminAccount?id={id}");
             var content = await result.Content.ReadAsStringAsync();
 
             var user = System.Text.Json.JsonSerializer.Deserialize<UserBaseDTO>(content, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });

@@ -16,7 +16,7 @@ namespace ClientUI.Services
 
         public async Task<IEnumerable<DriverApplicationDTO>> GetApplicationsAsync()
         {
-            var response = await httpClient.GetAsync("http://localhost:41427/api/DriverApplications");
+            var response = await httpClient.GetAsync("https://intellicarsapi.azurewebsites.net/api/DriverApplications");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -27,7 +27,7 @@ namespace ClientUI.Services
 
         public async Task<DriverApplicationDTO> GetApplicationAsync(int id)
         {
-            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/id?id={id}");
+            var response = await httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/DriverApplications/id?id={id}");
 
             var content = await response.Content.ReadAsStringAsync();
 
@@ -41,7 +41,7 @@ namespace ClientUI.Services
             var json = JsonConvert.SerializeObject(model);
             var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await httpClient.PostAsync("http://localhost:41427/api/DriverApplications", stringContent);
+            var response = await httpClient.PostAsync("https://intellicarsapi.azurewebsites.net/api/DriverApplications", stringContent);
 
             if (response.IsSuccessStatusCode == false)
             {
@@ -53,7 +53,7 @@ namespace ClientUI.Services
 
         public async Task<Utils.RequestResponse> ApproveApplicationAsync(int id)
         {
-            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/approve/id?id={id}");
+            var response = await httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/DriverApplications/approve/id?id={id}");
 
             if (response.IsSuccessStatusCode == false)
             {
@@ -65,7 +65,7 @@ namespace ClientUI.Services
 
         public async Task<Utils.RequestResponse> RejectApplicationAsync(int id)
         {
-            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/reject/id?{id}");
+            var response = await httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/DriverApplications/reject/id?{id}");
 
             if (response.IsSuccessStatusCode == false)
             {
