@@ -24,6 +24,10 @@ namespace Models
         public DateTime PickUpTime { get; set; }
         public int DriverId { get; set; }
         public int ClientId { get; set; }
+        public int RideStateId { get; set; }
+
+        [ForeignKey(nameof(RideStateId))]
+        public virtual RideState RideState{ get; set; }
 
         [ForeignKey(nameof(DriverId))]
         public virtual Driver Driver { get; set; }

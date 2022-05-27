@@ -257,13 +257,16 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Body")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EventContent")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("NotificationCategoryId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("EventName")
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
@@ -271,9 +274,30 @@ namespace Api.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NotificationCategoryId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Models.NotificationCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Icon")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationCategories");
                 });
 
             modelBuilder.Entity("Models.Ride", b =>
@@ -323,13 +347,34 @@ namespace Api.DataAccess.Migrations
                     b.Property<DateTime>("PickUpTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RideStateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.HasIndex("DriverId");
 
+                    b.HasIndex("RideStateId");
+
                     b.ToTable("Rides");
+                });
+
+            modelBuilder.Entity("Models.RideState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RideStates");
                 });
 
             modelBuilder.Entity("Models.Role", b =>
@@ -623,11 +668,19 @@ namespace Api.DataAccess.Migrations
 
             modelBuilder.Entity("Models.Notification", b =>
                 {
+                    b.HasOne("Models.NotificationCategory", "NotificaionCategory")
+                        .WithMany("Notifications")
+                        .HasForeignKey("NotificationCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.UserBase", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("NotificaionCategory");
 
                     b.Navigation("User");
                 });
@@ -646,9 +699,17 @@ namespace Api.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.RideState", "RideState")
+                        .WithMany("Rides")
+                        .HasForeignKey("RideStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Client");
 
                     b.Navigation("Driver");
+
+                    b.Navigation("RideState");
                 });
 
             modelBuilder.Entity("Models.UserBase", b =>
@@ -719,6 +780,16 @@ namespace Api.DataAccess.Migrations
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Navigation("Driver");
+                });
+
+            modelBuilder.Entity("Models.NotificationCategory", b =>
+                {
+                    b.Navigation("Notifications");
+                });
+
+            modelBuilder.Entity("Models.RideState", b =>
+                {
+                    b.Navigation("Rides");
                 });
 
             modelBuilder.Entity("Models.UserBase", b =>

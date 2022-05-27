@@ -56,7 +56,7 @@ namespace Api.Services.Implementations
             Client newUser = new();
 
             // Compress user avatar
-            model.Avatar = FileCompressor.Decompress(model.Avatar);
+            model.Avatar = FileCompressor.Compress(model.Avatar);
 
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {

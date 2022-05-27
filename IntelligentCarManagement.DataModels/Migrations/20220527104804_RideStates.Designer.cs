@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    [Migration("20220516094551_ApplicationStatusRename")]
-    partial class ApplicationStatusRename
+    [Migration("20220527104804_RideStates")]
+    partial class RideStates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -325,13 +325,34 @@ namespace Api.DataAccess.Migrations
                     b.Property<DateTime>("PickUpTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RideStateId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.HasIndex("DriverId");
 
+                    b.HasIndex("RideStateId");
+
                     b.ToTable("Rides");
+                });
+
+            modelBuilder.Entity("Models.RideState", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RideStates");
                 });
 
             modelBuilder.Entity("Models.Role", b =>
@@ -613,7 +634,7 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Models.ApplicationStatus", "ApplicationStatus")
-                        .WithMany("Applications")
+                        .WithMany()
                         .HasForeignKey("ApplicationStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -636,7 +657,7 @@ namespace Api.DataAccess.Migrations
 
             modelBuilder.Entity("Models.Ride", b =>
                 {
-                    b.HasOne("Models.UserBase", "User")
+                    b.HasOne("Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -648,9 +669,17 @@ namespace Api.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.RideState", "RideState")
+                        .WithMany("Rides")
+                        .HasForeignKey("RideStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
                     b.Navigation("Driver");
 
-                    b.Navigation("User");
+                    b.Navigation("RideState");
                 });
 
             modelBuilder.Entity("Models.UserBase", b =>
@@ -718,14 +747,14 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Models.ApplicationStatus", b =>
-                {
-                    b.Navigation("Applications");
-                });
-
             modelBuilder.Entity("Models.Car", b =>
                 {
                     b.Navigation("Driver");
+                });
+
+            modelBuilder.Entity("Models.RideState", b =>
+                {
+                    b.Navigation("Rides");
                 });
 
             modelBuilder.Entity("Models.UserBase", b =>

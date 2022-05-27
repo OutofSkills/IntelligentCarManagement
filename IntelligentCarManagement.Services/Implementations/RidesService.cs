@@ -1,4 +1,5 @@
-﻿using Api.Services.Utils;
+﻿using Api.Services.CustomExceptions;
+using Api.Services.Utils;
 using AutoMapper;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Models;
@@ -52,11 +53,16 @@ namespace IntelligentCarManagement.Api.Services
 
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<RideDTO, Ride>();
+                cfg.CreateMap<RideStateDTO, RideState>();
+                cfg.AddGlobalIgnore("Id");
             });
 
             IMapper iMapper = config.CreateMapper();
 
             var newRide = iMapper.Map<RideDTO, Ride>(ride);
+
+            var states = await _unitOfWork.RideStatesRepo.GetAll();
+            newRide.RideState = states.Where(s => s.Name == "PROCESSING").FirstOrDefault();
 
             _unitOfWork.RidesRepo.Insert(newRide);
             _unitOfWork.SaveChanges();
@@ -67,9 +73,15 @@ namespace IntelligentCarManagement.Api.Services
 
         private async Task<RequestResponse> NotifyDriverAsync(Driver driver, Client client)
         {
-            var notificationResponse = await notificationService.SendAsync(driver.Id, new NotificationDTO { Title = "New available ride", Body = $"User {client.UserName} requested a new ride." });
+            var notificationCategory = await notificationService.GetNotificationCategoryAsync(NotificationCategories.NEW_RIDE);
+            var notificationResponse = await notificationService.SendAsync(driver.Id, new NotificationDTO
+            {
+                Title = "New available ride",
+                Body = $"User {client.UserName} requested a new ride.",
+                NotificaionCategory = notificationCategory
+            });
 
-            if (!notificationResponse.IsSuccess)
+            if (!notificationResponse.Success)
                 return new RequestResponse()
                 {
                     Success = false,
@@ -101,6 +113,34 @@ namespace IntelligentCarManagement.Api.Services
             _unitOfWork.SaveChanges();
         }
 
+        public async Task ConfirmRequestAsync(int rideId)
+        {
+            var ride = await _unitOfWork.RidesRepo.GetById(rideId);
+            var newState = await _unitOfWork.RideStatesRepo.GetAll();
+
+            if (ride is null)
+                throw new NotFoundException($"Can't find a ride with id {rideId}");
+
+            ride.RideStateId = newState.Where(s => s.Name == "ONGOING").FirstOrDefault().Id;
+
+            _unitOfWork.RidesRepo.Update(ride);
+            _unitOfWork.SaveChanges();
+        }
+
+        public async Task EndAsync(int rideId)
+        {
+            var ride = await _unitOfWork.RidesRepo.GetById(rideId);
+            var newState = await _unitOfWork.RideStatesRepo.GetAll();
+
+            if (ride is null)
+                throw new NotFoundException($"Can't find a ride with id {rideId}");
+
+            ride.RideStateId = newState.Where(s => s.Name == "FINISHED").FirstOrDefault().Id;
+
+            _unitOfWork.RidesRepo.Update(ride);
+            _unitOfWork.SaveChanges();
+        }
+
         public async Task<IEnumerable<RideDTO>> GetAllAsync()
         {
             var rides = await _unitOfWork.RidesRepo.GetAll();
@@ -111,6 +151,7 @@ namespace IntelligentCarManagement.Api.Services
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
+                cfg.CreateMap<RideStateDTO, RideState>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -129,11 +170,40 @@ namespace IntelligentCarManagement.Api.Services
 
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
+                cfg.CreateMap<Client, ClientDTO>();
+                cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<RideState, RideStateDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
+            var rideDto = iMapper.Map<Ride, RideDTO>(ride);
+            rideDto.Client.Avatar = FileCompressor.Decompress(rideDto.Client.Avatar);
+            rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
 
-            return iMapper.Map<Ride, RideDTO>(ride);
+            return rideDto;
+        }
+
+        public async Task<RideDTO> GetOngoingAsync(int driverId)
+        {
+            var rides = await _unitOfWork.RidesRepo.GetAll();
+            var ongoingRide = rides.Where(ride => ride.DriverId == driverId && ride.RideState.Name == "ONGOING").FirstOrDefault();
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Ride, RideDTO>();
+                cfg.CreateMap<Client, ClientDTO>();
+                cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<RideState, RideStateDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            var rideDto = iMapper.Map<Ride, RideDTO>(ongoingRide);
+            if (rideDto != null)
+            {
+                rideDto.Client.Avatar = FileCompressor.Decompress(rideDto.Client.Avatar);
+                rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
+            }
+
+            return rideDto;
         }
 
         public async Task RemoveAsync(int id)
@@ -155,6 +225,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Ride, RideDTO>();
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<RideState, RideStateDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -183,6 +254,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Ride, RideDTO>();
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<RideState, RideStateDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();

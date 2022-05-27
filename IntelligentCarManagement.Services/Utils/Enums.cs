@@ -12,4 +12,13 @@ namespace Api.Services.Utils
         DRIVER,
         ADMIN
     }
+
+    public enum NotificationCategories
+    {
+        GENERAL,
+        NEW_RIDE,
+        ALERT,
+        RIDE_CONFIRMED,
+        NEWS
+    }
 }

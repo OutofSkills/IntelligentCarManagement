@@ -43,7 +43,9 @@ namespace IntelligentCarManagement.DataAccess
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<ApplicationStatus> ApplicationStatuses { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<NotificationCategory> NotificationCategories { get; set; }
         public DbSet<Ride> Rides { get; set; }
         public DbSet<DriverApplication> DriverApplications { get; set; } 
+        public DbSet<RideState> RideStates { get; set; }
     }
 }

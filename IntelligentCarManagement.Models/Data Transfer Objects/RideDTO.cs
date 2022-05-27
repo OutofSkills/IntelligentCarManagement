@@ -9,6 +9,7 @@ namespace Models.Data_Transfer_Objects
 {
     public class RideDTO
     {
+        public int Id { get; set; }
         public string PickUpPlaceName { get; set; }
         public string PickUpPlaceAddress { get; set; }
         public string PickUpPlaceLat { get; set; }
@@ -23,6 +24,7 @@ namespace Models.Data_Transfer_Objects
         public int DriverId { get; set; }
         public int ClientId { get; set; }
 
+        public RideStateDTO RideState { get; set; }
         public DriverDTO Driver { get; set; }
         public ClientDTO Client { get; set; }
     }

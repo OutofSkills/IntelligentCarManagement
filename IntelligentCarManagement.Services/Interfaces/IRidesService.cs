@@ -14,6 +14,9 @@ namespace IntelligentCarManagement.Api.Services
         Task<IEnumerable<RideDTO>> GetAllAsync();
         Task<IEnumerable<RideDTO>> GetClientsAllAsync(int clientId);
         Task<IEnumerable<RideDTO>> GetDriversAllAsync(int driverId);
+        Task<RideDTO> GetOngoingAsync(int driverId);
+        Task ConfirmRequestAsync(int rideId);
+        Task EndAsync(int rideId);
         Task<RideDTO> GetAsync(int id);
         Task RemoveAsync(int id);
         Task<RequestResponse> RequestAsync(RideDTO ride);

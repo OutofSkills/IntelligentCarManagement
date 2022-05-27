@@ -72,5 +72,32 @@ namespace IntelligentCarManagement.Api.Controllers
 
             return Ok(ride);
         }
+
+        [HttpPost]
+        [Route("request/confirm")]
+        public async Task<RequestResponse> ConfirmRequestAsync([FromQuery] int id)
+        {
+            await ridesService.ConfirmRequestAsync(id);
+
+            return new RequestResponse() { Success = true, Message = "Confirmed successfully." };
+        }
+
+        [HttpPost]
+        [Route("request/end")]
+        public async Task<RequestResponse> EndRequestAsync([FromQuery] int id)
+        {
+            await ridesService.EndAsync(id);
+
+            return new RequestResponse() { Success = true, Message = "Ended successfully." };
+        }
+
+        [HttpGet]
+        [Route("ongoing")]
+        public async Task<RideDTO> GetOngoingAsync([FromQuery] int id)
+        {
+            var ride = await ridesService.GetOngoingAsync(id);
+
+            return ride;
+        }
     }
 }

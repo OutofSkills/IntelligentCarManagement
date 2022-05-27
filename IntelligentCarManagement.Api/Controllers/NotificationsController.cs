@@ -1,6 +1,8 @@
-﻿using IntelligentCarManagement.Api.Services;
+﻿using Api.Services.Utils;
+using IntelligentCarManagement.Api.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -24,11 +26,11 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserNotificationsAsync([FromQuery] int userId)
+        public async Task<IEnumerable<NotificationDTO>> GetUserNotificationsAsync([FromQuery] int userId)
         {
             var notifications = await notificationService.GetAsync(userId);
 
-            return Ok(notifications);
+            return notifications;
         }
 
         [HttpDelete]
@@ -57,6 +59,9 @@ namespace IntelligentCarManagement.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> SendNotification(NotificationDTO notification, int userId)
         {
+            var notificationCategory = await notificationService.GetNotificationCategoryAsync(NotificationCategories.GENERAL);
+            notification.NotificaionCategory = notificationCategory;
+
             var result = await notificationService.SendAsync(userId, notification);
             return Ok(result);
         }
@@ -68,6 +73,15 @@ namespace IntelligentCarManagement.Api.Controllers
              await notificationService.UpdateFirebaseToken(id, firebaseToken);
 
             return Ok(firebaseToken);
+        }
+
+        [Route("category")]
+        [HttpPost]
+        public NotificationCategoryDTO CreateCategory([FromBody] NotificationCategoryDTO categoryDTO)
+        {
+            notificationService.CreateCategory(categoryDTO);
+
+            return categoryDTO;
         }
     }
 }

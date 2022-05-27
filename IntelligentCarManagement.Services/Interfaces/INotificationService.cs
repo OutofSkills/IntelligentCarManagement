@@ -1,4 +1,6 @@
-﻿using Models;
+﻿using Api.Services.Utils;
+using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,12 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface INotificationService
     {
-        Task<IEnumerable<NotificationResponse>> GetAsync(int userId);
-        void Save(NotificationDTO notification);
+        Task<IEnumerable<NotificationDTO>> GetAsync(int userId);
+        void Save(NotificationDTO notification, int id);
         Task RemoveAsync(int id);
-        Task<NotificationResponse> SendAsync(int userId, NotificationDTO notification);
+        Task<RequestResponse> SendAsync(int userId, NotificationDTO notification);
         Task UpdateFirebaseToken(int userId, string token);
+        Task<NotificationCategoryDTO> GetNotificationCategoryAsync(NotificationCategories category);
+        void CreateCategory(NotificationCategoryDTO categoryDTO);
     }
 }

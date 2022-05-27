@@ -1,4 +1,5 @@
 ﻿using Api.Services.CustomExceptions;
+using Api.Services.Utils;
 using AutoMapper;
 using CorePush.Google;
 using FirebaseAdmin;
@@ -7,6 +8,7 @@ using Google.Apis.Auth.OAuth2;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.Extensions.Options;
 using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using Models.Others;
 using Models.Tools;
@@ -33,29 +35,33 @@ namespace IntelligentCarManagement.Api.Services
             messaging = FirebaseMessaging.GetMessaging(FirebaseApp.DefaultInstance);
         }
 
-        public void Save(NotificationDTO notificationDTO)
+        public void Save(NotificationDTO notificationDTO, int userId)
         {
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<NotificationDTO, Models.Notification>();
+                cfg.CreateMap<NotificationCategoryDTO, Models.NotificationCategory>();
             });
 
             IMapper iMapper = config.CreateMapper();
             var notification = iMapper.Map<NotificationDTO, Models.Notification>(notificationDTO);
 
+            notification.UserId = userId;
 
             unitOfWork.NotificationsRepo.Insert(notification);
             unitOfWork.SaveChanges();
         }
 
-        public async Task<IEnumerable<NotificationResponse>> GetAsync(int userId)
+        public async Task<IEnumerable<NotificationDTO>> GetAsync(int userId)
         {
             var notifications = await unitOfWork.NotificationsRepo.GetAll();
+            notifications = notifications.Where(notification => notification.UserId == userId);
 
             var result = new List<NotificationDTO>();
 
             // Map the notification model to the notification DTO
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Models.Notification, NotificationDTO>();
+                cfg.CreateMap<Models.NotificationCategory, NotificationCategoryDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -65,7 +71,7 @@ namespace IntelligentCarManagement.Api.Services
                 result.Add(iMapper.Map<Models.Notification, NotificationDTO>(notification));
             }
 
-            return (IEnumerable<NotificationResponse>)result;
+            return result;
         }
 
         public async Task RemoveAsync(int id)
@@ -74,27 +80,24 @@ namespace IntelligentCarManagement.Api.Services
             unitOfWork.SaveChanges();
         }
 
-        public async Task<NotificationResponse> SendAsync(int userId, NotificationDTO notificationDTO)
+        public async Task<RequestResponse> SendAsync(int userId, NotificationDTO notificationDTO)
         {
             // Get the user's firebase token
             var firebaseToken = await GetUserFirebaseToken(userId);
 
-            NotificationResponse response = new();
+            RequestResponse response = new();
             try
             {
-                var message = CreateNotification(notificationDTO.Title, notificationDTO.Body, firebaseToken);
+                var message = CreateNotification(notificationDTO, firebaseToken);
                 var result = await messaging.SendAsync(message);
-               
-                response.IsSuccess = true;
-                response.Message = result;
-                
-                return response;
+
+                this.Save(notificationDTO, userId);
+
+                return new RequestResponse() { Success = true, Message = result };
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Message = "Something went wrong";
-                return response;
+                return new RequestResponse() { Success = false, Message = "Something went wrong" };
             }
         }
 
@@ -110,19 +113,20 @@ namespace IntelligentCarManagement.Api.Services
             return user.NotificationsToken;
         }
 
-        private Message CreateNotification(string title, string notificationBody, string token)
+        private Message CreateNotification(NotificationDTO notification, string token)
         {
             return new Message()
             {
                 Token = token,
                 Notification = new FirebaseAdmin.Messaging.Notification()
                 {
-                    Body = notificationBody,
-                    Title = title
+                    Body = notification.Body,
+                    Title = notification.Title
                 },
                 Android = new AndroidConfig() 
                 { 
-                    Priority = Priority.High
+                    Priority = Priority.High,
+                    Notification = new AndroidNotification() { Icon = notification.NotificaionCategory.Icon}
                 }
             };
         }
@@ -136,6 +140,35 @@ namespace IntelligentCarManagement.Api.Services
             user.NotificationsToken = token;
 
             unitOfWork.UsersRepo.Update(user);
+            unitOfWork.SaveChanges();
+        }
+
+        public async Task<NotificationCategoryDTO> GetNotificationCategoryAsync(NotificationCategories category)
+        {
+            var notificationCategories = await unitOfWork.NotificationCategoriesRepo.GetAll();
+            var notificationCategory = notificationCategories.Where(nc => nc.Name == category.ToString()).FirstOrDefault();
+
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<NotificationCategory, NotificationCategoryDTO>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            return iMapper.Map<NotificationCategory, NotificationCategoryDTO>(notificationCategory);
+        }
+
+        public void CreateCategory(NotificationCategoryDTO categoryDTO)
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<NotificationCategoryDTO, NotificationCategory>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            var notificationCategory = new NotificationCategory();
+            notificationCategory = iMapper.Map<NotificationCategoryDTO, NotificationCategory>(categoryDTO);
+
+            unitOfWork.NotificationCategoriesRepo.Insert(notificationCategory);
             unitOfWork.SaveChanges();
         }
     }
