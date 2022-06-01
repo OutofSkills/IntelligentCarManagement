@@ -50,45 +50,29 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("find-ride")]
-        public async Task<IActionResult> FindRideAsync([FromQuery] int id)
+        public async Task<RideDTO> FindRideAsync([FromQuery] int id)
         {
-            RideDTO ride;
-            try
-            {
-                ride = await ridesService.GetAsync(id);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Couldn't find the searched ride."
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok(ride);
+            var ride = await ridesService.GetAsync(id);
+            
+            return ride;
         }
 
         [HttpPost]
-        [Route("request/confirm")]
-        public async Task<RequestResponse> ConfirmRequestAsync([FromQuery] int id)
+        [Route("confirm")]
+        public async Task<RideDTO> ConfirmRequestAsync([FromQuery] int id)
         {
             await ridesService.ConfirmRequestAsync(id);
 
-            return new RequestResponse() { Success = true, Message = "Confirmed successfully." };
+            return await ridesService.GetAsync(id);
         }
 
         [HttpPost]
-        [Route("request/end")]
-        public async Task<RequestResponse> EndRequestAsync([FromQuery] int id)
+        [Route("end")]
+        public async Task<RideDTO> EndRequestAsync([FromQuery] int id)
         {
             await ridesService.EndAsync(id);
 
-            return new RequestResponse() { Success = true, Message = "Ended successfully." };
+            return await ridesService.GetAsync(id);
         }
 
         [HttpGet]

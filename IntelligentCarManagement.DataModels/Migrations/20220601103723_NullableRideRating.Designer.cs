@@ -4,6 +4,7 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20220601103723_NullableRideRating")]
+    partial class NullableRideRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,32 +189,6 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("Cars", (string)null);
                 });
 
-            modelBuilder.Entity("Models.ClientReview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DriverId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
-
-                    b.HasIndex("DriverId");
-
-                    b.ToTable("ClientReviews");
-                });
-
             modelBuilder.Entity("Models.DriverApplication", b =>
                 {
                     b.Property<int>("Id")
@@ -327,10 +303,10 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double?>("DrivingAccuracy")
+                    b.Property<double>("DrivingAccuracy")
                         .HasColumnType("float");
 
-                    b.Property<double?>("Rating")
+                    b.Property<double>("Rating")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -392,7 +368,7 @@ namespace Api.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RideReviewId")
                         .HasColumnType("int");
@@ -701,25 +677,6 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.ClientReview", b =>
-                {
-                    b.HasOne("Models.Client", "Client")
-                        .WithMany("DriverReviews")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Driver", "Driver")
-                        .WithMany("ReviewedClients")
-                        .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Driver");
-                });
-
             modelBuilder.Entity("Models.DriverApplication", b =>
                 {
                     b.HasOne("Models.UserAddress", "Address")
@@ -881,16 +838,6 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("Models.Client", b =>
-                {
-                    b.Navigation("DriverReviews");
-                });
-
-            modelBuilder.Entity("Models.Driver", b =>
-                {
-                    b.Navigation("ReviewedClients");
                 });
 #pragma warning restore 612, 618
         }

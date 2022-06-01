@@ -136,5 +136,25 @@ namespace IntelligentCarManagement.Services
             unitOfWork.DriversRepo.Update(driver);
             unitOfWork.SaveChanges();
         }
+
+        public async Task RateClientAsync(int rideId, double rating)
+        {
+            var ride = await unitOfWork.RidesRepo.GetById(rideId);
+
+            if(ride is null)
+            {
+                throw new NotFoundException($"The ride with id {rideId} wasn't found.");
+            }
+
+            var review = new ClientReview()
+            {
+                ClientId = ride.ClientId,
+                Rating = rating,
+                DriverId = ride.DriverId,
+            };
+
+            unitOfWork.ClientReviewsRepo.Insert(review);
+            unitOfWork.SaveChanges();
+        }
     }
 }

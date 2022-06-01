@@ -60,7 +60,7 @@ namespace IntelligentCarManagement.Api.Controllers
         public async Task<IActionResult> SendNotification(NotificationDTO notification, int userId)
         {
             var notificationCategory = await notificationService.GetNotificationCategoryAsync(NotificationCategories.GENERAL);
-            notification.NotificaionCategory = notificationCategory;
+            notification.NotificationCategory = notificationCategory;
 
             var result = await notificationService.SendAsync(userId, notification);
             return Ok(result);

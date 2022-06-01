@@ -25,8 +25,9 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         public IRidesRepo RidesRepo { get; private set; }
         public IDriverApplicationsRepo ApplicationsRepo { get; private set; }
         public IApplicationStatusesRepo ApplicationStatusesRepo { get; private set; }
-
+        public IClientReviewsRepo ClientReviewsRepo { get; private set; }
         public IRideStatesRepo RideStatesRepo { get; private set; }
+        public IReviewsRepo ReviewsRepo { get; private set; }
 
 
         /// <summary>
@@ -54,6 +55,8 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
             ApplicationStatusesRepo = new ApplicationStatusesRepo(_context);
             RideStatesRepo = new RideStatesRepo(_context);
             NotificationCategoriesRepo = new NotificationCategoriesRepo(_context);
+            ClientReviewsRepo = new ClientReviewsRepo(_context);
+            ReviewsRepo = new ReviewsRepo(_context);
         }
 
         /// <summary>

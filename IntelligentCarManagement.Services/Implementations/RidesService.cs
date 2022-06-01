@@ -55,6 +55,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<RideDTO, Ride>();
                 cfg.CreateMap<RideStateDTO, RideState>();
                 cfg.AddGlobalIgnore("Id");
+                cfg.AddGlobalIgnore("Review");
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -62,7 +63,7 @@ namespace IntelligentCarManagement.Api.Services
             var newRide = iMapper.Map<RideDTO, Ride>(ride);
 
             var states = await _unitOfWork.RideStatesRepo.GetAll();
-            newRide.RideState = states.Where(s => s.Name == "PROCESSING").FirstOrDefault();
+            newRide.RideState = states.Where(s => s.Name == "ASSIGNED").FirstOrDefault();
 
             _unitOfWork.RidesRepo.Insert(newRide);
             _unitOfWork.SaveChanges();
@@ -78,7 +79,7 @@ namespace IntelligentCarManagement.Api.Services
             {
                 Title = "New available ride",
                 Body = $"User {client.UserName} requested a new ride.",
-                NotificaionCategory = notificationCategory
+                NotificationCategory = notificationCategory
             });
 
             if (!notificationResponse.Success)
@@ -121,7 +122,7 @@ namespace IntelligentCarManagement.Api.Services
             if (ride is null)
                 throw new NotFoundException($"Can't find a ride with id {rideId}");
 
-            ride.RideStateId = newState.Where(s => s.Name == "ONGOING").FirstOrDefault().Id;
+            ride.RideStateId = newState.Where(s => s.Name == "STARTED").FirstOrDefault().Id;
 
             _unitOfWork.RidesRepo.Update(ride);
             _unitOfWork.SaveChanges();
@@ -151,14 +152,23 @@ namespace IntelligentCarManagement.Api.Services
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
-                cfg.CreateMap<RideStateDTO, RideState>();
+                cfg.CreateMap<Client, ClientDTO>();
+                cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<RideState, RideStateDTO>();
+                cfg.CreateMap<Review, ReviewDTO>();
+
             });
 
             IMapper iMapper = config.CreateMapper();
 
             foreach (var ride in rides)
             {
-                result.Add(iMapper.Map<Ride, RideDTO>(ride));
+                var dto = iMapper.Map<Ride, RideDTO>(ride);
+                // Get client's rating
+                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
+                dto.Client.Rating = Math.Round(rating, 1); 
+
+                result.Add(dto);
             }
 
             return result;
@@ -173,6 +183,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
+                cfg.CreateMap<Review, ReviewDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -180,19 +191,24 @@ namespace IntelligentCarManagement.Api.Services
             rideDto.Client.Avatar = FileCompressor.Decompress(rideDto.Client.Avatar);
             rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
 
+            // Get client's rating
+            var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
+            rideDto.Client.Rating = Math.Round(rating, 1);
+
             return rideDto;
         }
 
         public async Task<RideDTO> GetOngoingAsync(int driverId)
         {
             var rides = await _unitOfWork.RidesRepo.GetAll();
-            var ongoingRide = rides.Where(ride => ride.DriverId == driverId && ride.RideState.Name == "ONGOING").FirstOrDefault();
+            var ongoingRide = rides.Where(ride => ride.DriverId == driverId && (ride.RideState.Name == "STARTED" || ride.RideState.Name == "ASSIGNED")).FirstOrDefault();
 
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
+                cfg.CreateMap<Review, ReviewDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -201,6 +217,10 @@ namespace IntelligentCarManagement.Api.Services
             {
                 rideDto.Client.Avatar = FileCompressor.Decompress(rideDto.Client.Avatar);
                 rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
+
+                // Get client's rating
+                var rating = ongoingRide.Client.DriverReviews.Sum(r => r.Rating) / ongoingRide.Client.DriverReviews.Count;
+                rideDto.Client.Rating = Math.Round(rating, 1);
             }
 
             return rideDto;
@@ -226,6 +246,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
+                cfg.CreateMap<Review, ReviewDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -235,6 +256,11 @@ namespace IntelligentCarManagement.Api.Services
                 var rideObj = iMapper.Map<Ride, RideDTO>(ride);
                 rideObj.Client.Avatar = FileCompressor.Decompress(rideObj.Client.Avatar);
                 rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
+
+                // Get client's rating
+                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
+                rideObj.Client.Rating = Math.Round(rating, 1);
+
                 result.Add(rideObj);
             }
 
@@ -255,6 +281,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
+                cfg.CreateMap<Review, ReviewDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -264,10 +291,77 @@ namespace IntelligentCarManagement.Api.Services
                 var rideObj = iMapper.Map<Ride, RideDTO>(ride);
                 rideObj.Client.Avatar = FileCompressor.Decompress(rideObj.Client.Avatar);
                 rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
+
+                // Get client's rating
+                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
+                rideObj.Client.Rating = Math.Round(rating, 1);
+
                 result.Add(rideObj);
             }
 
             return result;
+        }
+
+        public async Task RateAsync(int rideId, double rating)
+        {
+            var ride = await _unitOfWork.RidesRepo.GetById(rideId);
+
+            if(ride is null)
+            {
+                throw new Exception($"A ride with the id {rideId} doesn't exist.");
+            }
+
+            if (ride.Review is null)
+            {
+                var review = new Review()
+                {
+                    Rating = Math.Round(rating, 1)
+                };
+
+                _unitOfWork.ReviewsRepo.Insert(review);
+                _unitOfWork.SaveChanges();
+
+                ride.RideReviewId = review.Id;
+                _unitOfWork.RidesRepo.Update(ride);
+            }
+            else
+            {
+                ride.Review.Rating = Math.Round(rating, 1); 
+                _unitOfWork.ReviewsRepo.Update(ride.Review);
+            }
+            
+            _unitOfWork.SaveChanges();
+        }
+
+        public async Task EvaluateAccuracy(int rideId, double accuracy)
+        {
+            var ride = await _unitOfWork.RidesRepo.GetById(rideId);
+
+            if (ride is null)
+            {
+                throw new Exception($"A ride with the id {rideId} doesn't exist.");
+            }
+
+            if (ride.Review is null)
+            {
+                var review = new Review()
+                {
+                    DrivingAccuracy = Math.Round(accuracy, 1)
+                };
+
+                _unitOfWork.ReviewsRepo.Insert(review);
+                _unitOfWork.SaveChanges();
+
+                ride.RideReviewId = review.Id;
+                _unitOfWork.RidesRepo.Update(ride);
+            }
+            else
+            {
+                ride.Review.DrivingAccuracy = Math.Round(accuracy, 1);
+                _unitOfWork.ReviewsRepo.Update(ride.Review);
+            }
+
+            _unitOfWork.SaveChanges();
         }
     }
 }

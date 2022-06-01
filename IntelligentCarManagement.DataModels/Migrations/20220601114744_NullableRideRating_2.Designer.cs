@@ -4,6 +4,7 @@ using IntelligentCarManagement.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    partial class CarMngContextModelSnapshot : ModelSnapshot
+    [Migration("20220601114744_NullableRideRating_2")]
+    partial class NullableRideRating_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,7 +329,7 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double?>("DrivingAccuracy")
+                    b.Property<double>("DrivingAccuracy")
                         .HasColumnType("float");
 
                     b.Property<double?>("Rating")
@@ -392,7 +394,7 @@ namespace Api.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RideReviewId")
                         .HasColumnType("int");

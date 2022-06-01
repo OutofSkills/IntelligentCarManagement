@@ -10,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Models;
 using Models.Data_Transfer_Objects;
 using Models.DTOs;
-using Models.Others;
 using Models.Tools;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using static Models.Others.GoogleNotification;
 
 namespace IntelligentCarManagement.Api.Services
 {
@@ -46,6 +44,8 @@ namespace IntelligentCarManagement.Api.Services
             var notification = iMapper.Map<NotificationDTO, Models.Notification>(notificationDTO);
 
             notification.UserId = userId;
+            notification.NotificationCategoryId = notification.NotificationCategory.Id;
+            notification.NotificationCategory = null;
 
             unitOfWork.NotificationsRepo.Insert(notification);
             unitOfWork.SaveChanges();
@@ -126,7 +126,7 @@ namespace IntelligentCarManagement.Api.Services
                 Android = new AndroidConfig() 
                 { 
                     Priority = Priority.High,
-                    Notification = new AndroidNotification() { Icon = notification.NotificaionCategory.Icon}
+                    Notification = new AndroidNotification() { Icon = notification.NotificationCategory.Icon}
                 }
             };
         }
@@ -161,6 +161,7 @@ namespace IntelligentCarManagement.Api.Services
         {
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<NotificationCategoryDTO, NotificationCategory>();
+                cfg.AddGlobalIgnore("Id");
             });
 
             IMapper iMapper = config.CreateMapper();

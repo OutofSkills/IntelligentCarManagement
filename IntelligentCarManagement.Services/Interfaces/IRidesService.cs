@@ -22,5 +22,7 @@ namespace IntelligentCarManagement.Api.Services
         Task<RequestResponse> RequestAsync(RideDTO ride);
         void Update(int id, Ride ride);
         Task AssignDriverAsync(int rideId, int driverId);
+        Task RateAsync(int rideId, double rating);
+        Task EvaluateAccuracy(int rideId, double accuracy);
     }
 }

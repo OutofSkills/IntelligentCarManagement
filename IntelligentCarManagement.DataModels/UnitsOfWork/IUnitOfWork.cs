@@ -26,6 +26,8 @@ namespace IntelligentCarManagement.DataAccess.UnitsOfWork
         IDriverApplicationsRepo ApplicationsRepo { get; }  
         IApplicationStatusesRepo ApplicationStatusesRepo { get; }
         IRideStatesRepo RideStatesRepo { get; }
+        IClientReviewsRepo ClientReviewsRepo { get; }
+        IReviewsRepo ReviewsRepo { get; }
 
         /// <summary>
         /// Saves all pending changes

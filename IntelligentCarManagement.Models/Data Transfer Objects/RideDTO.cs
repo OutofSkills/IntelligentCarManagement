@@ -19,6 +19,7 @@ namespace Models.Data_Transfer_Objects
         public string DestinationPlaceLat { get; set; }
         public string DestinationPlaceLong { get; set; }
         public double Distance { get; set; }
+        public decimal Price { get; set; }
         public double AverageTime { get; set; }
         public DateTime PickUpTime { get; set; }
         public int DriverId { get; set; }
@@ -27,5 +28,6 @@ namespace Models.Data_Transfer_Objects
         public RideStateDTO RideState { get; set; }
         public DriverDTO Driver { get; set; }
         public ClientDTO Client { get; set; }
+        public ReviewDTO Review { get; set; }
     }
 }

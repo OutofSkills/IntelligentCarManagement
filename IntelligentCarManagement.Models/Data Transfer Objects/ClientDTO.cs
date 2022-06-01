@@ -9,5 +9,6 @@ namespace Models.DTOs
 {
     public class ClientDTO: UserBaseDTO
     {
+        public double Rating { get; set; } = 0.0;
     }
 }

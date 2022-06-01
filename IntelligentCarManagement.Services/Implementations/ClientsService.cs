@@ -42,8 +42,13 @@ namespace IntelligentCarManagement.Services
             });
 
             IMapper iMapper = config.CreateMapper();
+            var dto = iMapper.Map<Client, ClientDTO>(client);
 
-            return iMapper.Map<Client, ClientDTO>(client);
+            // Get client's rating
+            var rating = client.DriverReviews.Sum(r => r.Rating)/client.DriverReviews.Count;
+            dto.Rating = Math.Round(rating, 1); 
+
+            return dto;
         }
 
         public ClientDTO Get(String email)
@@ -59,8 +64,13 @@ namespace IntelligentCarManagement.Services
             });
 
             IMapper iMapper = config.CreateMapper();
+            var dto = iMapper.Map<Client, ClientDTO>(client);
 
-            return iMapper.Map<Client, ClientDTO>(client);
+            // Get client's rating
+            var rating = client.DriverReviews.Sum(r => r.Rating) / client.DriverReviews.Count;
+            dto.Rating = Math.Round(rating, 1);
+
+            return dto;
         }
 
         public async Task<IEnumerable<ClientDTO>> GetAllAsync()
@@ -80,8 +90,13 @@ namespace IntelligentCarManagement.Services
             foreach (var client in clients)
             {
                 var clientObj = iMapper.Map<Client, ClientDTO>(client);
-                // Compress user avatar
+                // Decompress user avatar
                 clientObj.Avatar = FileCompressor.Decompress(clientObj.Avatar);
+
+                // Get client's rating
+                var rating = client.DriverReviews.Sum(r => r.Rating) / client.DriverReviews.Count;
+                clientObj.Rating = Math.Round(rating, 1);
+
                 result.Add(clientObj);
             }
 

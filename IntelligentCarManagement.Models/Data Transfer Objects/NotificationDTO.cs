@@ -11,7 +11,8 @@ namespace Models.DTOs
     {
         public string Title { get; set; }
         public string Body { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
 
-        public NotificationCategoryDTO NotificaionCategory { get; set; }
+        public NotificationCategoryDTO NotificationCategory { get; set; }
     }
 }

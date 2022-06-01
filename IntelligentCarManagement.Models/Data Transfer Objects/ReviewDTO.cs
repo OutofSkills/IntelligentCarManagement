@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Models.Data_Transfer_Objects
 {
-    public class NotificationCategoryDTO
+    public class ReviewDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
+        public double Rating { get; set; }
+        public double DrivingAccuracy { get; set; }
     }
 }

@@ -6,5 +6,6 @@ namespace Models
 {
     public class Client: UserBase
     {
+        public virtual ICollection<ClientReview> DriverReviews { get; set; }
     }
 }

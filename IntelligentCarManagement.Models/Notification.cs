@@ -12,7 +12,7 @@ namespace Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
-        public DateTime DateTime { get; set; } = DateTime.Now;
+        public DateTime DateTime { get; set; }
         public int UserId { get; set; }
         public int NotificationCategoryId { get; set; }
 
@@ -20,6 +20,6 @@ namespace Models
         public virtual UserBase User { get; set; }
 
         [ForeignKey(nameof(NotificationCategoryId))]
-        public virtual NotificationCategory NotificaionCategory { get; set; }
+        public virtual NotificationCategory NotificationCategory { get; set; }
     }
 }

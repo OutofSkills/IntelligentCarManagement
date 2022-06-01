@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace IntelligentCarManagement.DataAccess.Repositories
+namespace Api.DataAccess.Repositories.Interfaces
 {
-    public class CarsRepo : Repo<Car>, ICarsRepo
+    public interface IClientReviewsRepo: IRepo<ClientReview>
     {
-        public CarsRepo(CarMngContext context): base(context) {}
     }
 }

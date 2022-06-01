@@ -8,6 +8,5 @@ namespace IntelligentCarManagement.DataAccess.Repositories
 {
     public interface ICarsRepo: IRepo<Car>
     {
-        public IEnumerable<Car> GetAvailableCars();
     }
 }

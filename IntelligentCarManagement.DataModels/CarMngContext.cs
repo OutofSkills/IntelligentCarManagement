@@ -47,5 +47,7 @@ namespace IntelligentCarManagement.DataAccess
         public DbSet<Ride> Rides { get; set; }
         public DbSet<DriverApplication> DriverApplications { get; set; } 
         public DbSet<RideState> RideStates { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<ClientReview> ClientReviews { get; set; }
     }
 }
