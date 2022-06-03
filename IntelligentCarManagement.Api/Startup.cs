@@ -175,7 +175,7 @@ namespace IntelligentCarManagement.Api
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ICarsService, CarsService>();
             services.AddScoped<IDriversService, DriversService>();
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IAdminsService, AdminsService>();

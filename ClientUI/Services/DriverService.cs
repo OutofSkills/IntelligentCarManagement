@@ -74,5 +74,16 @@ namespace ClientUI.Services
 
             return new Utils.RequestResponse() { IsSuccess = true, Message = "Application rejected successfully." };
         }
+
+        public async Task<IEnumerable<DriverDTO>> GetDriversAsync()
+        {
+            var response = await httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/Drivers");
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            var result = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<DriverDTO>>(content, new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            return result;
+        }
     }
 }

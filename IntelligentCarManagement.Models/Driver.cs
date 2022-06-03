@@ -25,5 +25,6 @@ namespace Models
         [ForeignKey(nameof(CarId))]
         public virtual Car Car { get; set; }
         public virtual ICollection<ClientReview> ReviewedClients { get; set; }
+        public virtual ICollection<Ride> Rides { get; set; }
     }
 }

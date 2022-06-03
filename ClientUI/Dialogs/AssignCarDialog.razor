@@ -1,0 +1,64 @@
+﻿@using ClientUI.Services.Cars
+@inject ISnackbar Snackbar
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1"/>
+            Assign Car
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField Value="@car.Id.ToString()" Label="Car ID" ReadOnly="true"/>
+        <MudTextField Value="@car.Brand" Label="Brand" ReadOnly="true"/>
+        <MudTextField Value="@car.Model" Label="Model" ReadOnly="true"/>
+        <MudTextField @bind-Value="@driverEmail" Label="Driver Email" ReadOnly="false"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Disabled="@(processRequest)" Color="Color.Default" OnClick="AssignCar">
+        @if (processRequest)
+        {
+            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+            <MudText Class="ms-2">Processing</MudText>
+        }
+        else
+        {
+            <MudText>Assign</MudText>
+        }
+    </MudButton>
+    </DialogActions>
+</MudDialog>
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public CarDTO car { get; set; } = new CarDTO();
+
+    [Inject] public ICarsService CarsService{ get; set; }
+
+    private string driverEmail;
+
+    private bool processRequest = false;
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task AssignCar()
+    {
+        processRequest = true;
+        var result = await CarsService.AssignCarAsync(car.Id, driverEmail);
+        processRequest = false;
+
+        if(result.IsSuccess)
+        {
+            Snackbar.Add("Car assigned successfully!", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Something went wrong.", Severity.Error);
+        }
+        MudDialog.Close(DialogResult.Ok(car.Id));
+    }
+}

@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Net;
 using Models.DTOs;
 using Models;
+using Models.Data_Transfer_Objects;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
@@ -20,91 +21,32 @@ namespace IntelligentCarManagement.Api.Controllers
     [ApiController]
     public class CarsController : ControllerBase
     {
-        private readonly ICarService carService;
+        private readonly ICarsService carService;
 
-        public CarsController(ICarService carService)
+        public CarsController(ICarsService carService)
         {
             this.carService = carService;
         }
 
         [HttpGet]
-        [Route("get-cars")]
-        public async Task<IActionResult> GetCarsAsync([FromQuery] Pagination pagination) 
+        public async Task<IEnumerable<CarDTO>> GetAllAsync() 
         {
-            var collection = await carService.GetAllCars();
+            var result = await carService.GetAllAsync();
 
-            HttpContext.InsertPaginationParameterInResponse(collection, pagination.NumberOfRecords);
-
-            return Ok(collection.Paginate(pagination).ToList());
-        }
-
-        [HttpDelete]
-        [Route("remove-car")]
-        public async Task<IActionResult> RemoveCarAsync([FromQuery] int id)
-        {
-            try
-            {
-                await carService.RemoveCarAsync(id);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Remove car error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            return result;
         }
     
         [HttpPost]
-        [Route("new-car")]
-        public IActionResult AddNewCar([FromBody] Car car)
+        public void AddCar([FromBody] CarDTO car)
         {
-            try
-            {
-                carService.AddCar(car);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Insert car error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            carService.Create(car);
         }
 
-        [HttpPut]
-        [Route("edit-car")]
-        public IActionResult EditCar([FromBody] Car car)
+        [HttpGet]
+        [Route("assign")]
+        public void AssignCar([FromQuery] int carId, [FromQuery] string driverEmail)
         {
-            try
-            {
-                carService.EditCar(car);
-            }
-            catch (Exception e)
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent(e.Message),
-                    ReasonPhrase = "Edit car error"
-
-                };
-
-                throw new System.Web.Http.HttpResponseException(response);
-            }
-
-            return Ok();
+            carService.AssignDriver(carId, driverEmail);
         }
     }
 }

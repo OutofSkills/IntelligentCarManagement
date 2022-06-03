@@ -15,6 +15,8 @@ namespace IntelligentCarManagement.Services
         Task<DriverDTO> UpdateAsync(int id, DriverDTO dto);
         Task<IEnumerable<DriverDTO>> GetAllAsync(bool? availability);
         Task BecomeAvailable(int driverId, bool availability);
+        Task UpdateLocationAsync(int driverId, string latitude, string longitude);
         Task RateClientAsync(int rideId, double rating);
+        Task<bool> IsAvailable(int driverId);
     }
 }

@@ -97,16 +97,12 @@
     </div>
 </div>
 
-@action
-
 @code{
     [Inject] public NavigationManager NavManager{ get; set; }
 
     [Inject] public IDriverService DriverService{ get; set; }
 
     private IEnumerable<DriverApplicationDTO> applications;
-
-    private string action{ get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -133,9 +129,10 @@
         }
         if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
         {
-            action = "Deleting";
+            //TODO: delete
         }
     }
+
     public async Task ActionCompleteHandler(ActionEventArgs<DriverApplicationDTO> Args)
     {
         if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
@@ -146,7 +143,6 @@
 
     public void OnCommandClicked(CommandClickEventArgs<DriverApplicationDTO> args)
     {
-        action = "Navigate to";
         NavManager.NavigateTo($"/admin/driver-application/{args.RowData.Id}");
     }
     

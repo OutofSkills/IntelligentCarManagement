@@ -1,9 +1,11 @@
 ﻿using Api.Services.CustomExceptions;
 using Api.Services.Utils;
 using AutoMapper;
+using IntelligentCarManagement.Api.Services;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
 using Microsoft.AspNetCore.Identity;
 using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -34,6 +36,7 @@ namespace IntelligentCarManagement.Services
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -41,10 +44,18 @@ namespace IntelligentCarManagement.Services
 
             dto.Avatar = FileCompressor.Decompress(dto.Avatar);
 
+            // Get rating
+            double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+            dto.Rating = (float)Math.Round((double)driverRating, 1);
+
+            // Get accuracy
+            double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
+            dto.Accuracy = Math.Round((double)driverAccuracy, 1);
+
             return dto;
         }
 
-        public DriverDTO Get(String email)
+        public DriverDTO Get(string email)
         {
             var driver = unitOfWork.DriversRepo.GetByEmail(email);
 
@@ -52,12 +63,20 @@ namespace IntelligentCarManagement.Services
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
             var dto = iMapper.Map<Driver, DriverDTO>(driver);
 
             dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+            // Get rating
+            double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+            dto.Rating = (float)Math.Round((double)driverRating, 1);
+
+            // Get accuracy
+            double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
+            dto.Accuracy = Math.Round((double)driverAccuracy, 1);
 
             return dto;
         }
@@ -72,6 +91,7 @@ namespace IntelligentCarManagement.Services
             // Map view model to user model
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Driver, DriverDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -84,6 +104,15 @@ namespace IntelligentCarManagement.Services
                     {
                         var dto = iMapper.Map<Driver, DriverDTO>(driver);
                         dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+
+                        // Get rating
+                        double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+                        dto.Rating = (float)Math.Round((double)driverRating, 1);
+
+                        // Get accuracy
+                        double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
+                        dto.Accuracy = Math.Round((double)driverAccuracy, 1);
+
                         result.Add(dto);
                     }
                 }
@@ -94,6 +123,15 @@ namespace IntelligentCarManagement.Services
                 {
                     var dto = iMapper.Map<Driver, DriverDTO>(driver);
                     dto.Avatar = FileCompressor.Decompress(dto.Avatar);
+
+                    // Get rating
+                    double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+                    dto.Rating = (float)Math.Round((double)driverRating, 1);
+
+                    // Get accuracy
+                    double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
+                    dto.Accuracy = Math.Round((double)driverAccuracy, 1);
+
                     result.Add(dto);
                 }
             }
@@ -111,6 +149,7 @@ namespace IntelligentCarManagement.Services
             var config = new MapperConfiguration(cfg => {
                 cfg.AddGlobalIgnore("id");
                 cfg.CreateMap<DriverDTO, Driver>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -155,6 +194,39 @@ namespace IntelligentCarManagement.Services
 
             unitOfWork.ClientReviewsRepo.Insert(review);
             unitOfWork.SaveChanges();
+        }
+
+        public async Task UpdateLocationAsync(int driverId, string latitude, string longitude)
+        {
+            var driver = await unitOfWork.DriversRepo.GetById(driverId);
+
+            if (driver is null)
+                throw new NotFoundException($"Driver with id {driverId} not found.");
+
+            driver.CurrentLat = latitude;
+            driver.CurrentLong = longitude;
+
+            unitOfWork.DriversRepo.Update(driver);
+            unitOfWork.SaveChanges();
+        }
+
+        public static double? GetDriverAccuracy(IEnumerable<Ride> rides, int driverId)
+        {
+            var ratedRides = rides.Where(r => r.Review is not null && r.Review.DrivingAccuracy != null && r.DriverId == driverId).ToList();
+            var driverAccuracy = ratedRides.Sum(r => r.Review.DrivingAccuracy) / ratedRides.Count;
+            return driverAccuracy;
+        }
+
+        public async Task<bool> IsAvailable(int driverId)
+        {
+            var driver = await unitOfWork.DriversRepo.GetById(driverId);
+
+            if(driver is null)
+            {
+                throw new NotFoundException($"Driver with id {driverId} wasn't found.");
+            }
+
+            return driver.IsAvailable;
         }
     }
 }

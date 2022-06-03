@@ -2,6 +2,7 @@
 using Api.Services.Utils;
 using AutoMapper;
 using IntelligentCarManagement.DataAccess.UnitsOfWork;
+using IntelligentCarManagement.Services;
 using Models;
 using Models.Data_Transfer_Objects;
 using Models.DTOs;
@@ -156,6 +157,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
                 cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<Car, CarDTO>();
 
             });
 
@@ -165,8 +167,15 @@ namespace IntelligentCarManagement.Api.Services
             {
                 var dto = iMapper.Map<Ride, RideDTO>(ride);
                 // Get client's rating
-                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
-                dto.Client.Rating = Math.Round(rating, 1); 
+                var clientRating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
+                dto.Client.Rating = Math.Round(clientRating, 1);
+                // Get driver's rating
+                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                dto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
+
+                // Get accuracy
+                double? driverAccuracy = DriversService.GetDriverAccuracy(rides, ride.Driver.Id);
+                dto.Driver.Accuracy = Math.Round((double)driverAccuracy, 1);
 
                 result.Add(dto);
             }
@@ -178,12 +187,16 @@ namespace IntelligentCarManagement.Api.Services
         {
             var ride =  await _unitOfWork.RidesRepo.GetById(id);
 
+            if (ride is null)
+                return null;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
                 cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -195,6 +208,15 @@ namespace IntelligentCarManagement.Api.Services
             var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
             rideDto.Client.Rating = Math.Round(rating, 1);
 
+            // Get driver's rating
+            var rides = await _unitOfWork.RidesRepo.GetAll();
+            double? driverRating = GetDriverRating(rides, ride.DriverId);
+            rideDto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
+
+            // Get accuracy
+            double? driverAccuracy = DriversService.GetDriverAccuracy(rides, ride.Driver.Id);
+            rideDto.Driver.Accuracy = Math.Round((double)driverAccuracy, 1);
+
             return rideDto;
         }
 
@@ -203,12 +225,16 @@ namespace IntelligentCarManagement.Api.Services
             var rides = await _unitOfWork.RidesRepo.GetAll();
             var ongoingRide = rides.Where(ride => ride.DriverId == driverId && (ride.RideState.Name == "STARTED" || ride.RideState.Name == "ASSIGNED")).FirstOrDefault();
 
+            if (ongoingRide is null)
+                return null;
+
             var config = new MapperConfiguration(cfg => {
                 cfg.CreateMap<Ride, RideDTO>();
                 cfg.CreateMap<Client, ClientDTO>();
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
                 cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -221,6 +247,14 @@ namespace IntelligentCarManagement.Api.Services
                 // Get client's rating
                 var rating = ongoingRide.Client.DriverReviews.Sum(r => r.Rating) / ongoingRide.Client.DriverReviews.Count;
                 rideDto.Client.Rating = Math.Round(rating, 1);
+
+                // Get driver's rating
+                double? driverRating = GetDriverRating(rides, ongoingRide.DriverId);
+                rideDto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
+
+                // Get accuracy
+                double? driverAccuracy = DriversService.GetDriverAccuracy(rides, ongoingRide.Driver.Id);
+                rideDto.Driver.Accuracy = Math.Round((double)driverAccuracy, 1);
             }
 
             return rideDto;
@@ -247,6 +281,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
                 cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -260,6 +295,14 @@ namespace IntelligentCarManagement.Api.Services
                 // Get client's rating
                 var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
                 rideObj.Client.Rating = Math.Round(rating, 1);
+
+                // Get driver's rating
+                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                rideObj.Driver.Rating = (float)Math.Round((double)driverRating, 1);
+
+                // Get accuracy
+                double? driverAccuracy = DriversService.GetDriverAccuracy(rides, ride.Driver.Id);
+                rideObj.Driver.Accuracy = Math.Round((double)driverAccuracy, 1);
 
                 result.Add(rideObj);
             }
@@ -282,6 +325,7 @@ namespace IntelligentCarManagement.Api.Services
                 cfg.CreateMap<Driver, DriverDTO>();
                 cfg.CreateMap<RideState, RideStateDTO>();
                 cfg.CreateMap<Review, ReviewDTO>();
+                cfg.CreateMap<Car, CarDTO>();
             });
 
             IMapper iMapper = config.CreateMapper();
@@ -296,10 +340,25 @@ namespace IntelligentCarManagement.Api.Services
                 var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
                 rideObj.Client.Rating = Math.Round(rating, 1);
 
+                // Get driver's rating
+                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                rideObj.Driver.Rating = (float)Math.Round((double)driverRating, 1);
+
+                // Get accuracy
+                double? driverAccuracy = DriversService.GetDriverAccuracy(rides, ride.Driver.Id);
+                rideObj.Driver.Accuracy = Math.Round((double)driverAccuracy, 1);
+
                 result.Add(rideObj);
             }
 
             return result;
+        }
+
+        public static double? GetDriverRating(IEnumerable<Ride> rides, int driverId)
+        {
+            var ratedRides = rides.Where(r => r.Review is not null && r.Review.Rating != null && r.DriverId == driverId).ToList();
+            var driverRating = ratedRides.Sum(r => r.Review.Rating) / ratedRides.Count;
+            return driverRating;
         }
 
         public async Task RateAsync(int rideId, double rating)

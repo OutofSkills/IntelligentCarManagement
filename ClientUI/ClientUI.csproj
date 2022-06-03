@@ -8,10 +8,11 @@
 
 	<ItemGroup>
 	  <None Remove="Pages\BecomeDriver.razor.css" />
+	  <None Remove="Pages\Driver Applications\BecomeDriver.razor.css" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="Pages\BecomeDriver.razor.css" />
+	  <Content Include="Pages\Driver Applications\BecomeDriver.razor.css" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -26,7 +27,9 @@
 		<PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="6.0.5" />
 		<PackageReference Include="MudBlazor" Version="6.0.10" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Syncfusion.Blazor" Version="20.1.0.55" />
+		<PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.1.0.58" />
+		<PackageReference Include="Syncfusion.Blazor.Grid" Version="20.1.0.58" />
+		<PackageReference Include="Syncfusion.Blazor.PdfViewer" Version="20.1.0.58" />
 		<PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.55" />
 	</ItemGroup>
 

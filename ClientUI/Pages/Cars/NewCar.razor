@@ -1,0 +1,68 @@
+﻿@page "/admin/cars/create"
+@using ClientUI.Services.Cars
+
+<MudContainer MaxWidth="MaxWidth.Small">
+    <MudText Typo="Typo.h4" Class="mb-4">
+        <b>New Car</b>
+    </MudText>
+
+    <EditForm Model="@carModel" OnValidSubmit="OnValidSubmitAsync">
+    <DataAnnotationsValidator/>
+    <MudCard>
+        <MudCardContent>
+            <MudTextField Label="Brand" HelperText="Ex. BMW, Fiat.."
+                            @bind-Value="carModel.Brand" For="@(() => carModel.Brand)"/>
+            <MudTextField Label="Model" Class="mt-3" HelperText="Ex. Model Y, Mustang.."
+                            @bind-Value="carModel.Model" For="@(() => carModel.Model)"/>
+            <MudSelect Label="With Helper"
+                            @bind-Value="carModel.FuelType" Variant="Variant.Text">
+                <MudSelectItem Value="@("Petrol")" />
+                <MudSelectItem Value="@("Diesel")" />
+                <MudSelectItem Value="@("Biodiesel")" />
+                <MudSelectItem Value="@("Gas")" />
+                <MudSelectItem Value="@("Electric")" />
+            </MudSelect>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Disabled="@(processRequest)" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+            @if (processRequest)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Processing</MudText>
+            }
+            else
+            {
+                <MudText>Submit</MudText>
+            }
+        </MudButton>
+        </MudCardActions>
+    </MudCard>
+    </EditForm>
+
+</MudContainer>
+
+@code {
+    private CarDTO carModel = new();
+
+    [Inject] public ICarsService CarsService{ get; set; }
+
+    [Inject] public ISnackbar SnackBar{ get; set; }
+
+    private bool processRequest = false;
+
+    private async Task OnValidSubmitAsync()
+    {
+        processRequest = true;
+        var result = await CarsService.CreateAsync(carModel);
+        processRequest = false;
+
+        if(result.IsSuccess)
+        {
+            SnackBar.Add(result.Message, Severity.Success);
+        }
+        else
+        {
+             SnackBar.Add(result.Message, Severity.Error);
+        }
+    }
+}

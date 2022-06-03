@@ -52,6 +52,7 @@ namespace IntelligentCarManagement.Api.Controllers
         {
             return await driverService.GetAllAsync(availability);
         }
+
         [HttpPut]
         public async Task<DriverDTO> UpdatAsync([FromQuery] int id, [FromBody] DriverDTO driver)
         {
@@ -71,6 +72,20 @@ namespace IntelligentCarManagement.Api.Controllers
             await driverService.BecomeAvailable(id, isAvailable);
 
             return isAvailable;
+        }
+
+        [HttpGet]
+        [Route("availability")]
+        public async Task<bool> IsAvailable([FromQuery] int id)
+        {
+            return await driverService.IsAvailable(id);
+        }
+
+        [HttpPut]
+        [Route("location")]
+        public async Task UpdateLocation([FromQuery] int id, [FromQuery] string latitude, [FromQuery] string longitude)
+        {
+            await driverService.UpdateLocationAsync(id, latitude, longitude);
         }
     }
 }

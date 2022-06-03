@@ -10,5 +10,6 @@ namespace ClientUI.Services
         Task<DriverApplicationDTO> GetApplicationAsync(int id);
         Task<Utils.RequestResponse> ApproveApplicationAsync(int id);
         Task<Utils.RequestResponse> RejectApplicationAsync(int id);
+        Task<IEnumerable<DriverDTO>> GetDriversAsync();
     }
 }
