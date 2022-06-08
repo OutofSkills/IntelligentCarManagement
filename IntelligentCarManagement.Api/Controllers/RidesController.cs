@@ -50,6 +50,15 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
+        public async Task<IEnumerable<RideDTO>> GetAll()
+        {
+            var rides = await ridesService.GetAllAsync();
+
+            return rides;
+        }
+
+        [HttpGet]
+        [Route("id")]
         public async Task<RideDTO> FindRideAsync([FromQuery] int id)
         {
             var ride = await ridesService.GetAsync(id);

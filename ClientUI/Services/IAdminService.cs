@@ -4,6 +4,7 @@ namespace ClientUI.Services
 {
     public interface IAdminService
     {
-        Task<UserBaseDTO> Get(int id);
+        Task<UserBaseDTO> GetAsync(int id);
+        Task<IEnumerable<UserBaseDTO>> GetAllAsync();
     }
 }

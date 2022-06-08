@@ -1,167 +1,287 @@
 ﻿@page "/admin"
-
+@using ClientUI.Services.Clients
+@using ClientUI.Services.Rides
+@using Syncfusion.Blazor;
+@using Syncfusion.Blazor.Charts;
 @attribute [Authorize(Roles = "ADMIN")]
 
 <MudText Typo="Typo.h5" Color="Color.Primary" Class="mb-4">Admin Dashboard</MudText>
-<MudGrid>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="@Icons.Material.Filled.PeopleAlt" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Drivers</MudText>
-                <MudText Typo="Typo.h5">
-                    <MudTooltip Text="Active">
-                        412
-                    </MudTooltip>
-                     / 
-                    <MudTooltip Text="Total">
-                        510
-                    </MudTooltip>
-                </MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="@Icons.Material.Filled.Alarm" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Available Applications</MudText>
-                <MudText Typo="Typo.h5">0</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="fas fa-check-circle" Size="Size.Large" Color="Color.Success" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Deserved Clients</MudText>
-                <MudText Typo="Typo.h5">120</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="6" md="3">
-        <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
-            <MudIcon Icon="fas fa-user" Size="Size.Large" Color="Color.Warning" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
-            <div>
-                <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">New Clients</MudText>
-                <MudText Typo="Typo.h5">12</MudText>
-            </div>
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="8">
-        <MudPaper Class="pa-4" Style="height:300px;">
-            Charts comming soon...
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="4">
-        <MudPaper Class="pa-4" Style="height:300px;">
-            Charts comming soon...
-        </MudPaper>
-    </MudItem>
-    <MudItem xs="12" sm="12" md="6">
-        <MudCard Style="height:100%;">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Earning Report</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent Class="px-0">
-                <MudSimpleTable Elevation="0" Hover="true">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Deserved Clients</th>
-                            <th>Earnings</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var report in earningReports.OrderByDescending(x => x.Earnings))
-                        {
+@if(!isRendered)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="MudBlazor.SkeletonType.Circle" Class="mx-4" Style="width:54px; height:54px;" />
+                <div>
+                    <MudSkeleton Width="100px"/>
+                    <MudSkeleton Width="30px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="MudBlazor.SkeletonType.Circle" Class="mx-4" Style="width:54px; height:54px;" />
+                <div>
+                    <MudSkeleton Width="100px"/>
+                    <MudSkeleton Width="30px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="MudBlazor.SkeletonType.Circle" Class="mx-4" Style="width:54px; height:54px;" />
+                <div>
+                    <MudSkeleton Width="100px"/>
+                    <MudSkeleton Width="30px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="MudBlazor.SkeletonType.Circle" Class="mx-4" Style="width:54px; height:54px;" />
+                <div>
+                    <MudSkeleton Width="100px"/>
+                    <MudSkeleton Width="30px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+         <MudItem xs="12" sm="6">
+            <MudPaper Class="pa-4" Style="height:300px;">
+                <MudSkeleton Class="pa-4" SkeletonType="MudBlazor.SkeletonType.Rectangle" Height="250px" />
+            </MudPaper>
+        </MudItem>
+
+        
+         <MudItem xs="12" sm="6">
+            <MudPaper Class="pa-4" Style="height:300px;">
+                <MudSkeleton Class="pa-4" SkeletonType="MudBlazor.SkeletonType.Rectangle" Height="250px" />
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="12">
+            <MudPaper Class="pa-4" Style="height:300px;">
+                <MudSkeleton Class="pa-4" SkeletonType="MudBlazor.SkeletonType.Rectangle" Height="250px" />
+            </MudPaper>
+        </MudItem>
+
+    </MudGrid>
+}
+else
+{
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.PeopleAlt" Color="Color.Secondary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Drivers</MudText>
+                    <MudText Typo="Typo.h5">
+                       @totalDrivers
+                    </MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Alarm" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Available Applications</MudText>
+                    <MudText Typo="Typo.h5">@availableApplications</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Work" Size="Size.Large" Color="Color.Success" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Deserved Clients</MudText>
+                    <MudText Typo="Typo.h5">@totalRides</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudPaper Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Large" Color="Color.Info" Class="mx-4 mt-1" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Total Clients</MudText>
+                    <MudText Typo="Typo.h5">@totalClients</MudText>
+                </div>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper Class="pa-4" Style="height:300px;">
+               
+                <SfAccumulationChart Title="Rides Rating Statistics" EnableAnimation="true" >
+                    <AccumulationChartTooltipSettings Enable="true"></AccumulationChartTooltipSettings>
+                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@RidesPieChart" XName="Rating" YName="Rides" Name="Rating" Radius="70" StartAngle="0" EndAngle="360"
+                                                    InnerRadius="0%" ExplodeIndex="0" Explode="true" ExplodeOffset="10">
+                            <AccumulationDataLabelSettings Visible="true" Name="Rating" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                </SfAccumulationChart>
+                
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudPaper Class="pa-4" Style="height:300px;">
+                
+                <SfAccumulationChart Title="Users Statistics" EnableAnimation="true" >
+                    <AccumulationChartTooltipSettings Enable="true"></AccumulationChartTooltipSettings>
+                    <AccumulationChartLegendSettings Visible="false"></AccumulationChartLegendSettings>
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@UsersPieChart" XName="Role" YName="Users" Name="Role" Radius="70" StartAngle="0" EndAngle="360"
+                                                    InnerRadius="0%" ExplodeIndex="0" Explode="true" ExplodeOffset="10">
+                            <AccumulationDataLabelSettings Visible="true" Name="Role" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                </SfAccumulationChart>
+                
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="12">
+            <MudCard Style="height:100%;">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">Top drivers</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent Class="px-0">
+                    <MudSimpleTable Elevation="0" Hover="true">
+                        <thead>
                             <tr>
-                                <td>
-                                    <div class="d-flex flex-row">
-                                        <MudAvatar Image="@report.Avatar" Class="mud-elevation-25" />
-                                        <div class="ml-6">
-                                            <MudText Typo="Typo.subtitle2">@report.Name</MudText>
-                                            <MudText Typo="Typo.body2">@report.Title</MudText>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td><MudText>@report.DeservedClients</MudText></td>
-                                <td><MudText><b>$</b>@report.Earnings</MudText></td>
+                                <th>Name</th>
+                                <th>Deserved Clients</th>
+                                <th>Is Available</th>
+                                <th>Accuracy</th>
                             </tr>
-                        }
-                    </tbody>
-                </MudSimpleTable>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-    <MudItem xs="12" sm="12" md="6">
-        <MudCard Style="height:100%;">
-            <MudCardHeader>
-                <CardHeaderContent>
-                    <MudText Typo="Typo.h6">Recent incidents</MudText>
-                </CardHeaderContent>
-            </MudCardHeader>
-            <MudCardContent Class="px-0">
-                <MudList Clickable="true">
-                    <MudListItem>
-                        <div class="d-flex flex-row">
-                            <MudAvatar Class="mud-elevation-25">
-                                <MudIcon Icon="fas fa-car-crash" Size="Size.Large" Class="mx-4" />
-                            </MudAvatar>
-                            <div class="ml-6">
-                                <MudText Typo="Typo.subtitle2">Accident</MudText>
-                                <MudText Typo="Typo.body2">Driver <MudLink>BadLobster69</MudLink> has crashed his car while working.</MudText>
-                            </div>
-                            <MudChip Label="true" Color="Color.Error" Size="Size.Small" Class="ml-auto mud-elevation-25">Danger</MudChip>
-                        </div>
-                    </MudListItem>
-                    <MudListItem>
-                        <div class="d-flex flex-row">
-                            <MudAvatar Class="mud-elevation-25">
-                                <MudIcon Icon="@Icons.Filled.Money" Class="mx-4" />
-                            </MudAvatar>
-                            <div class="ml-6">
-                                <MudText Typo="Typo.subtitle2">Payment Issue</MudText>
-                                <MudText Typo="Typo.body2">Client <MudLink>Ionut777</MudLink> refused to pay for his ride.</MudText>
-                            </div>
-                            <MudChip Label="true" Color="Color.Secondary" Size="Size.Small" Class="ml-auto mud-elevation-25">Medium</MudChip>
-                        </div>
-                    </MudListItem>
-                    <MudListItem>
-                        <div class="d-flex flex-row">
-                            <MudAvatar Class="mud-elevation-25">
-                                <MudIcon Icon="fas fa-car-crash" Size="Size.Large" Class="mx-4" />
-                            </MudAvatar>
-                            <div class="ml-6">
-                                <MudText Typo="Typo.subtitle2">Accident</MudText>
-                                <MudText Typo="Typo.body2">Driver <MudLink>NoobMaster</MudLink> has crashed his car while working.</MudText>
-                            </div>
-                            <MudChip Label="true" Color="Color.Error" Size="Size.Small" Class="ml-auto mud-elevation-25">Danger</MudChip>
-                        </div>
-                    </MudListItem>
-                </MudList>
-            </MudCardContent>
-        </MudCard>
-    </MudItem>
-</MudGrid>
+                        </thead>
+                        <tbody>
+                            @foreach (var report in accuracyReports.OrderByDescending(x => x.Accuracy))
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex flex-row">
+                                            <MudAvatar Image="@report.Avatar" Class="mud-elevation-25" />
+                                            <div class="ml-6">
+                                                <MudText Typo="Typo.subtitle2">@report.Name</MudText>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><MudText>@report.DeservedClients</MudText></td>
+                                    <td>@if (report.IsAvailable)
+                                        {
+                                            <MudChip Color="Color.Success">Available</MudChip>
+                                        }
+                                        else
+                                        {
+                                            <MudChip Color="Color.Error">Not Available</MudChip>
+                                        }
+                                    </td>
+                                    <td><MudText>@report.Accuracy</MudText></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </MudSimpleTable>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+}
 
 @code {
+    [Inject] public IDriverService DriverService { get; set; }
 
-    EarningReport[] earningReports = new EarningReport[]
+    [Inject] public IClientsService ClientsService { get; set; }
+
+    [Inject] public IAdminService AdminService{ get; set; }
+
+    [Inject] public IRidesService RidesService{ get; set; }
+
+    private int totalDrivers = 0;
+    private int availableApplications = 0;
+    private int totalClients = 0;
+    private int totalRides = 0;
+
+    private bool isRendered = false;
+
+    public List<PieData> UsersPieChart { get; set; } = new List<PieData>();
+
+    public class PieData
     {
-        new EarningReport { Name = "Lunees", Title = "Driver", Avatar = "https://avatars2.githubusercontent.com/u/71094850?s=460&u=66c16f5bb7d27dc751f6759a82a3a070c8c7fe4b&v=4", Earnings = 27.99, DeservedClients = 10},
-        new EarningReport { Name = "Mikes-gh", Title = "Driver", Avatar = "https://avatars.githubusercontent.com/u/16208742?s=120&v=4", Earnings = 109.12, DeservedClients = 21},
-        new EarningReport { Name = "Garderoben", Title = "Driver", Avatar = "https://avatars2.githubusercontent.com/u/10367109?s=460&amp;u=2abf95f9e01132e8e2915def42895ffe99c5d2c6&amp;v=4", Earnings = 420, DeservedClients = 17},
-    };
+        public string Role { get; set; }
+        public double Users { get; set; }
+    }
 
-    class EarningReport
+    public List<PieRideData> RidesPieChart { get; set; } = new List<PieRideData>();
+
+    public class PieRideData
+    {
+        public string Rating { get; set; }
+        public double Rides { get; set; }
+    }
+
+
+    List<AccuracyReport> accuracyReports = new List<AccuracyReport>();
+
+    class AccuracyReport
     {
         public string Avatar;
         public string Name;
-        public string Title;
         public int DeservedClients;
-        public double Earnings;
+        public bool IsAvailable;
+        public double Accuracy;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isRendered = false;
+
+        var drivers = await DriverService.GetDriversAsync();
+        totalDrivers = drivers.Count();
+        totalRides = drivers.Sum(d => d.DeservedClients);
+
+        // Top 3 drivers by accuray
+        var topDrivers = drivers.OrderBy(d => d.Accuracy).Take(3);
+
+        foreach(var driver in topDrivers)
+        {
+            accuracyReports.Add(new AccuracyReport()
+                {
+                    Avatar = string.Format("data:image/svg+xml+jpg+jpeg;base64,{0}", Convert.ToBase64String(driver.Avatar)),
+                    Name = driver.FirstName + ' ' + driver.LastName,
+                    DeservedClients = driver.DeservedClients,
+                    IsAvailable = driver.IsAvailable,
+                    Accuracy = driver.Accuracy
+        });
+        }
+
+        var applications = await DriverService.GetApplicationsAsync();
+        availableApplications = applications.Where(a => a.ApplicationStatus.Name == "WAITING FOR CONFIRMATION").Count();
+
+        var clients = await ClientsService.GetAllAsync();
+        totalClients = clients.Count();
+
+        var admins = await AdminService.GetAllAsync();
+        var totalAdmins = admins.Count();
+
+        UsersPieChart.Add(new PieData { Role = "Admins", Users = totalAdmins });
+        UsersPieChart.Add(new PieData { Role = "Drivers", Users = totalDrivers });
+        UsersPieChart.Add(new PieData { Role = "Clients", Users = totalClients });
+
+        var rides = await RidesService.GetAllAsync();
+
+        var ridesLess2_5 = rides.Where(r => r.Review is not null && r.Review.Rating < 2.5).Count();
+        var ridesBtw2_5_3_5 = rides.Where(r => r.Review is not null && r.Review.Rating > 2.5 && r.Review.Rating < 3.5).Count();
+        var ridesBtw3_5_4_5 = rides.Where(r => r.Review is not null && r.Review.Rating > 3.5 && r.Review.Rating < 4.5).Count();
+        var ridesBtw4_5_5 = rides.Where(r => r.Review is not null && r.Review.Rating > 4.5 && r.Review.Rating <= 5).Count();
+
+        RidesPieChart.Add(new PieRideData { Rating = "< 2.5", Rides = ridesLess2_5 });
+        RidesPieChart.Add(new PieRideData { Rating = "2.5 < x < 3.5", Rides = ridesBtw2_5_3_5 });
+        RidesPieChart.Add(new PieRideData { Rating = "3.5 < x < 4.5", Rides = ridesBtw3_5_4_5 });
+        RidesPieChart.Add(new PieRideData { Rating = "4.5 < x < 5", Rides = ridesBtw4_5_5 });
+
+        isRendered = true;
     }
 }

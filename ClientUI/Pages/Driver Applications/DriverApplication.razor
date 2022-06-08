@@ -102,8 +102,10 @@ else
                         <MudDivider/>
                     </CardHeaderContent>
                     <CardHeaderActions>
-                        <MudIconButton Title="Accept appliction" Icon="@Icons.Material.Filled.Verified" Color="Color.Success" OnClick="HandleAcceptAsync"/>
-                        <MudIconButton Title="Reject application" Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" OnClick="HandleRejectAsync"/>
+                        <MudIconButton Title="Accept appliction" Icon="@Icons.Material.Filled.Verified" Color="Color.Success"
+                                   Disabled=@(application.ApplicationStatus.Name == "APPROVED") OnClick="HandleAcceptAsync"/>
+                        <MudIconButton Title="Reject application" Icon="@Icons.Material.Filled.Cancel" Color="Color.Error" 
+                                   Disabled=@(application.ApplicationStatus.Name == "APPROVED") OnClick="HandleRejectAsync"/>
                     </CardHeaderActions>
                 </MudCardHeader>
                 <MudCardContent>

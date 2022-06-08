@@ -15,6 +15,5 @@ namespace Models.Data_Transfer_Objects
         [Required]
         public string Model { get; set; }
         public string FuelType { get; set; }
-
     }
 }

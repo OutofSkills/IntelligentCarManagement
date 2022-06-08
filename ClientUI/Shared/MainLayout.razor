@@ -85,7 +85,7 @@
         var id = await GetLoggedUserId();
         if(id > 0)
         {
-           user =  await AdminService.Get(id);
+           user =  await AdminService.GetAsync(id);
         }
     }
 

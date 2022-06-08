@@ -27,15 +27,20 @@
 		<PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="6.0.5" />
 		<PackageReference Include="MudBlazor" Version="6.0.10" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.1.0.58" />
-		<PackageReference Include="Syncfusion.Blazor.Grid" Version="20.1.0.58" />
-		<PackageReference Include="Syncfusion.Blazor.PdfViewer" Version="20.1.0.58" />
-		<PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.55" />
+		<PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.1.0.59" />
+		<PackageReference Include="Syncfusion.Blazor.Charts" Version="20.1.0.59" />
+		<PackageReference Include="Syncfusion.Blazor.Grid" Version="20.1.0.59" />
+		<PackageReference Include="Syncfusion.Blazor.PdfViewer" Version="20.1.0.59" />
+		<PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.59" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\IntelligentCarManagement.Authentication\Client.Authentication.csproj" />
 	  <ProjectReference Include="..\IntelligentCarManagement.Models\Models.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\Roles\" />
 	</ItemGroup>
 	
 	

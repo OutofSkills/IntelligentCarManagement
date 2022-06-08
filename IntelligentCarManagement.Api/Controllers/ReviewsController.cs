@@ -37,7 +37,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("ride/accuracy")]
-        public async Task EvaluateDriverAccuracyAsync([FromQuery] int rideId, double accuracy)
+        public async Task EvaluateDriverAccuracyAsync([FromQuery] int rideId, [FromQuery] double accuracy)
         {
             await ridesService.EvaluateAccuracy(rideId, accuracy);
         }

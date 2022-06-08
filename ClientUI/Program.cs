@@ -1,7 +1,10 @@
 using Blazored.LocalStorage;
+using Client.Authentication;
 using ClientUI;
 using ClientUI.Services;
 using ClientUI.Services.Cars;
+using ClientUI.Services.Clients;
+using ClientUI.Services.Rides;
 using IntelligentCarManagement.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -27,6 +30,9 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
 builder.Services.AddScoped<ICarsService, CarsService>();
+builder.Services.AddScoped<IClientsService, ClientsService>();
+builder.Services.AddScoped<IRidesService, RidesService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();

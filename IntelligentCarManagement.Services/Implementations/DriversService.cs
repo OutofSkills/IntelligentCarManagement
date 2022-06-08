@@ -113,6 +113,9 @@ namespace IntelligentCarManagement.Services
                         double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
                         dto.Accuracy = Math.Round((double)driverAccuracy, 1);
 
+                        // Get number of rides
+                        dto.DeservedClients = driver.Rides is null ? 0 : driver.Rides.Count;
+
                         result.Add(dto);
                     }
                 }
@@ -131,6 +134,9 @@ namespace IntelligentCarManagement.Services
                     // Get accuracy
                     double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
                     dto.Accuracy = Math.Round((double)driverAccuracy, 1);
+
+                    // Get number of rides
+                    dto.DeservedClients = driver.Rides is null ? 0 : driver.Rides.Count;
 
                     result.Add(dto);
                 }

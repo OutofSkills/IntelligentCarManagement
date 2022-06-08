@@ -10,5 +10,6 @@ namespace Api.Services.Interfaces
     public interface IAdminsService
     {
         Task<UserBaseDTO> Get(int id);
+        Task<IEnumerable<UserBaseDTO>> GetAll();
     }
 }

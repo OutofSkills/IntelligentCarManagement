@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -27,9 +28,16 @@ namespace Api.Controllers
         }
 
         [HttpGet]
+        [Route("id")]
         public async Task<UserBaseDTO> Get([FromQuery] int id)
         {
             return await _adminsService.Get(id);
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<UserBaseDTO>> GetAll()
+        {
+            return await _adminsService.GetAll();
         }
     }
 }

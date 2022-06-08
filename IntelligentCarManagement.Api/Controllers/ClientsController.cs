@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
-    [EnableCors]
+  
     [Authorize(Roles = nameof(RoleName.ADMIN) + "," + nameof(RoleName.CLIENT))]
     [Route("api/[controller]")]
     [ApiController]
