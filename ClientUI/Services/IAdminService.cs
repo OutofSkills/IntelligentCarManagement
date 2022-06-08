@@ -1,4 +1,5 @@
-﻿using Models.DTOs;
+﻿using Models.Data_Transfer_Objects;
+using Models.DTOs;
 
 namespace ClientUI.Services
 {
@@ -6,5 +7,6 @@ namespace ClientUI.Services
     {
         Task<UserBaseDTO> GetAsync(int id);
         Task<IEnumerable<UserBaseDTO>> GetAllAsync();
+        Task<RequestResponse> Register(AdminRegisterModel model);
     }
 }

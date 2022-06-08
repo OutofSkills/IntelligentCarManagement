@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
 using System.Collections.Generic;
@@ -25,49 +26,36 @@ namespace IntelligentCarManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Route("get-all-roles")]
-        public async Task<IActionResult> GetRolesAsync()
+        public async Task<IEnumerable<RoleDTO>> GetAllAsync()
         {
-            return Ok(await rolesService.GetAllRolesAsync());
+            return await rolesService.GetAllRolesAsync();
         }
 
         [HttpGet]
-        [Route("get-roles")]
-        public async Task<IActionResult> GetRolesAsync([FromQuery] Pagination pagination)
+        [Route("id")]
+        public async Task<RoleDTO> GetRoleAsync([FromQuery]int id)
         {
-            var collection = await rolesService.GetAllRolesAsync();
-
-            HttpContext.InsertPaginationParameterInResponse(collection, pagination.NumberOfRecords);
-
-            return Ok(collection.Paginate(pagination).ToList());
-        }
-
-        [HttpGet]
-        [Route("get-role")]
-        public async Task<IActionResult> GetRoleAsync([FromQuery]int id)
-        {
-            return Ok(await rolesService.GetRoleAsync(id));
+            return await rolesService.GetRoleAsync(id);
         }
 
         [HttpDelete]
-        [Route("remove-role")]
-        public async Task<IActionResult> RemoveRoleAsync([FromQuery] int id)
+        [Route("id")]
+        public async Task<bool> RemoveRoleAsync([FromQuery] int id)
         {
-            return Ok(await rolesService.RemoveRoleAsync(id));
+            return await rolesService.RemoveRoleAsync(id);
         }
 
         [HttpPut]
-        [Route("edit-role")]
-        public async Task<IActionResult> EditRoleAsync([FromBody] Role role)
+        [Route("id")]
+        public async Task<bool> EditRoleAsync([FromQuery] int id, [FromBody] RoleDTO role)
         {
-            return Ok(await rolesService.EditRoleAsync(role));
+            return await rolesService.EditRoleAsync(id, role);
         }
 
         [HttpPost]
-        [Route("add-role")]
-        public async Task<IActionResult> AddRoleAsync([FromBody] Role role)
+        public async Task<bool> AddRoleAsync([FromBody] RoleDTO role)
         {
-            return Ok(await rolesService.AddRoleAsync(role));
+            return await rolesService.AddRoleAsync(role);
         }
     }
 }

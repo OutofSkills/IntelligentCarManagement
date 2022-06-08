@@ -1,6 +1,7 @@
 ﻿using Api.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,6 +26,14 @@ namespace Api.Controllers
         public async Task<LoginResponse> Login([FromBody] LoginModel loginModel)
         {
             return await _adminAccountService.Login(loginModel);
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task Register([FromBody] AdminRegisterModel registerModel)
+        {
+            await _adminAccountService.Register(registerModel);
+            return;
         }
 
         [HttpGet]

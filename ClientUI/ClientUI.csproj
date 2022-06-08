@@ -38,10 +38,6 @@
 	  <ProjectReference Include="..\IntelligentCarManagement.Authentication\Client.Authentication.csproj" />
 	  <ProjectReference Include="..\IntelligentCarManagement.Models\Models.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Services\Roles\" />
-	</ItemGroup>
 	
 	
 </Project>

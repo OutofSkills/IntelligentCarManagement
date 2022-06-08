@@ -38,7 +38,7 @@ namespace ClientUI.Services.Cars
                 return new RequestResponse() { IsSuccess = false, Message = "Server error. Please try again later." };
             }
 
-            return new RequestResponse() { IsSuccess = true, Message = "Application sent successfully." };
+            return new RequestResponse() { IsSuccess = true, Message = "Car created successfully." };
         }
 
         public async Task<IEnumerable<CarDTO>> GetAllAsync()

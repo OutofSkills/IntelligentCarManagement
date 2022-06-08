@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Api.Services.Interfaces
 {
-    public interface IAdminAccountService: ISignIn
+    public interface IAdminAccountService: ISignIn, ISignUp<IRegisterModel>
     {
     }
 }

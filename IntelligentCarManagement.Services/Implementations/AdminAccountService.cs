@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using Models.Data_Transfer_Objects;
 
 namespace Api.Services.Implementations
 {
@@ -36,6 +38,43 @@ namespace Api.Services.Implementations
             string jwtToken = await _tokenBuilder.BuildAsync(model.Email);
             string firebaseToken = client.NotificationsToken;
             return new LoginResponse() { FirebaseToken = firebaseToken, JwtToken = jwtToken };
+        }
+
+        public async Task Register(IRegisterModel model)
+        {
+
+            UserBase newUser = new();
+
+            // Compress user avatar
+            model.Avatar = FileCompressor.Compress(model.Avatar);
+
+            // Map view model to user model
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<AdminRegisterModel, UserBase>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+            newUser = iMapper.Map<AdminRegisterModel, UserBase>((AdminRegisterModel)model);
+
+            var isEmailValid = await _userManager.FindByEmailAsync(model.Email);
+            if (isEmailValid is not null)
+            {
+                throw new Exception("A user with this email already exists.");
+            }
+
+            try
+            {
+                // Creating the new user
+                IdentityResult result = await _userManager.CreateAsync(newUser, model.Password);
+                if (result.Succeeded is false) { throw new Exception("Something went wrong, please try again."); }
+
+                // Assigning the user to a default role
+                await _userManager.AddToRoleAsync(newUser, RoleName.ADMIN.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new ServerException(ex.Message);
+            }
         }
 
         private async Task<bool> IsValidUsernameAndPassword(string username, string password, RoleName role)

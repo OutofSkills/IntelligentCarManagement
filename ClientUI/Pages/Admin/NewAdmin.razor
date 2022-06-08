@@ -1,0 +1,151 @@
+﻿@page "/admin/new"
+
+<MudText Typo="Typo.h4" Align="Align.Center">New Admin</MudText>
+
+<div class="d-flex justify-center">
+    <MudPaper Class="pa-4">
+        <div class="pa-4">
+            <EditForm Model=model OnValidSubmit="HandleSubmit">
+                <MudTextField Label="Username" HelperText="Max. 8 characters" InputType="InputType.Text"
+                              @bind-Value="model.UserName" For="@(() => model.UserName)"/>
+                <div class="d-flex flex-row gap-2 flex-wrap">
+                     <MudTextField Label="First name" InputType="InputType.Text"
+                              @bind-Value="model.FirstName" For="@(() => model.LastName)"/>
+
+                     <MudTextField Label="Last name" InputType="InputType.Text"
+                              @bind-Value="model.LastName" For="@(() => model.LastName)"/>
+                </div>
+
+                <MudTextField Label="Phone Number" InputType="InputType.Telephone"
+                              @bind-Value="model.PhoneNumber" For="@(() => model.PhoneNumber)"/>
+
+                <InputFile id="avatar" OnChange="e => UploadFile(e)" accept=".jpg, .jpeg, png" name="avatar" hidden />
+                <div class="d-flex flex-row gap-2 flex-wrap mt-2">
+                     <MudIconButton HtmlTag="label"
+                               Color="Color.Info"
+                               Icon="@Icons.Filled.PhotoCamera"
+                               for="avatar" />
+                     <MudText Class="d-flex" Style="align-items:center">@uploadAvatarState</MudText>
+                </div>
+                <MudTextField Label="Email" Class="mt-3" InputType="InputType.Email"
+                              @bind-Value="model.Email" For="@(() => model.Email)"/>
+                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                              @bind-Value="model.Password" For="@(() => model.Password)" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility"/>
+                <MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
+                              @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)"  InputType="@ConfPasswordInput" Adornment="Adornment.End" AdornmentIcon="@ConfPasswordInputIcon" OnAdornmentClick="ToggleConfPasswordVisibility"/>
+
+                 <MudButton Class="mt-4" Disabled="@(processRequest)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+                    @if (processRequest)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Register</MudText>
+                    }
+                </MudButton>
+            </EditForm>
+        </div>
+    </MudPaper>
+</div>
+
+@code {
+    public AdminRegisterModel model = new AdminRegisterModel();
+
+    [Inject] public IAdminService AdminService{ get; set; }
+
+    [Inject] public ISnackbar Snackbar{ get; set; }
+
+    private bool processRequest = false;
+
+    private string uploadAvatarState = "Upload your avatar.";
+
+    bool PasswordVisibility, ConfPasswordVisibility;
+
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    InputType ConfPasswordInput = InputType.Password;
+    string ConfPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void TogglePasswordVisibility()
+    {
+        @if (PasswordVisibility)
+        {
+            PasswordVisibility = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            PasswordVisibility = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    void ToggleConfPasswordVisibility()
+    {
+        @if (ConfPasswordVisibility)
+        {
+            ConfPasswordVisibility = false;
+            ConfPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            ConfPasswordInput = InputType.Password;
+        }
+        else
+        {
+            ConfPasswordVisibility = true;
+            ConfPasswordInputIcon = Icons.Material.Filled.Visibility;
+            ConfPasswordInput = InputType.Text;
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        processRequest = true;
+        var result = await AdminService.Register(model);
+        processRequest = false;
+
+         if (result.Success)
+        {
+            Snackbar.Add(result.Message, Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
+    }
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        try
+        {
+            model.Avatar = await GetBytesFromFile(file);
+            uploadAvatarState = "File uploaded!";
+        }catch(Exception ex)
+        {
+            uploadAvatarState = "Something went wrong. Please try again!";
+        }
+    }
+
+    public static async Task<byte[]> GetBytesFromFile(IBrowserFile file)
+    {
+        var bytes = new byte[file.Size];
+
+        var path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+        await using var fs = new FileStream(path, FileMode.Create);
+        await file.OpenReadStream(file.Size).CopyToAsync(fs);
+
+        fs.Position = 0;
+
+        await fs.ReadAsync(bytes);            
+
+        fs.Close();
+        File.Delete(path);
+
+        return bytes;
+    }
+}

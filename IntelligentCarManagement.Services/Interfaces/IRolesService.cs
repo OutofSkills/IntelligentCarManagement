@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Data_Transfer_Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace IntelligentCarManagement.Api.Services
 {
     public interface IRolesService
     {
-        Task<IEnumerable<Role>> GetAllRolesAsync();
-        Task<Role> GetRoleAsync(int id);
+        Task<IEnumerable<RoleDTO>> GetAllRolesAsync();
+        Task<RoleDTO> GetRoleAsync(int id);
         Task<bool> RemoveRoleAsync(int id);
-        Task<bool> EditRoleAsync(Role role);
-        Task<bool> AddRoleAsync(Role role);
+        Task<bool> EditRoleAsync(int id, RoleDTO role);
+        Task<bool> AddRoleAsync(RoleDTO role);
     }
 }
