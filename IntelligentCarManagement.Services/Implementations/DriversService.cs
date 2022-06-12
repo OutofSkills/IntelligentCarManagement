@@ -45,7 +45,7 @@ namespace IntelligentCarManagement.Services
             dto.Avatar = FileCompressor.Decompress(dto.Avatar);
 
             // Get rating
-            double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+            double? driverRating = RatingCalculator.GetDriverRating(driver.Rides, driver.Id);
             dto.Rating = (float)Math.Round((double)driverRating, 1);
 
             // Get accuracy
@@ -71,7 +71,7 @@ namespace IntelligentCarManagement.Services
 
             dto.Avatar = FileCompressor.Decompress(dto.Avatar);
             // Get rating
-            double driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+            double driverRating = RatingCalculator.GetDriverRating(driver.Rides, driver.Id);
             dto.Rating = (float)Math.Round((double)driverRating, 1);
 
             // Get accuracy
@@ -106,7 +106,7 @@ namespace IntelligentCarManagement.Services
                         dto.Avatar = FileCompressor.Decompress(dto.Avatar);
 
                         // Get rating
-                        double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+                        double? driverRating = RatingCalculator.GetDriverRating(driver.Rides, driver.Id);
                         dto.Rating = (float)Math.Round((double)driverRating, 1);
 
                         // Get accuracy
@@ -128,7 +128,7 @@ namespace IntelligentCarManagement.Services
                     dto.Avatar = FileCompressor.Decompress(dto.Avatar);
 
                     // Get rating
-                    double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+                    double? driverRating = RatingCalculator.GetDriverRating(driver.Rides, driver.Id);
                     dto.Rating = (float)Math.Round((double)driverRating, 1);
 
                     // Get accuracy

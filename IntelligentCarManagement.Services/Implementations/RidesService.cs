@@ -167,10 +167,9 @@ namespace IntelligentCarManagement.Api.Services
             {
                 var dto = iMapper.Map<Ride, RideDTO>(ride);
                 // Get client's rating
-                var clientRating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
-                dto.Client.Rating = Math.Round(clientRating, 1);
+                dto.Client.Rating = RatingCalculator.CalculateRating(ride.Client);
                 // Get driver's rating
-                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                double? driverRating = RatingCalculator.GetDriverRating(rides, ride.DriverId);
                 dto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
 
                 // Get accuracy
@@ -205,12 +204,12 @@ namespace IntelligentCarManagement.Api.Services
             rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
 
             // Get client's rating
-            var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
-            rideDto.Client.Rating = Math.Round(rating, 1);
+            // Get client's rating
+            rideDto.Client.Rating = RatingCalculator.CalculateRating(ride.Client);
 
             // Get driver's rating
             var rides = await _unitOfWork.RidesRepo.GetAll();
-            double? driverRating = GetDriverRating(rides, ride.DriverId);
+            double? driverRating = RatingCalculator.GetDriverRating(rides, ride.DriverId);
             rideDto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
 
             // Get accuracy
@@ -245,11 +244,10 @@ namespace IntelligentCarManagement.Api.Services
                 rideDto.Driver.Avatar = FileCompressor.Decompress(rideDto.Driver.Avatar);
 
                 // Get client's rating
-                var rating = ongoingRide.Client.DriverReviews.Sum(r => r.Rating) / ongoingRide.Client.DriverReviews.Count;
-                rideDto.Client.Rating = Math.Round(rating, 1);
+                rideDto.Client.Rating = RatingCalculator.CalculateRating(ongoingRide.Client);
 
                 // Get driver's rating
-                double? driverRating = GetDriverRating(rides, ongoingRide.DriverId);
+                double? driverRating = RatingCalculator.GetDriverRating(rides, ongoingRide.DriverId);
                 rideDto.Driver.Rating = (float)Math.Round((double)driverRating, 1);
 
                 // Get accuracy
@@ -293,11 +291,11 @@ namespace IntelligentCarManagement.Api.Services
                 rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
 
                 // Get client's rating
-                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
-                rideObj.Client.Rating = Math.Round(rating, 1);
+                // Get client's rating
+                rideObj.Client.Rating = RatingCalculator.CalculateRating(ride.Client);
 
                 // Get driver's rating
-                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                double? driverRating = RatingCalculator.GetDriverRating(rides, ride.DriverId);
                 rideObj.Driver.Rating = (float)Math.Round((double)driverRating, 1);
 
                 // Get accuracy
@@ -337,11 +335,11 @@ namespace IntelligentCarManagement.Api.Services
                 rideObj.Driver.Avatar = FileCompressor.Decompress(ride.Driver.Avatar);
 
                 // Get client's rating
-                var rating = ride.Client.DriverReviews.Sum(r => r.Rating) / ride.Client.DriverReviews.Count;
-                rideObj.Client.Rating = Math.Round(rating, 1);
+                // Get client's rating
+                rideObj.Client.Rating = RatingCalculator.CalculateRating(ride.Client);
 
                 // Get driver's rating
-                double? driverRating = GetDriverRating(rides, ride.DriverId);
+                double? driverRating = RatingCalculator.GetDriverRating(rides, ride.DriverId);
                 rideObj.Driver.Rating = (float)Math.Round((double)driverRating, 1);
 
                 // Get accuracy
@@ -352,18 +350,6 @@ namespace IntelligentCarManagement.Api.Services
             }
 
             return result;
-        }
-
-        public static double GetDriverRating(IEnumerable<Ride> rides, int driverId)
-        {
-            var ratedRides = rides.Where(r => r.Review is not null && r.Review.Rating != null && r.DriverId == driverId).ToList();
-            double driverRating = 0.0;
-            if(ratedRides.Any())
-            {
-                driverRating = (double)(ratedRides.Sum(r => r.Review.Rating) / ratedRides.Count);
-            }
-
-            return driverRating;
         }
 
         public async Task RateAsync(int rideId, double rating)

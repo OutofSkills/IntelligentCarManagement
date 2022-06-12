@@ -45,8 +45,8 @@ namespace IntelligentCarManagement.Services
             var dto = iMapper.Map<Client, ClientDTO>(client);
 
             // Get client's rating
-            var rating = client.DriverReviews.Sum(r => r.Rating)/client.DriverReviews.Count;
-            dto.Rating = Math.Round(rating, 1); 
+            dto.Rating = RatingCalculator.CalculateRating(client);
+
 
             return dto;
         }
@@ -67,8 +67,7 @@ namespace IntelligentCarManagement.Services
             var dto = iMapper.Map<Client, ClientDTO>(client);
 
             // Get client's rating
-            var rating = client.DriverReviews.Sum(r => r.Rating) / client.DriverReviews.Count;
-            dto.Rating = Math.Round(rating, 1);
+            dto.Rating = RatingCalculator.CalculateRating(client);
 
             return dto;
         }
@@ -94,8 +93,7 @@ namespace IntelligentCarManagement.Services
                 clientObj.Avatar = FileCompressor.Decompress(clientObj.Avatar);
 
                 // Get client's rating
-                var rating = client.DriverReviews.Sum(r => r.Rating) / client.DriverReviews.Count;
-                clientObj.Rating = Math.Round(rating, 1);
+                clientObj.Rating = RatingCalculator.CalculateRating(client);
 
                 result.Add(clientObj);
             }
