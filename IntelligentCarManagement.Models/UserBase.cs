@@ -52,13 +52,10 @@ namespace Models
         [ForeignKey(nameof(StatusId))]
         public virtual AccountStatus AccountStatus { get; set; }
 
-        public virtual IList<UserRole> UserRoles { get; set; }
-
         public virtual IEnumerable<Notification> Notifications { get; set; }
 
         public UserBase()
         {
-            UserRoles = new List<UserRole>();
             Notifications = new HashSet<Notification>();
             // Defult account data
             StatusId = 1; // pendind activation

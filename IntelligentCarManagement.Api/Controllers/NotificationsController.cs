@@ -1,7 +1,9 @@
 ﻿using Api.Services.Utils;
 using IntelligentCarManagement.Api.Services;
+using IntelligentCarManagement.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Models.Data_Transfer_Objects;
 using Models.DTOs;
 using System;
@@ -19,10 +21,14 @@ namespace IntelligentCarManagement.Api.Controllers
     public class NotificationsController : Controller
     {
         private readonly INotificationService notificationService;
+        private readonly IDriversService driversService;
+        private readonly IClientsService clientsService;
 
-        public NotificationsController(INotificationService notificationService)
+        public NotificationsController(INotificationService notificationService, IDriversService driversService, IClientsService clientsService)
         {
             this.notificationService = notificationService;
+            this.driversService = driversService;
+            this.clientsService = clientsService;
         }
 
         [HttpGet]
@@ -55,15 +61,68 @@ namespace IntelligentCarManagement.Api.Controllers
             return Ok();
         }
 
-        [Route("send/{userId}")]
+        [Route("send/category")]
         [HttpPost]
-        public async Task<IActionResult> SendNotification(NotificationDTO notification, int userId)
+        public async Task SendNotification(NotificationDTO notification, [FromQuery] string category)
         {
             var notificationCategory = await notificationService.GetNotificationCategoryAsync(NotificationCategories.GENERAL);
             notification.NotificationCategory = notificationCategory;
 
-            var result = await notificationService.SendAsync(userId, notification);
-            return Ok(result);
+            var clients = await clientsService.GetAllAsync();
+            var drivers = await driversService.GetAllAsync(null);
+
+            switch (category)
+            {
+                case "All":
+                    foreach(var client in clients)
+                    {
+                        try
+                        {
+                            var result = await notificationService.SendAsync(client.Id, notification);
+                        }catch (Exception e)
+                        {
+                            // log the exception
+                        }
+                    }
+                    foreach (var driver in drivers)
+                    {
+                        try
+                        {
+                            var result = await notificationService.SendAsync(driver.Id, notification);
+                        }
+                        catch (Exception e)
+                        {
+                            // log the exception
+                        }
+                    }
+                    break;
+                case "Drivers":
+                    foreach (var driver in drivers)
+                    {
+                        try
+                        {
+                            var result = await notificationService.SendAsync(driver.Id, notification);
+                        }
+                        catch (Exception e)
+                        {
+                            // log the exception
+                        }
+                    }
+                    break;
+                case "Clients":
+                    foreach (var client in clients)
+                    {
+                        try
+                        {
+                            var result = await notificationService.SendAsync(client.Id, notification);
+                        }
+                        catch (Exception e)
+                        {
+                            // log the exception
+                        }
+                    }
+                    break;
+            }
         }
 
         [Route("token")]
@@ -77,11 +136,34 @@ namespace IntelligentCarManagement.Api.Controllers
 
         [Route("category")]
         [HttpPost]
-        public NotificationCategoryDTO CreateCategory([FromBody] NotificationCategoryDTO categoryDTO)
+        public NotificationCategory CreateCategoryAsync([FromBody] NotificationCategory category)
         {
-            notificationService.CreateCategory(categoryDTO);
+            notificationService.CreateCategory(category);
 
-            return categoryDTO;
+            return category;
+        }
+
+        [Route("category/id")]
+        [HttpPut]
+        public NotificationCategory EditCategoryAsync([FromQuery] int id, [FromBody] NotificationCategory category)
+        {
+            notificationService.UpdateCategoryAsync(category, id);
+
+            return category;
+        }
+
+        [Route("category/id")]
+        [HttpDelete]
+        public async Task RemoveCategoryAsync([FromQuery] int id)
+        {
+            await notificationService.RemoveCategoryAsync(id);
+        }
+
+        [Route("category")]
+        [HttpGet]
+        public async Task<IEnumerable<NotificationCategory>> GetCategoriesAsync()
+        {
+            return await notificationService.GetCategoriesAsync();
         }
     }
 }

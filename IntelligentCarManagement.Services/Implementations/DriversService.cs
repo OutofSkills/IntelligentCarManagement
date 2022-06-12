@@ -71,11 +71,11 @@ namespace IntelligentCarManagement.Services
 
             dto.Avatar = FileCompressor.Decompress(dto.Avatar);
             // Get rating
-            double? driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
+            double driverRating = RidesService.GetDriverRating(driver.Rides, driver.Id);
             dto.Rating = (float)Math.Round((double)driverRating, 1);
 
             // Get accuracy
-            double? driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
+            double driverAccuracy = GetDriverAccuracy(driver.Rides, driver.Id);
             dto.Accuracy = Math.Round((double)driverAccuracy, 1);
 
             return dto;
@@ -216,10 +216,14 @@ namespace IntelligentCarManagement.Services
             unitOfWork.SaveChanges();
         }
 
-        public static double? GetDriverAccuracy(IEnumerable<Ride> rides, int driverId)
+        public static double GetDriverAccuracy(IEnumerable<Ride> rides, int driverId)
         {
             var ratedRides = rides.Where(r => r.Review is not null && r.Review.DrivingAccuracy != null && r.DriverId == driverId).ToList();
-            var driverAccuracy = ratedRides.Sum(r => r.Review.DrivingAccuracy) / ratedRides.Count;
+            double driverAccuracy = 0.0;
+            if (ratedRides.Any())
+            {
+                driverAccuracy = (double)(ratedRides.Sum(r => r.Review.DrivingAccuracy) / ratedRides.Count);
+            }
             return driverAccuracy;
         }
 

@@ -1,0 +1,132 @@
+﻿@page "/admin/driver-applications/statuses"
+
+@using ClientUI.Services.Statuses
+@using Syncfusion.Blazor.Grids
+
+<MudText Typo="Typo.h4" Class="mb-4">
+    <b>Application Statuses</b>
+</MudText>
+
+<MudGrid Class="pb-6">
+    @if(statuses is null)
+     {
+         <!--If the products where not loaded yet, display some skeletons-->
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Numbers" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Roles</MudText>
+                    <MudText Typo="Typo.h5">@(statuses.Count())</MudText>
+                </div>
+            </MudPaper>
+        
+        </MudItem>
+    }
+</MudGrid>
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid DataSource="@statuses" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel" })" AllowPaging="true" AllowSorting="true" TValue="ApplicationStatus">
+                <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings>
+                 <GridEvents OnActionBegin="ActionBeginHandler" OnActionComplete="ActionCompleteHandler" TValue="ApplicationStatus"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(ApplicationStatus.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationStatus.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(ApplicationStatus.Description) HeaderText="Description"></GridColumn>
+                     <GridColumn HeaderText="Applications">
+                        <Template>
+                            @{
+                                var status = (context as ApplicationStatus);
+                                var applications = status.Applications is null ? 0 : status.Applications.Count();
+                                
+                                <MudChip Color="Color.Success">@applications</MudChip>
+                            }
+                        </Template>
+                    </GridColumn>
+                  </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject] public NavigationManager NavManager { get; set; }
+
+    [Inject] public IStatusesService StatusesService { get; set; }
+
+    private IEnumerable<ApplicationStatus> statuses;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadStatusesAsync();
+    }
+
+    private async Task LoadStatusesAsync()
+    {
+        statuses = await StatusesService.GetApplicationStatusesAsync();
+    }
+
+    public async Task ActionCompleteHandler(ActionEventArgs<ApplicationStatus> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            await LoadStatusesAsync();
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            await LoadStatusesAsync();
+        }
+    }
+
+    public async void ActionBeginHandler(ActionEventArgs<ApplicationStatus> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            if (Args.Action == "Add")
+            {
+                // adding new record
+                await StatusesService.AddApplicationStatusAsync(Args.RowData);
+            }
+            else
+            {
+                //updating
+            }
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            //TODO: delete
+        }
+    }
+}

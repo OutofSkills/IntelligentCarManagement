@@ -1,0 +1,61 @@
+﻿@page "/admin/mail/create"
+@using ClientUI.Services.Emails
+
+
+<MudText Typo="Typo.h4" Align="Align.Center">New Email</MudText>
+
+<div class="d-flex justify-center">
+    <MudPaper MinWidth="40vw">
+        <div class="pa-4">
+            <EditForm Model=Model OnValidSubmit="HandleSubmit">
+                 <MudTextField Label="To" HelperText="Email destination." InputType="InputType.Email"
+                              @bind-Value="Model.SendTo" For="@(() => Model.SendTo)" Required="true" InputMode="InputMode.email"/>
+
+                <MudTextField Label="Title" HelperText="Email title." InputType="InputType.Text"
+                              @bind-Value="Model.Title" For="@(() => Model.Title)" Required="true"/>
+               
+                 <MudTextField Label="Content" HelperText="Email content." InputType="InputType.Text"
+                              @bind-Value="Model.Content" For="@(() => Model.Content)" Required="true" Lines="10" Variant="Variant.Outlined"/>
+
+
+                 <MudButton Class="mt-4" Disabled="@(processRequest)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+                    @if (processRequest)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Send</MudText>
+                    }
+                </MudButton>
+            </EditForm>
+        </div>
+    </MudPaper>
+</div>
+
+@code {
+    public EmailDTO Model = new();
+
+    [Inject] public IEmailsService EmailsService{ get; set; }
+
+    [Inject] public ISnackbar Snackbar{ get; set; }
+
+    private bool processRequest = false;
+
+    private async Task HandleSubmit()
+    {
+        processRequest = true;
+        var result = await EmailsService.SendAsync(Model);
+        processRequest = false;
+
+        if(result.IsSuccess)
+        {
+            Snackbar.Add(result.Message, Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add(result.Message, Severity.Error);
+        }
+    }
+}

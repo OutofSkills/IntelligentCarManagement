@@ -35,7 +35,6 @@ namespace ClientUI.Services.Roles
             }
 
             return new RequestResponse() { IsSuccess = true, Message = "Role added successfully." };
-
         }
 
         public async Task<RequestResponse> Delete(int id)

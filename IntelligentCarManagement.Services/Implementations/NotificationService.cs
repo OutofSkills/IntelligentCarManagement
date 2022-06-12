@@ -157,19 +157,28 @@ namespace IntelligentCarManagement.Api.Services
             return iMapper.Map<NotificationCategory, NotificationCategoryDTO>(notificationCategory);
         }
 
-        public void CreateCategory(NotificationCategoryDTO categoryDTO)
+        public void CreateCategory(NotificationCategory category)
         {
-            var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<NotificationCategoryDTO, NotificationCategory>();
-                cfg.AddGlobalIgnore("Id");
-            });
+            unitOfWork.NotificationCategoriesRepo.Insert(category);
+            unitOfWork.SaveChanges();
+        }
 
-            IMapper iMapper = config.CreateMapper();
+        public async Task<IEnumerable<NotificationCategory>> GetCategoriesAsync()
+        {
+            var categories = await unitOfWork.NotificationCategoriesRepo.GetAll();
 
-            var notificationCategory = new NotificationCategory();
-            notificationCategory = iMapper.Map<NotificationCategoryDTO, NotificationCategory>(categoryDTO);
+            return categories;
+        }
 
-            unitOfWork.NotificationCategoriesRepo.Insert(notificationCategory);
+        public async Task RemoveCategoryAsync(int id)
+        {
+            await unitOfWork.NotificationCategoriesRepo.Delete(id);
+            unitOfWork.SaveChanges();
+        }
+
+        public void UpdateCategoryAsync(NotificationCategory category, int id)
+        {
+            unitOfWork.NotificationCategoriesRepo.Update(category);
             unitOfWork.SaveChanges();
         }
     }

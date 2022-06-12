@@ -10,19 +10,19 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailController : ControllerBase
+    public class EmailsController : ControllerBase
     {
         private readonly IMailService emailService;
 
-        public EmailController(IMailService emailService)
+        public EmailsController(IMailService emailService)
         {
             this.emailService = emailService;
         }
 
         [HttpPost]
-        public void Send(EmailDTO dTO, [FromServices] IWebHostEnvironment environment)
+        public void Send([FromBody] EmailDTO dTO, [FromServices] IWebHostEnvironment environment)
         {
-            emailService.SendEmail(dTO, new WelcomeTemplate(environment));
+            emailService.SendEmail(dTO, new GeneralEmailTemplate(environment));
         }
     }
 }

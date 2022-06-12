@@ -40,7 +40,7 @@ namespace Models
         public string ContactMethod { get; set; }
 
         public int AddressId { get; set; }
-        public int ApplicationStatusId { get; set; } = 1;
+        public int ApplicationStatusId { get; set; } = 3;
 
         [ForeignKey(nameof(AddressId))]
         public virtual UserAddress Address { get; set; } = new UserAddress();

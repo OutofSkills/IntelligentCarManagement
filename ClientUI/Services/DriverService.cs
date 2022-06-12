@@ -53,7 +53,7 @@ namespace ClientUI.Services
 
         public async Task<Utils.RequestResponse> ApproveApplicationAsync(int id)
         {
-            var response = await httpClient.GetAsync($"https://intellicarsapi.azurewebsites.net/api/DriverApplications/approve/id?id={id}");
+            var response = await httpClient.GetAsync($"http://localhost:41427/api/DriverApplications/approve/id?id={id}");
 
             if (response.IsSuccessStatusCode == false)
             {

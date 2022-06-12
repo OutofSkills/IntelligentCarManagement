@@ -35,6 +35,7 @@ using System.Diagnostics;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
 using Serilog.Events;
+using Api.Helpers;
 
 namespace IntelligentCarManagement.Api
 {
@@ -170,31 +171,8 @@ namespace IntelligentCarManagement.Api
                 });
             });
 
-
-            services.AddControllers().AddNewtonsoftJson(options =>
-            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); 
-
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<ICarsService, CarsService>();
-            services.AddScoped<IDriversService, DriversService>();
-            services.AddScoped<IClientsService, ClientsService>();
-            services.AddScoped<IAdminsService, AdminsService>();
-            services.AddScoped<ITokenBuilder, TokenBuilder>();
-            services.AddScoped<IRolesService, RolesService>();
-            services.AddScoped<IAccountStatusService, AccountStatusService>();
-            services.AddScoped<IDriverStatusService, DriverStatusService>();
-            services.AddScoped<INotificationService, NotificationService>();
-            services.AddScoped<IRidesService, RidesService>();
-            services.AddScoped<IClientsAccountService, ClientsAccountService>();
-            services.AddScoped<IDriversAccountService, DriversAccountService>();
-            services.AddScoped<IAdminAccountService, AdminAccountService>();
-            services.AddScoped<IDriverApplicationsService, DriverApplicationsService>();
-            services.AddTransient<INotificationService, NotificationService>();
-            services.AddHttpClient<FcmSender>();
-            services.AddHttpClient<ApnSender>();
-            // SMTP email client
-            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-            services.AddScoped<IMailService, MailService>();
+            // Dependency Injection custom services
+            services.AddCustomServices(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -72,10 +72,13 @@ namespace Api.Services.Implementations
             {
                 throw new Exception("A user with this email already exists.");
             }
+            string generatedPassword = "";
 
-            var generatedPassword = GeneratePassword();
             try
             {
+                generatedPassword = GeneratePassword();
+                newDriver.UserName = newDriver.UserName.Trim(); // No white spaces allowed
+
                 // Creating the new user
                 IdentityResult result = await _userManager.CreateAsync(newDriver, generatedPassword);
                 if (result.Succeeded is false) { return null; }
@@ -129,8 +132,6 @@ namespace Api.Services.Implementations
 
             int length = options.RequiredLength;
 
-            //bool nonAlphanumeric = options.RequireNonAlphanumeric;
-            bool nonAlphanumeric = false;
             bool digit = options.RequireDigit;
             bool lowercase = options.RequireLowercase;
             bool uppercase = options.RequireUppercase;
@@ -142,20 +143,23 @@ namespace Api.Services.Implementations
             {
                 char c = (char)random.Next(32, 126);
 
-                password.Append(c);
-
                 if (char.IsDigit(c))
+                {
                     digit = false;
+                    password.Append(c);
+                }
                 else if (char.IsLower(c))
+                {
                     lowercase = false;
+                    password.Append(c);
+                }
                 else if (char.IsUpper(c))
+                {
                     uppercase = false;
-                else if (!char.IsLetterOrDigit(c))
-                    nonAlphanumeric = false;
+                    password.Append(c);
+                }
             }
 
-            if (nonAlphanumeric)
-                password.Append((char)random.Next(33, 48));
             if (digit)
                 password.Append((char)random.Next(48, 58));
             if (lowercase)

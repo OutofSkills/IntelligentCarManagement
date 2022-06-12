@@ -593,21 +593,6 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Models.UserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRole");
-                });
-
             modelBuilder.Entity("Models.Client", b =>
                 {
                     b.HasBaseType("Models.UserBase");
@@ -767,7 +752,7 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Models.Driver", "Driver")
-                        .WithMany()
+                        .WithMany("Rides")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -806,25 +791,6 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("AccountStatus");
 
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Models.UserRole", b =>
-                {
-                    b.HasOne("Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.UserBase", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Client", b =>
@@ -879,8 +845,6 @@ namespace Api.DataAccess.Migrations
             modelBuilder.Entity("Models.UserBase", b =>
                 {
                     b.Navigation("Notifications");
-
-                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("Models.Client", b =>
@@ -891,6 +855,8 @@ namespace Api.DataAccess.Migrations
             modelBuilder.Entity("Models.Driver", b =>
                 {
                     b.Navigation("ReviewedClients");
+
+                    b.Navigation("Rides");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,79 @@
+﻿@page "/admin/notification/new"
+@using ClientUI.Services.Notifications
+
+<MudText Typo="Typo.h4" Align="Align.Center">New Notification</MudText>
+
+<div class="d-flex justify-center">
+    <MudPaper Class="pa-4">
+        <div class="pa-4">
+            <EditForm Model=model OnValidSubmit="HandleSubmit">
+                <MudTextField Label="Title" HelperText="Notification title." InputType="InputType.Text"
+                              @bind-Value="model.Title" For="@(() => model.Title)" Required="true"/>
+               
+                 <MudTextField Label="Body" HelperText="Notification description." InputType="InputType.Text"
+                              @bind-Value="model.Body" For="@(() => model.Body)" Required="true" Lines="3"/>
+
+                <MudSelect Label="Choose destination" Required="true"
+                            @bind-Value="model.Destination" Variant="Variant.Text">
+                    @foreach(var value in destinationList)
+                    {
+                         <MudSelectItem Value="@value" />
+                    }
+                </MudSelect>
+
+                 <MudButton Class="mt-4" Disabled="@(processRequest)" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" FullWidth="true">
+                    @if (processRequest)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                        <MudText Class="ms-2">Processing</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Send</MudText>
+                    }
+                </MudButton>
+            </EditForm>
+        </div>
+    </MudPaper>
+</div>
+
+@code{
+    public Model model { get; set; } = new();
+
+    [Inject] public INotificationsService NotificationsService{ get; set; }
+
+    [Inject] public ISnackbar Snackbar{ get; set; }
+
+    private bool processRequest = false;
+
+
+    private List<string> destinationList = new List<string>
+    {
+        "All",
+        "Drivers",
+        "Clients"
+    };
+
+    public class Model
+    {
+        public string Title { get; set; }
+        public string Body { get; set; }
+        public string Destination{ get; set; }
+    }
+
+    private async Task HandleSubmit()
+    {
+        processRequest = true;
+        var response = await NotificationsService.SendAsync(model.Destination, new NotificationDTO{Title = model.Title, Body = model.Body});
+        processRequest = false;
+
+        if (response.IsSuccess)
+        {
+            Snackbar.Add(response.Message, Severity.Success);
+        }
+        else
+        {
+             Snackbar.Add(response.Message, Severity.Error);
+        }
+    }
+}

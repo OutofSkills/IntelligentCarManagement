@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
-    [EnableCors]
     [Route("api/[controller]")]
     [ApiController]
     public class DriversAccountController : Controller

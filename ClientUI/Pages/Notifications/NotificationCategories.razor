@@ -1,0 +1,134 @@
+﻿@page "/admin/notification/categories"
+
+@using ClientUI.Services.Notifications
+@using Syncfusion.Blazor.Grids
+
+<MudText Typo="Typo.h4" Class="mb-4">
+    <b>Notification Categories</b>
+</MudText>
+
+<MudGrid Class="pb-6">
+    @if(categories is null)
+     {
+         <!--If the products where not loaded yet, display some skeletons-->
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudSkeleton SkeletonType="@SkeletonType.Rectangle" Class="mx-4" Width="54px" Height="54px"/>
+                <div>
+                    <MudSkeleton Width="200px"/>
+                    <MudSkeleton Width="40px"/>
+                </div>
+            </MudPaper>
+        </MudItem>
+    }
+    else
+    {
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper  Class="d-flex flex-row pt-6 pb-4" Style="height:100px;">
+                <MudIcon Icon="@Icons.Material.Filled.Numbers" Color="Color.Primary" Class="mx-4" Style="width:54px; height:54px;"></MudIcon>
+                <div>
+                    <MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-n1">Roles</MudText>
+                    <MudText Typo="Typo.h5">@(categories.Count())</MudText>
+                </div>
+            </MudPaper>
+        
+        </MudItem>
+    }
+</MudGrid>
+
+<div class="col-lg-12 control-section">
+    <div class="content-wrapper">
+        <div class="row">
+            <SfGrid DataSource="@categories" Toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Update", "Cancel" })" AllowPaging="true" AllowSorting="true" TValue="NotificationCategory">
+                <GridEditSettings AllowAdding="true" AllowDeleting="true" AllowEditing="true" Mode="EditMode.Dialog"></GridEditSettings>
+                 <GridEvents OnActionBegin="ActionBeginHandler" OnActionComplete="ActionCompleteHandler" TValue="NotificationCategory"></GridEvents>
+                <GridColumns>
+                    <GridColumn Field=@nameof(NotificationCategory.Id) HeaderText="Id"></GridColumn>
+                    <GridColumn Field=@nameof(NotificationCategory.Name) HeaderText="Name"></GridColumn>
+                    <GridColumn Field=@nameof(NotificationCategory.Icon) HeaderText="Icon"></GridColumn>
+                     <GridColumn HeaderText="Notifications">
+                        <Template>
+                            @{
+                                var category = (context as NotificationCategory);
+                                var users = category.Notifications is null ? 0 : category.Notifications.Count();
+                                
+                                <MudChip Color="Color.Success">@users</MudChip>
+                            }
+                        </Template>
+                    </GridColumn>
+                  </GridColumns>
+            </SfGrid>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Inject] public NavigationManager NavManager { get; set; }
+
+    [Inject] public INotificationsService NotificationsService { get; set; }
+
+    private IEnumerable<NotificationCategory> categories;
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCategoriesAsync();
+    }
+
+    private async Task LoadCategoriesAsync()
+    {
+        categories = await NotificationsService.GetCategoriesAsync();
+    }
+
+    public async Task ActionCompleteHandler(ActionEventArgs<NotificationCategory> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            await LoadCategoriesAsync();
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            await LoadCategoriesAsync();
+        }
+    }
+
+    public async void ActionBeginHandler(ActionEventArgs<NotificationCategory> Args)
+    {
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Save))
+        {
+            if (Args.Action == "Add")
+            {
+                // adding new record
+                await NotificationsService.AddCategoryAsync(Args.RowData);
+            }
+            else
+            {
+                //updating
+                await NotificationsService.EditCategoryAsync(Args.RowData.Id, Args.Data);
+            }
+        }
+        if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))
+        {
+            //TODO: delete
+            await NotificationsService.DeleteCategoryAsync(Args.RowData.Id);
+        }
+    }
+}

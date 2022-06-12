@@ -18,6 +18,9 @@ namespace IntelligentCarManagement.Api.Services
         Task<RequestResponse> SendAsync(int userId, NotificationDTO notification);
         Task UpdateFirebaseToken(int userId, string token);
         Task<NotificationCategoryDTO> GetNotificationCategoryAsync(NotificationCategories category);
-        void CreateCategory(NotificationCategoryDTO categoryDTO);
+        void CreateCategory(NotificationCategory category);
+        Task<IEnumerable<NotificationCategory>> GetCategoriesAsync();
+        Task RemoveCategoryAsync(int id);
+        void UpdateCategoryAsync(NotificationCategory category, int id);
     }
 }

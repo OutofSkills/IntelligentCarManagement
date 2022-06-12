@@ -37,7 +37,7 @@ namespace Api.Services.Implementations
             String MessageID = "<" + guid.ToString() + ">";
             email.Headers.Add("Message-ID", MessageID); //Set Message-ID in Email Header
 
-            using SmtpClient client = new SmtpClient();
+            using SmtpClient client = new();
             client.EnableSsl = true;
             client.UseDefaultCredentials = false;
             client.Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password);

@@ -71,7 +71,7 @@ namespace Api.Services.Implementations
             if (application.ApplicationStatus.Name == "APPROVED")
                 throw new Exception("This application was already approved.");
 
-            var approvedStatus = await unitOfWork.ApplicationStatusesRepo.GetById(2);
+            var approvedStatus = await unitOfWork.ApplicationStatusesRepo.GetById(1);
             if (approvedStatus == null)
                 throw new NotFoundException("The APPROVED application status was not found.");
 

@@ -354,10 +354,15 @@ namespace IntelligentCarManagement.Api.Services
             return result;
         }
 
-        public static double? GetDriverRating(IEnumerable<Ride> rides, int driverId)
+        public static double GetDriverRating(IEnumerable<Ride> rides, int driverId)
         {
             var ratedRides = rides.Where(r => r.Review is not null && r.Review.Rating != null && r.DriverId == driverId).ToList();
-            var driverRating = ratedRides.Sum(r => r.Review.Rating) / ratedRides.Count;
+            double driverRating = 0.0;
+            if(ratedRides.Any())
+            {
+                driverRating = (double)(ratedRides.Sum(r => r.Review.Rating) / ratedRides.Count);
+            }
+
             return driverRating;
         }
 

@@ -19,20 +19,6 @@ namespace IntelligentCarManagement.DataAccess
             modelBuilder.Entity<ApplicationStatus>().ToTable("ApplicationStatuses");
             modelBuilder.Entity<UserAddress>().ToTable("Addresses");
 
-            modelBuilder.Entity<UserRole>()
-            .HasKey(ur => new { ur.UserId, ur.RoleId });
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany() // If you add `public ICollection<UserRoles> UserRoles{ get; set; }` navigation property to Role model class then replace `.WithMany()` with `.WithMany(b => b.UserRoles)`
-                .HasForeignKey(ur => ur.RoleId);
-
-
             base.OnModelCreating(modelBuilder);
         }
 

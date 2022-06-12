@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.DataAccess.Migrations
 {
     [DbContext(typeof(CarMngContext))]
-    [Migration("20220601103723_NullableRideRating")]
-    partial class NullableRideRating
+    [Migration("20220611135550_FixingDb")]
+    partial class FixingDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -189,6 +189,32 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("Cars", (string)null);
                 });
 
+            modelBuilder.Entity("Models.ClientReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("DriverId");
+
+                    b.ToTable("ClientReviews");
+                });
+
             modelBuilder.Entity("Models.DriverApplication", b =>
                 {
                     b.Property<int>("Id")
@@ -303,10 +329,10 @@ namespace Api.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<double>("DrivingAccuracy")
+                    b.Property<double?>("DrivingAccuracy")
                         .HasColumnType("float");
 
-                    b.Property<double>("Rating")
+                    b.Property<double?>("Rating")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -368,7 +394,7 @@ namespace Api.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int?>("RideReviewId")
                         .HasColumnType("int");
@@ -569,21 +595,6 @@ namespace Api.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Models.UserRole", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("UserRole");
-                });
-
             modelBuilder.Entity("Models.Client", b =>
                 {
                     b.HasBaseType("Models.UserBase");
@@ -677,6 +688,25 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.ClientReview", b =>
+                {
+                    b.HasOne("Models.Client", "Client")
+                        .WithMany("DriverReviews")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Driver", "Driver")
+                        .WithMany("ReviewedClients")
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Driver");
+                });
+
             modelBuilder.Entity("Models.DriverApplication", b =>
                 {
                     b.HasOne("Models.UserAddress", "Address")
@@ -724,7 +754,7 @@ namespace Api.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Models.Driver", "Driver")
-                        .WithMany()
+                        .WithMany("Rides")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -763,25 +793,6 @@ namespace Api.DataAccess.Migrations
                     b.Navigation("AccountStatus");
 
                     b.Navigation("Address");
-                });
-
-            modelBuilder.Entity("Models.UserRole", b =>
-                {
-                    b.HasOne("Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.UserBase", "User")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Models.Client", b =>
@@ -836,8 +847,18 @@ namespace Api.DataAccess.Migrations
             modelBuilder.Entity("Models.UserBase", b =>
                 {
                     b.Navigation("Notifications");
+                });
 
-                    b.Navigation("UserRoles");
+            modelBuilder.Entity("Models.Client", b =>
+                {
+                    b.Navigation("DriverReviews");
+                });
+
+            modelBuilder.Entity("Models.Driver", b =>
+                {
+                    b.Navigation("ReviewedClients");
+
+                    b.Navigation("Rides");
                 });
 #pragma warning restore 612, 618
         }

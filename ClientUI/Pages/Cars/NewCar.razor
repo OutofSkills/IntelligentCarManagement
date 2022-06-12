@@ -14,7 +14,7 @@
                             @bind-Value="carModel.Brand" For="@(() => carModel.Brand)"/>
             <MudTextField Label="Model" Class="mt-3" HelperText="Ex. Model Y, Mustang.."
                             @bind-Value="carModel.Model" For="@(() => carModel.Model)"/>
-            <MudSelect Label="With Helper"
+            <MudSelect Label="Choose fuel type."
                             @bind-Value="carModel.FuelType" Variant="Variant.Text">
                 <MudSelectItem Value="@("Petrol")" />
                 <MudSelectItem Value="@("Diesel")" />

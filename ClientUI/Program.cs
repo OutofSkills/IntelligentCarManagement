@@ -4,8 +4,12 @@ using ClientUI;
 using ClientUI.Services;
 using ClientUI.Services.Cars;
 using ClientUI.Services.Clients;
+using ClientUI.Services.Emails;
+using ClientUI.Services.Notifications;
 using ClientUI.Services.Rides;
 using ClientUI.Services.Roles;
+using ClientUI.Services.Statuses;
+using ClientUI.Utils;
 using IntelligentCarManagement.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -26,15 +30,7 @@ builder.Services.AddMudServices();
 builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = false; });
 
 /* Custom services here */
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-builder.Services.AddScoped<IDriverService, DriverService>();
-builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
-builder.Services.AddScoped<ICarsService, CarsService>();
-builder.Services.AddScoped<IClientsService, ClientsService>();
-builder.Services.AddScoped<IRidesService, RidesService>();
-builder.Services.AddScoped<IRolesService, RolesService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddCustomServices();
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
