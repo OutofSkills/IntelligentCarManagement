@@ -72,14 +72,10 @@
     </div>
 </div>
 
-@test
-
 @code {
     [Inject] public NavigationManager NavManager { get; set; }
 
     [Inject] public IRolesService RolesService { get; set; }
-
-    string test;
 
     private IEnumerable<RoleDTO> roles;
     protected override async Task OnInitializedAsync()
@@ -115,10 +111,8 @@
             }
             else
             {
-                test = "editing " + Args.RowData.Id;
                 // updating
-                var result = await RolesService.Edit(Args.RowData.Id, Args.Data);
-                test = result.Message;
+                var result = await RolesService.Edit(Args.RowData.Id, Args.Data); 
             }
         }
         if (Args.RequestType.Equals(Syncfusion.Blazor.Grids.Action.Delete))

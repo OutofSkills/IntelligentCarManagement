@@ -26,7 +26,6 @@ namespace Api.Helpers
             services.AddScoped<ITokenBuilder, TokenBuilder>();
             services.AddScoped<IRolesService, RolesService>();
             services.AddScoped<IStatusesService, StatusesService>();
-            services.AddScoped<IDriverStatusService, DriverStatusService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IRidesService, RidesService>();
             services.AddScoped<IClientsAccountService, ClientsAccountService>();

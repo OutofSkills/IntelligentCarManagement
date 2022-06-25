@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Models.DTOs;
 using Api.Services.CustomExceptions;
-using Models.DTOs;
 using Api.Services.Utils;
 
 namespace IntelligentCarManagement.Services
@@ -17,7 +16,6 @@ namespace IntelligentCarManagement.Services
     public class ClientsService : IClientsService
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly UserManager<UserBase> userManager;
 
         public ClientsService(IUnitOfWork unitOfWork)
         {

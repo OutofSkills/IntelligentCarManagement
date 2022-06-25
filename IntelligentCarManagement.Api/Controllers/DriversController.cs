@@ -13,7 +13,6 @@ using System.Net.Http;
 using System.Net;
 using Models.DTOs;
 using Models;
-using Models.DTOs;
 
 namespace IntelligentCarManagement.Api.Controllers
 {
